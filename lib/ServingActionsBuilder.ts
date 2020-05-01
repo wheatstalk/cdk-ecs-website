@@ -42,7 +42,7 @@ export class ServingActionsBuilder {
     };
   }
 
-  private getUserPoolAction() {
+  private getUserPoolAction(): ActionProperty {
     if (!this.userPoolInfo) {
       throw new Error('Can\'t create user pool action because we don\'t have a user pool');
     }

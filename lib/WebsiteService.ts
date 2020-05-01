@@ -31,7 +31,7 @@ import { ServingActionsBuilder, UserPoolInfo } from './ServingActionsBuilder';
  *
  * @param hostHeader
  */
-export const mapHostToConstructName = (hostHeader: string) => hostHeader
+export const mapHostToConstructName = (hostHeader: string): string => hostHeader
   .toLowerCase()
   .replace('*', 'wildcard')
   .replace(/[^a-z0-9-]/g, '');
@@ -59,9 +59,9 @@ export interface WebsiteServiceProps {
   /** Desired task count */
   desiredCount?: number;
   /** Specify environment variables for the main container */
-  envVars?: { [x: string]: string },
+  envVars?: { [x: string]: string };
   /** Specify environment variables from secrets for the main container */
-  envSecrets?: { [x: string]: Secret },
+  envSecrets?: { [x: string]: Secret };
   /** The primary host name that this service will serve from and redirect to */
   primaryHostName: string;
 }
@@ -164,7 +164,7 @@ export class WebsiteService extends Construct {
     });
 
     // Hack in COGNITO as a supported identity provider.
-    const cfnUserPoolClient = userPoolClient.node.defaultChild as any as CfnUserPoolClient;
+    const cfnUserPoolClient = userPoolClient.node.defaultChild as unknown as CfnUserPoolClient;
     cfnUserPoolClient.supportedIdentityProviders = ['COGNITO'];
 
     return {
@@ -174,7 +174,7 @@ export class WebsiteService extends Construct {
     };
   }
 
-  public obtainTargetGroup() {
+  public obtainTargetGroup(): IApplicationTargetGroup {
     // Create a target group if we don't have one.
     if (!this.targetGroup) {
       this.targetGroup = new ApplicationTargetGroup(this, 'TargetGroup', {
@@ -206,8 +206,8 @@ export class WebsiteService extends Construct {
     this.createHostHeaderListenerRule(hostHeader);
   }
 
-  private createHostHeaderListenerRule(hostHeader: string) {
-    return new CfnListenerRule(this, 'Target-' + mapHostToConstructName(hostHeader), {
+  private createHostHeaderListenerRule(hostHeader: string): void {
+    new CfnListenerRule(this, 'Target-' + mapHostToConstructName(hostHeader), {
       actions: this.servingActions,
       conditions: [
         {
@@ -220,10 +220,10 @@ export class WebsiteService extends Construct {
     });
   }
 
-  private createAuthBypassHeaderListenerRule(hostHeader: string) {
+  private createAuthBypassHeaderListenerRule(hostHeader: string): void {
     if (!this.authBypassValue) throw new Error('Can\'t create an auth bypass rule because no auth bypass value is available');
 
-    return new CfnListenerRule(this, 'TargetAuthBypass-' + mapHostToConstructName(hostHeader), {
+    new CfnListenerRule(this, 'TargetAuthBypass-' + mapHostToConstructName(hostHeader), {
       actions: [
         {
           type: 'forward',
