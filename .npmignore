@@ -10,3 +10,4 @@ test
 *.tgz
 tsconfig.json
 jest.config.js
+yarn.lock
