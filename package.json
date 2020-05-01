@@ -1,6 +1,7 @@
 {
-  "name": "cdk-ecs-website",
-  "version": "0.1.0",
+  "name": "@wheatstalk/cdk-ecs-website",
+  "license": "MIT",
+  "version": "0.0.1",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
@@ -11,28 +12,25 @@
   },
   "devDependencies": {
     "@aws-cdk/assert": "1.36.1",
-    "@aws-cdk/aws-cognito": "^1.36.1",
-    "@aws-cdk/aws-ecs": "^1.36.1",
-    "@aws-cdk/aws-elasticloadbalancingv2": "^1.36.1",
-    "@aws-cdk/aws-logs": "^1.36.1",
     "@types/jest": "^25.2.1",
-    "@types/node": "10.17.5",
+    "@types/node": "^13.13.4",
     "@typescript-eslint/eslint-plugin": "^2.30.0",
     "@typescript-eslint/parser": "^2.30.0",
     "add": "^2.0.6",
     "eslint": "^6.8.0",
     "jest": "^25.5.0",
     "ts-jest": "^25.3.1",
-    "typescript": "~3.7.2",
+    "typescript": "^3.8.3",
     "yarn": "^1.22.4"
   },
   "peerDependencies": {
-    "@aws-cdk/core": "1.36.1"
+    "@aws-cdk/core": "^1.36.1"
   },
   "dependencies": {
-    "@aws-cdk/aws-sns": "1.36.1",
-    "@aws-cdk/aws-sns-subscriptions": "1.36.1",
-    "@aws-cdk/aws-sqs": "1.36.1",
+    "@aws-cdk/aws-cognito": "^1.36.1",
+    "@aws-cdk/aws-ecs": "^1.36.1",
+    "@aws-cdk/aws-elasticloadbalancingv2": "^1.36.1",
+    "@aws-cdk/aws-logs": "^1.36.1",
     "@aws-cdk/core": "1.36.1"
   }
 }

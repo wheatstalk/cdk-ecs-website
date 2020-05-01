@@ -15,3 +15,5 @@ cdk.out
 # Intellij
 .idea
 
+# Package files
+/*.tgz
