@@ -1,12 +1,15 @@
-# Welcome to your CDK TypeScript Construct Library project!
+# CDK ECS Website Construct
 
-You should explore the contents of this project. It demonstrates a CDK Construct Library that includes a construct (`CdkEcsWebsite`)
-which contains an Amazon SQS queue that is subscribed to an Amazon SNS topic.
+This simple construct creates an ECS service following a shared ALB pattern. It has the following features:
 
-The construct defines an interface (`CdkEcsWebsiteProps`) to configure the visibility timeout of the queue.
+- Creates an ECS service
+- Creates an ALB target group
+- Registers the target group with ALB listeners using host-header-based listener rules.
+- Supports redirection to the primary host name of the service based on ALB listener rules.
+- Supports Cognito UserPool-based authentication for dev sites use.
 
-## Useful commands
+## Installation
 
- * `npm run build`   compile typescript to js
- * `npm run watch`   watch for changes and compile
- * `npm run test`    perform the jest unit tests
+```
+yarn add -D @wheatstalk/cdk-ecs-website
+```
