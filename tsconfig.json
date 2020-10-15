@@ -17,8 +17,10 @@
     "inlineSources": true,
     "experimentalDecorators": true,
     "strictPropertyInitialization":false,
-    "typeRoots": ["./node_modules/@types"]
+    "typeRoots": ["./node_modules/@types"],
+    "outDir": "dist"
   },
+  "include": ["lib/index.ts"],
   "exclude": ["cdk.out"]
 }
 

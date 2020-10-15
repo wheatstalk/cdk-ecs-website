@@ -2,8 +2,7 @@
   "name": "@wheatstalk/cdk-ecs-website",
   "license": "MIT",
   "version": "0.2.1",
-  "main": "lib/index.js",
-  "types": "lib/index.d.ts",
+  "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
     "test": "jest",
@@ -20,17 +19,13 @@
     "eslint": "^6.8.0",
     "jest": "^25.5.0",
     "ts-jest": "^25.3.1",
-    "typescript": "^3.8.3",
-    "yarn": "^1.22.4"
-  },
-  "peerDependencies": {
-    "@aws-cdk/core": "^1.36.1"
+    "typescript": "^3.8.3"
   },
   "dependencies": {
+    "@aws-cdk/core": "^1.36.1",
     "@aws-cdk/aws-cognito": "^1.36.1",
     "@aws-cdk/aws-ecs": "^1.36.1",
     "@aws-cdk/aws-elasticloadbalancingv2": "^1.36.1",
-    "@aws-cdk/aws-logs": "^1.36.1",
-    "@aws-cdk/core": "^1.36.1"
+    "@aws-cdk/aws-logs": "^1.36.1"
   }
 }
