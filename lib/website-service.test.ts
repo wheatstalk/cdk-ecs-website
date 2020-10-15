@@ -1,14 +1,15 @@
 import { expect as expectCDK, haveResourceLike } from '@aws-cdk/assert';
 import { UserPool } from '@aws-cdk/aws-cognito';
 import { ContainerImage } from '@aws-cdk/aws-ecs';
+import { App } from '@aws-cdk/core';
 
-import { WebsiteService } from '../lib';
-import { TestingConstructs } from './testing-constructs';
+import { WebsiteService } from './index';
+import { TestingClusterStack } from './testing-cluster';
 
 describe('WebsiteService', () => {
   it('produces an ecs service', () => {
     // GIVEN
-    const given = new TestingConstructs();
+    const given = new TestingClusterStack(new App(), 'stack');
 
     // WHEN
     const service = new WebsiteService(given, 'Test', {
@@ -34,7 +35,9 @@ describe('WebsiteService', () => {
         Conditions: [
           {
             Field: 'host-header',
-            Values: ['www.example.com'],
+            HostHeaderConfig: {
+              Values: ['www.example.com'],
+            },
           },
         ],
         Priority: 20000,
@@ -91,12 +94,13 @@ describe('WebsiteService', () => {
       }),
     );
   });
-  it('produces a userpool and authenticated listener', () => {
-    const given = new TestingConstructs();
+
+  it('produces a userpool client and authenticated listener', () => {
+    const given = new TestingClusterStack(new App(), 'stack');
     const userPool = new UserPool(given, 'UserPool');
 
     new WebsiteService(given, 'Service', {
-      albBasePriority: 0,
+      albBasePriority: 1,
       albListener: given.albListener,
       cluster: given.cluster,
       containerImage: ContainerImage.fromRegistry('nginx'),
@@ -126,19 +130,22 @@ describe('WebsiteService', () => {
         Conditions: [
           {
             Field: 'host-header',
-            Values: ['www.example.com'],
+            HostHeaderConfig: {
+              Values: ['www.example.com'],
+            },
           },
         ],
-        Priority: 0,
+        Priority: 1,
       }),
     );
   });
+
   it('provides a listener with an access bypass', () => {
-    const given = new TestingConstructs();
+    const given = new TestingClusterStack(new App(), 'stack');
     const userPool = new UserPool(given, 'UserPool');
 
     new WebsiteService(given, 'Service', {
-      albBasePriority: 0,
+      albBasePriority: 1,
       albListener: given.albListener,
       cluster: given.cluster,
       containerImage: ContainerImage.fromRegistry('nginx'),
@@ -169,9 +176,12 @@ describe('WebsiteService', () => {
           },
           {
             Field: 'host-header',
-            Values: ['www.example.com'],
+            HostHeaderConfig: {
+              Values: ['www.example.com'],
+            },
           },
         ],
+        Priority: 1,
       }),
     );
 
@@ -193,11 +203,48 @@ describe('WebsiteService', () => {
         Conditions: [
           {
             Field: 'host-header',
-            Values: ['www.example.com'],
+            HostHeaderConfig: {
+              Values: ['www.example.com'],
+            },
           },
         ],
-        Priority: 1,
+        Priority: 2,
       }),
     );
   });
+});
+
+it('adds listener rules', () => {
+  const app = new App();
+  const stack = new TestingClusterStack(app, 'basic-http-service-integ');
+
+  const website = new WebsiteService(stack, 'Website', {
+    albBasePriority: 2000,
+    albListener: stack.albListener,
+    cluster: stack.cluster,
+    containerImage: ContainerImage.fromRegistry('nginx'),
+    containerPort: 80,
+    primaryHostName: 'www.example.com',
+  });
+
+  // website.addServingHost('example2.com');
+  website.addRedirectToPrimaryHostName('*.example.com');
+
+  app.synth();
+});
+
+it('works on port 3000', () => {
+  const app = new App();
+  const stack = new TestingClusterStack(app, 'basic-http-service-integ');
+
+  new WebsiteService(stack, 'Website', {
+    albBasePriority: 2000,
+    albListener: stack.albListener,
+    cluster: stack.cluster,
+    containerImage: ContainerImage.fromRegistry('nginx'),
+    containerPort: 3000,
+    primaryHostName: stack.alb.loadBalancerDnsName,
+  });
+
+  app.synth();
 });

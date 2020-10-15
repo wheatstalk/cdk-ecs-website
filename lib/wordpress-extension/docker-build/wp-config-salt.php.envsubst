@@ -1,0 +1,7 @@
+<?php
+
+if (AUTH_KEY == DEFAULT_SALT) {
+// Generated at build time and inserted with envsubst
+${BUILD_TIME_SALT}
+// End of generated code
+}
