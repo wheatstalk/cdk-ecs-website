@@ -22,8 +22,8 @@ import {
 import { RetentionDays } from '@aws-cdk/aws-logs';
 import { Construct, Duration } from '@aws-cdk/core';
 
-import { NumberSequence } from './NumberSequence';
-import { ServingActionsBuilder, UserPoolInfo } from './ServingActionsBuilder';
+import { NumberSequence } from './number-sequence';
+import { ServingActionsBuilder, UserPoolInfo } from './serving-actions-builder';
 
 /**
  * Maps a host name which would be used to a host header to a string that
