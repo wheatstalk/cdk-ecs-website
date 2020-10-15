@@ -15,7 +15,7 @@ export class UserPoolClientSecretGetter extends Construct {
 
     const clientSecretGetter = new AwsCustomResource(this, 'DescribeUserPoolClientSecret', {
       onCreate: {
-        region: Fn.sub("${AWS::Partition}"),
+        region: Fn.sub('${AWS::Partition}'),
         service: 'CognitoIdentityServiceProvider',
         action: 'describeUserPoolClient',
         parameters: {
@@ -25,7 +25,7 @@ export class UserPoolClientSecretGetter extends Construct {
         physicalResourceId: PhysicalResourceId.of(props.userPoolClient.userPoolClientId),
       },
       policy: AwsCustomResourcePolicy.fromSdkCalls({
-        resources:AwsCustomResourcePolicy.ANY_RESOURCE,
+        resources: AwsCustomResourcePolicy.ANY_RESOURCE,
       }),
     });
 

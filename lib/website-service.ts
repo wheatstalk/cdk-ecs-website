@@ -17,7 +17,7 @@ import {
   CfnListenerRule,
   IApplicationListener,
   IApplicationTargetGroup,
-  Protocol
+  Protocol,
 } from '@aws-cdk/aws-elasticloadbalancingv2';
 import { RetentionDays } from '@aws-cdk/aws-logs';
 import { Construct, Duration } from '@aws-cdk/core';
@@ -31,10 +31,11 @@ import { ServingActionsBuilder, UserPoolInfo } from './serving-actions-builder';
  *
  * @param hostHeader
  */
-export const mapHostToConstructName = (hostHeader: string): string => hostHeader
-  .toLowerCase()
-  .replace('*', 'wildcard')
-  .replace(/[^a-z0-9-]/g, '');
+export const mapHostToConstructName = (hostHeader: string): string =>
+  hostHeader
+    .toLowerCase()
+    .replace('*', 'wildcard')
+    .replace(/[^a-z0-9-]/g, '');
 
 export enum RedirectResponseStatus {
   HTTP_301_PERMANENT = 'HTTP_301',
@@ -160,13 +161,7 @@ export class WebsiteService extends Construct {
         flows: {
           authorizationCodeGrant: true,
         },
-        scopes: [
-          OAuthScope.PROFILE,
-          OAuthScope.COGNITO_ADMIN,
-          OAuthScope.OPENID,
-          OAuthScope.EMAIL,
-          OAuthScope.PHONE,
-        ],
+        scopes: [OAuthScope.PROFILE, OAuthScope.COGNITO_ADMIN, OAuthScope.OPENID, OAuthScope.EMAIL, OAuthScope.PHONE],
         callbackUrls: [
           // Application load balancer handles the idp response on a specific
           // callback uri: /oauth2/idpresponse
@@ -177,7 +172,7 @@ export class WebsiteService extends Construct {
     });
 
     // Hack in COGNITO as a supported identity provider.
-    const cfnUserPoolClient = userPoolClient.node.defaultChild as unknown as CfnUserPoolClient;
+    const cfnUserPoolClient = (userPoolClient.node.defaultChild as unknown) as CfnUserPoolClient;
     cfnUserPoolClient.supportedIdentityProviders = ['COGNITO'];
 
     return {
@@ -234,7 +229,8 @@ export class WebsiteService extends Construct {
   }
 
   private createAuthBypassHeaderListenerRule(hostHeader: string): void {
-    if (!this.authBypassValue) throw new Error('Can\'t create an auth bypass rule because no auth bypass value is available');
+    if (!this.authBypassValue)
+      throw new Error("Can't create an auth bypass rule because no auth bypass value is available");
 
     new CfnListenerRule(this, 'TargetAuthBypass-' + mapHostToConstructName(hostHeader), {
       actions: [
@@ -273,7 +269,7 @@ export class WebsiteService extends Construct {
         protocol: redirectResponse.protocol ?? '#{protocol}',
         query: redirectResponse.query ?? '#{query}',
         statusCode: redirectResponse.statusCode ?? RedirectResponseStatus.HTTP_301_PERMANENT,
-      }
+      },
     });
   }
 
