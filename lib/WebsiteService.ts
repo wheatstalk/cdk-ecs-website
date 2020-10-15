@@ -154,7 +154,6 @@ export class WebsiteService extends Construct {
     const userPoolClient = new UserPoolClient(this, 'UserPoolClient', {
       authFlows: {
         userPassword: true,
-        refreshToken: true,
       },
       generateSecret: true,
       oAuth: {
