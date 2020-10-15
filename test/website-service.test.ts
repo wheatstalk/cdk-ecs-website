@@ -2,8 +2,8 @@ import { expect as expectCDK, haveResourceLike } from '@aws-cdk/assert';
 import { UserPool } from '@aws-cdk/aws-cognito';
 import { ContainerImage } from '@aws-cdk/aws-ecs';
 
-import { TestingConstructs } from './testing-constructs';
 import { WebsiteService } from '../lib';
+import { TestingConstructs } from './testing-constructs';
 
 describe('WebsiteService', () => {
   it('produces an ecs service', () => {
@@ -29,64 +29,69 @@ describe('WebsiteService', () => {
     expectCDK(given).to(haveResourceLike('AWS::ElasticLoadBalancingV2::TargetGroup'));
 
     // THEN defines listener rules
-    expectCDK(given).to(haveResourceLike('AWS::ElasticLoadBalancingV2::ListenerRule', {
-      Conditions: [
-        {
-          Field: 'host-header',
-          Values: ['www.example.com'],
-        },
-      ],
-      Priority: 20000,
-    }));
-
-    expectCDK(given).to(haveResourceLike('AWS::ElasticLoadBalancingV2::ListenerRule', {
-      Actions: [
-        {
-          Type: 'redirect',
-          RedirectConfig: {
-            Host: 'www.example.com',
-            Path: '/#{path}',
-            Port: '#{port}',
-            Protocol: '#{protocol}',
-            Query: '#{query}',
-            StatusCode: 'HTTP_301',
+    expectCDK(given).to(
+      haveResourceLike('AWS::ElasticLoadBalancingV2::ListenerRule', {
+        Conditions: [
+          {
+            Field: 'host-header',
+            Values: ['www.example.com'],
           },
-        },
-      ],
-      Conditions: [
-        {
-          Field: 'host-header',
-          Values: ['*.example.com'],
-        },
-      ],
-      Priority: 20001,
-    }));
+        ],
+        Priority: 20000,
+      }),
+    );
 
-    expectCDK(given).to(haveResourceLike('AWS::ElasticLoadBalancingV2::ListenerRule', {
-      Actions: [
-        {
-          Type: 'redirect',
-          RedirectConfig: {
-            Host: 'amazonaws.com',
-            Path: '/#{path}',
-            Port: '#{port}',
-            Protocol: '#{protocol}',
-            Query: '#{query}',
-            StatusCode: 'HTTP_301',
+    expectCDK(given).to(
+      haveResourceLike('AWS::ElasticLoadBalancingV2::ListenerRule', {
+        Actions: [
+          {
+            Type: 'redirect',
+            RedirectConfig: {
+              Host: 'www.example.com',
+              Path: '/#{path}',
+              Port: '#{port}',
+              Protocol: '#{protocol}',
+              Query: '#{query}',
+              StatusCode: 'HTTP_301',
+            },
           },
-        },
-      ],
-      Conditions: [
-        {
-          Field: 'host-header',
-          Values: ['*.example2.com'],
-        },
-      ],
-      Priority: 20002,
-    }));
+        ],
+        Conditions: [
+          {
+            Field: 'host-header',
+            Values: ['*.example.com'],
+          },
+        ],
+        Priority: 20001,
+      }),
+    );
+
+    expectCDK(given).to(
+      haveResourceLike('AWS::ElasticLoadBalancingV2::ListenerRule', {
+        Actions: [
+          {
+            Type: 'redirect',
+            RedirectConfig: {
+              Host: 'amazonaws.com',
+              Path: '/#{path}',
+              Port: '#{port}',
+              Protocol: '#{protocol}',
+              Query: '#{query}',
+              StatusCode: 'HTTP_301',
+            },
+          },
+        ],
+        Conditions: [
+          {
+            Field: 'host-header',
+            Values: ['*.example2.com'],
+          },
+        ],
+        Priority: 20002,
+      }),
+    );
   });
   it('produces a userpool and authenticated listener', () => {
-
     const given = new TestingConstructs();
     const userPool = new UserPool(given, 'UserPool');
 
@@ -103,29 +108,30 @@ describe('WebsiteService', () => {
     });
 
     expectCDK(given).to(haveResourceLike('AWS::Cognito::UserPoolClient'));
-    expectCDK(given).to(haveResourceLike('AWS::ElasticLoadBalancingV2::ListenerRule', {
-      Actions: [
-        {
-          AuthenticateCognitoConfig: {
-            UserPoolDomain: 'auth.example.com',
+    expectCDK(given).to(
+      haveResourceLike('AWS::ElasticLoadBalancingV2::ListenerRule', {
+        Actions: [
+          {
+            AuthenticateCognitoConfig: {
+              UserPoolDomain: 'auth.example.com',
+            },
+            Order: 1,
+            Type: 'authenticate-cognito',
           },
-          Order: 1,
-          Type: 'authenticate-cognito',
-        },
-        {
-          Order: 2,
-          Type: 'forward',
-        },
-      ],
-      Conditions: [
-        {
-          Field: 'host-header',
-          Values: ['www.example.com'],
-        },
-      ],
-      Priority: 0,
-    }));
-
+          {
+            Order: 2,
+            Type: 'forward',
+          },
+        ],
+        Conditions: [
+          {
+            Field: 'host-header',
+            Values: ['www.example.com'],
+          },
+        ],
+        Priority: 0,
+      }),
+    );
   });
   it('provides a listener with an access bypass', () => {
     const given = new TestingConstructs();
@@ -146,48 +152,52 @@ describe('WebsiteService', () => {
 
     expectCDK(given).to(haveResourceLike('AWS::Cognito::UserPoolClient'));
 
-    expectCDK(given).to(haveResourceLike('AWS::ElasticLoadBalancingV2::ListenerRule', {
-      Actions: [
-        {
-          Type: 'forward',
-        },
-      ],
-      Conditions: [
-        {
-          Field: 'http-header',
-          HttpHeaderConfig: {
-            HttpHeaderName: 'AccessBypass',
-            Values: ['bypassvalue'],
+    expectCDK(given).to(
+      haveResourceLike('AWS::ElasticLoadBalancingV2::ListenerRule', {
+        Actions: [
+          {
+            Type: 'forward',
           },
-        },
-        {
-          Field: 'host-header',
-          Values: ['www.example.com'],
-        },
-      ],
-    }));
+        ],
+        Conditions: [
+          {
+            Field: 'http-header',
+            HttpHeaderConfig: {
+              HttpHeaderName: 'AccessBypass',
+              Values: ['bypassvalue'],
+            },
+          },
+          {
+            Field: 'host-header',
+            Values: ['www.example.com'],
+          },
+        ],
+      }),
+    );
 
-    expectCDK(given).to(haveResourceLike('AWS::ElasticLoadBalancingV2::ListenerRule', {
-      Actions: [
-        {
-          AuthenticateCognitoConfig: {
-            UserPoolDomain: 'auth.example.com',
+    expectCDK(given).to(
+      haveResourceLike('AWS::ElasticLoadBalancingV2::ListenerRule', {
+        Actions: [
+          {
+            AuthenticateCognitoConfig: {
+              UserPoolDomain: 'auth.example.com',
+            },
+            Order: 1,
+            Type: 'authenticate-cognito',
           },
-          Order: 1,
-          Type: 'authenticate-cognito',
-        },
-        {
-          Order: 2,
-          Type: 'forward',
-        },
-      ],
-      Conditions: [
-        {
-          Field: 'host-header',
-          Values: ['www.example.com'],
-        },
-      ],
-      Priority: 1,
-    }));
+          {
+            Order: 2,
+            Type: 'forward',
+          },
+        ],
+        Conditions: [
+          {
+            Field: 'host-header',
+            Values: ['www.example.com'],
+          },
+        ],
+        Priority: 1,
+      }),
+    );
   });
 });

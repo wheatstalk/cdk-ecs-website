@@ -6,4 +6,4 @@ describe('NumberSequence', () => {
     expect(sequence.getNextAndIncrement()).toBe(500);
     expect(sequence.getNextAndIncrement()).toBe(501);
   });
-})
+});

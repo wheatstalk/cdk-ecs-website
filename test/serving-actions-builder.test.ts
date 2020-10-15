@@ -5,7 +5,6 @@ import { Stack } from '@aws-cdk/core';
 import { ServingActionsBuilder } from '../lib/serving-actions-builder';
 
 describe('ServingActionsBuilder', () => {
-
   it('provides a forward action', () => {
     const stack = new Stack();
     const targetGroup = new ApplicationTargetGroup(stack, 'TG');
@@ -27,7 +26,7 @@ describe('ServingActionsBuilder', () => {
     builder.userPoolInfo = {
       userPoolClient: userPoolClient,
       userPool: userPool,
-      domain: "auth.example.com",
+      domain: 'auth.example.com',
     };
 
     const actions = builder.build();
@@ -40,5 +39,4 @@ describe('ServingActionsBuilder', () => {
     expect(actions[1].order).toEqual(2);
     expect(actions[1].type).toEqual('forward');
   });
-
 });

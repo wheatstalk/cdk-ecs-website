@@ -10,29 +10,27 @@ export interface UserPoolInfo {
 }
 
 export class ServingActionsBuilder {
-  public userPoolInfo?: UserPoolInfo
+  public userPoolInfo?: UserPoolInfo;
 
-  constructor(private targetGroup: IApplicationTargetGroup) {
-  }
+  constructor(private targetGroup: IApplicationTargetGroup) {}
 
   buildInner(): ActionProperty[] {
     if (this.userPoolInfo) {
-      return [
-        this.getUserPoolAction(),
-        this.getForwardAction(),
-      ];
+      return [this.getUserPoolAction(), this.getForwardAction()];
     }
 
     return [this.getForwardAction()];
   }
 
   build(): ActionProperty[] {
-    return this.buildInner()
-      // Add an order key by array index number.
-      .map((a, index) => ({
-        ...a,
-        order: index + 1,
-      }));
+    return (
+      this.buildInner()
+        // Add an order key by array index number.
+        .map((a, index) => ({
+          ...a,
+          order: index + 1,
+        }))
+    );
   }
 
   private getForwardAction(): ActionProperty {
@@ -44,7 +42,7 @@ export class ServingActionsBuilder {
 
   private getUserPoolAction(): ActionProperty {
     if (!this.userPoolInfo) {
-      throw new Error('Can\'t create user pool action because we don\'t have a user pool');
+      throw new Error("Can't create user pool action because we don't have a user pool");
     }
 
     return {
