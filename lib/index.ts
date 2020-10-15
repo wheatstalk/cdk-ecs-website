@@ -4,4 +4,4 @@ export {
   WebsiteServicePropsAuthWithUserPoolProps,
   RedirectResponseStatus,
   DefaultingRedirectResponse
-} from "./WebsiteService"
+} from "./website-service"

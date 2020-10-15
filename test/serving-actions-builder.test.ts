@@ -2,7 +2,7 @@ import { UserPool } from '@aws-cdk/aws-cognito';
 import { ApplicationTargetGroup } from '@aws-cdk/aws-elasticloadbalancingv2';
 import { Stack } from '@aws-cdk/core';
 
-import { ServingActionsBuilder } from '../lib/ServingActionsBuilder';
+import { ServingActionsBuilder } from '../lib/serving-actions-builder';
 
 describe('ServingActionsBuilder', () => {
 

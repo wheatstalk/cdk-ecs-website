@@ -2,7 +2,7 @@ import { expect as expectCDK, haveResourceLike } from '@aws-cdk/assert';
 import { UserPool } from '@aws-cdk/aws-cognito';
 import { ContainerImage } from '@aws-cdk/aws-ecs';
 
-import { TestingConstructs } from './TestingConstructs';
+import { TestingConstructs } from './testing-constructs';
 import { WebsiteService } from '../lib';
 
 describe('WebsiteService', () => {
