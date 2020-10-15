@@ -1,4 +1,4 @@
-import { NumberSequence } from '../lib/number-sequence';
+import { NumberSequence } from './number-sequence';
 
 describe('NumberSequence', () => {
   it('should start counting at the given value', () => {

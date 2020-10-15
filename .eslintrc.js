@@ -10,6 +10,7 @@ module.exports = {
   ],
   rules: {
     '@typescript-eslint/no-empty-interface': 'off',
+    '@typescript-eslint/no-use-before-define': 'off',
     'prettier/prettier': 'error',
     'simple-import-sort/sort': 'error',
   },
