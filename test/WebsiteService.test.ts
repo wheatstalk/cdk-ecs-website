@@ -19,6 +19,9 @@ describe('WebsiteService', () => {
       primaryHostName: 'www.example.com',
     });
     service.addRedirectToPrimaryHostName('*.example.com');
+    service.addRedirectResponse('*.example2.com', {
+      host: 'amazonaws.com',
+    });
 
     // THEN defines a service, task definition, and target group
     expectCDK(given).to(haveResourceLike('AWS::ECS::Service'));
@@ -57,6 +60,29 @@ describe('WebsiteService', () => {
         },
       ],
       Priority: 20001,
+    }));
+
+    expectCDK(given).to(haveResourceLike('AWS::ElasticLoadBalancingV2::ListenerRule', {
+      Actions: [
+        {
+          Type: 'redirect',
+          RedirectConfig: {
+            Host: 'amazonaws.com',
+            Path: '/#{path}',
+            Port: '#{port}',
+            Protocol: '#{protocol}',
+            Query: '#{query}',
+            StatusCode: 'HTTP_301',
+          },
+        },
+      ],
+      Conditions: [
+        {
+          Field: 'host-header',
+          Values: ['*.example2.com'],
+        },
+      ],
+      Priority: 20002,
     }));
   });
   it('produces a userpool and authenticated listener', () => {

@@ -17,7 +17,7 @@ import {
   CfnListenerRule,
   IApplicationListener,
   IApplicationTargetGroup,
-  Protocol,
+  Protocol
 } from '@aws-cdk/aws-elasticloadbalancingv2';
 import { RetentionDays } from '@aws-cdk/aws-logs';
 import { Construct, Duration } from '@aws-cdk/core';
@@ -35,6 +35,20 @@ export const mapHostToConstructName = (hostHeader: string): string => hostHeader
   .toLowerCase()
   .replace('*', 'wildcard')
   .replace(/[^a-z0-9-]/g, '');
+
+export enum RedirectResponseStatus {
+  HTTP_301_PERMANENT = 'HTTP_301',
+  HTTP_302_FOUND = 'HTTP_302',
+}
+
+export interface DefaultingRedirectResponse {
+  host?: string;
+  path?: string;
+  port?: string;
+  protocol?: string;
+  query?: string;
+  statusCode?: RedirectResponseStatus;
+}
 
 export interface WebsiteServicePropsAuthWithUserPoolProps {
   domain: string;
@@ -248,19 +262,25 @@ export class WebsiteService extends Construct {
     });
   }
 
-  public addRedirectToPrimaryHostName(hostHeader: string): void {
+  public addRedirectResponse(hostHeader: string, redirectResponse: DefaultingRedirectResponse): void {
     new ApplicationListenerRule(this, 'Target-' + mapHostToConstructName(hostHeader), {
       hostHeader: hostHeader,
       listener: this.albListener,
       priority: this.albPriority.getNextAndIncrement(),
       redirectResponse: {
-        host: this.hostName,
-        path: '/#{path}',
-        port: '#{port}',
-        protocol: '#{protocol}',
-        query: '#{query}',
-        statusCode: 'HTTP_301',
-      },
+        host: redirectResponse.host ?? this.hostName,
+        path: redirectResponse.path ?? '/#{path}',
+        port: redirectResponse.port ?? '#{port}',
+        protocol: redirectResponse.protocol ?? '#{protocol}',
+        query: redirectResponse.query ?? '#{query}',
+        statusCode: redirectResponse.statusCode ?? RedirectResponseStatus.HTTP_301_PERMANENT,
+      }
+    });
+  }
+
+  public addRedirectToPrimaryHostName(hostHeader: string): void {
+    this.addRedirectResponse(hostHeader, {
+      host: this.hostName,
     });
   }
 }
