@@ -24,10 +24,6 @@
     "yarn": "^1.22.4"
   },
   "peerDependencies": {
-    "@aws-cdk/aws-cognito": "^1.36.1",
-    "@aws-cdk/aws-ecs": "^1.36.1",
-    "@aws-cdk/aws-elasticloadbalancingv2": "^1.36.1",
-    "@aws-cdk/aws-logs": "^1.36.1",
     "@aws-cdk/core": "^1.36.1"
   },
   "dependencies": {
