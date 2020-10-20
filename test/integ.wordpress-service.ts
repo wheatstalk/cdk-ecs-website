@@ -4,7 +4,7 @@ import { DatabaseInstance, DatabaseInstanceEngine, MysqlEngineVersion } from '@a
 import { App, CfnOutput, Fn, RemovalPolicy } from '@aws-cdk/core';
 
 import { WordpressService } from '../src';
-import { EcsExtensionServiceCapacityType } from '../src/ecs-extensions';
+import { EcsWorkloadCapacityType } from '../src/ecs-workloads';
 import { TestingClusterStack } from '../src/testing-cluster';
 
 const app = new App();
@@ -36,7 +36,7 @@ new WordpressService(stack, 'Site', {
   albListener: albListener,
   primaryHostName: alb.loadBalancerDnsName,
 
-  capacityType: EcsExtensionServiceCapacityType.FARGATE,
+  capacityType: EcsWorkloadCapacityType.FARGATE,
   desiredCount: 4,
 
   databaseSecret: db.secret,

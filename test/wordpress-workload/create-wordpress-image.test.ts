@@ -3,7 +3,7 @@ import { Compatibility, TaskDefinition } from '@aws-cdk/aws-ecs';
 import { App, Stack } from '@aws-cdk/core';
 import * as fs from 'fs-extra';
 
-import { createUserSourceBuildContext, createWordpressImage } from '../../src/wordpress-extension/create-wordpress-image';
+import { createUserSourceBuildContext, createWordpressImage } from '../../src/wordpress-workload/create-wordpress-image';
 
 const WP_TEST_FIXTURE_PATH = path.join(__dirname, 'test-fixtures', 'wp');
 

@@ -2,7 +2,7 @@ import * as os from 'os';
 import * as path from 'path';
 import * as ecs from '@aws-cdk/aws-ecs';
 import * as fs from 'fs-extra';
-import { CreateImageOptions } from './wordpress-extension';
+import { WordpressImageOptions } from './wordpress-workload';
 
 export function renderWordpressZipUrl(version: string): string {
   return `https://wordpress.org/wordpress-${version}.zip`;
@@ -25,7 +25,7 @@ export function createUserSourceBuildContext(userSourcePath: string): string {
   return buildContext;
 }
 
-export function createWordpressImage(options?: CreateImageOptions): ecs.ContainerImage {
+export function createWordpressImage(options?: WordpressImageOptions): ecs.ContainerImage {
   if (options?.wordpressVersion && options?.wordpressSourcePath) {
     throw new Error('cannot specify both `downloadWordpressVersion` and `wordpressSourcePath`');
   }

@@ -4,7 +4,7 @@ import {
   findSmallestPublishedFargateSpec,
   megsFromGigs,
   range,
-} from '../../src/ecs-extensions/fargate-spec-finder';
+} from '../../src/ecs-workloads/fargate-spec-finder';
 
 it('generates a correct range value', () => {
   const gigsRange = range(1, 4).map(megsFromGigs);

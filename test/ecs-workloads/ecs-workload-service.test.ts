@@ -2,18 +2,18 @@ import { expect as expectCDK, haveResourceLike } from '@aws-cdk/assert';
 import { ContainerImage } from '@aws-cdk/aws-ecs';
 import { App } from '@aws-cdk/core';
 
-import { TaskDefinitionBindingInfo, EcsExtensionService } from '../../src/ecs-extensions';
+import { EcsWorkloadTaskInfo, EcsWorkloadService } from '../../src/ecs-workloads';
 import { TestingClusterStack } from '../../src/testing-cluster';
 
 test('it uses its desiredCount prop', () => {
   const testClusterStack = new TestingClusterStack(new App(), 'stack');
 
   // WHEN
-  new EcsExtensionService(testClusterStack, 'service', {
+  new EcsWorkloadService(testClusterStack, 'service', {
     cluster: testClusterStack.cluster,
     desiredCount: 5,
     serviceExtension: {
-      useTaskDefinition(taskDefinitionInfo: TaskDefinitionBindingInfo): void {
+      useTaskDefinition(taskDefinitionInfo: EcsWorkloadTaskInfo): void {
         taskDefinitionInfo.taskDefinition.addContainer('web', {
           image: ContainerImage.fromRegistry('nginx'),
           memoryLimitMiB: 512,

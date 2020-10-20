@@ -10,29 +10,19 @@ import {
   ListenerAction,
   ListenerCondition,
   Protocol,
+  RedirectOptions,
 } from '@aws-cdk/aws-elasticloadbalancingv2';
 import { Construct, Duration } from '@aws-cdk/core';
 
 import { CognitoAuthenticateAction, CognitoAuthenticateOptions } from './cognito-authenticate-action';
 import { NumberSequence } from './number-sequence';
 
-export interface AuthWithUserPoolProps {
+/**
+ * Configuration for authentication through a Cognito user pool.
+ */
+export interface CognitoAuthenticationConfig {
   readonly domain: string;
   readonly userPool: IUserPool;
-}
-
-export enum RedirectResponseStatus {
-  HTTP_301_PERMANENT = 'HTTP_301',
-  HTTP_302_FOUND = 'HTTP_302',
-}
-
-export interface DefaultingRedirectResponse {
-  readonly host?: string;
-  readonly path?: string;
-  readonly port?: string;
-  readonly protocol?: string;
-  readonly query?: string;
-  readonly statusCode?: RedirectResponseStatus;
 }
 
 /**
@@ -47,7 +37,7 @@ export interface IWebsiteService {
   /**
    * Add a host name from which traffic will be redirected to another URL.
    */
-  addRedirectResponse(hostHeader: string, redirectResponse: DefaultingRedirectResponse): void;
+  addRedirectResponse(hostHeader: string, redirectResponse: RedirectOptions): void;
 
   /**
    * Add a host name from which traffic will be directed to the primary
@@ -59,6 +49,9 @@ export interface IWebsiteService {
   // addAuthBypassServingHost(hostHeader: string, authBypassValue: string): void;
 }
 
+/**
+ * @internal
+ */
 export interface ListenerRulesBuilderProps {
   readonly service: Ec2Service | FargateService;
   readonly cluster: ICluster;
@@ -67,7 +60,7 @@ export interface ListenerRulesBuilderProps {
   readonly containerName: string;
   readonly trafficPort: number;
   readonly primaryHostName: string;
-  readonly authWithUserPool?: AuthWithUserPoolProps;
+  readonly authWithUserPool?: CognitoAuthenticationConfig;
 }
 
 /**
@@ -102,7 +95,7 @@ export class ListenerRulesBuilder extends Construct {
     this.deregistrationDelay = Duration.seconds(15);
   }
 
-  private obtainUserPoolInfo(config: AuthWithUserPoolProps): CognitoAuthenticateOptions {
+  private obtainUserPoolInfo(config: CognitoAuthenticationConfig): CognitoAuthenticateOptions {
     const name = `UserPoolClient-${mapHostToConstructName(config.domain)}`;
     // Create a user pool client and associate it with the user pool.
     const userPoolClient =
@@ -175,7 +168,7 @@ export class ListenerRulesBuilder extends Construct {
     });
   }
 
-  public addAuthenticatedServingHost(hostHeader: string, authConfig: AuthWithUserPoolProps): void {
+  public addAuthenticatedServingHost(hostHeader: string, authConfig: CognitoAuthenticationConfig): void {
     const targetGroup = this.obtainTargetGroup();
     const userPoolInfo = this.obtainUserPoolInfo(authConfig);
     const priority = this.albPriority.getNextAndIncrement();
@@ -202,7 +195,7 @@ export class ListenerRulesBuilder extends Construct {
     });
   }
 
-  public addRedirectResponse(hostHeader: string, redirectResponse: DefaultingRedirectResponse): void {
+  public addRedirectResponse(hostHeader: string, redirectResponse: RedirectOptions): void {
     const priority = this.albPriority.getNextAndIncrement();
 
     new ApplicationListenerRule(this, 'Target-' + mapHostToConstructName(hostHeader), {
@@ -215,7 +208,7 @@ export class ListenerRulesBuilder extends Construct {
         port: redirectResponse.port ?? '#{port}',
         protocol: redirectResponse.protocol ?? '#{protocol}',
         query: redirectResponse.query ?? '#{query}',
-        statusCode: redirectResponse.statusCode ?? RedirectResponseStatus.HTTP_301_PERMANENT,
+        statusCode: redirectResponse.permanent ? 'HTTP_301' : 'HTTP_302',
       },
     });
   }

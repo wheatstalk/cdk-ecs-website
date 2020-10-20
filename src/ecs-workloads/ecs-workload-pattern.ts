@@ -9,14 +9,14 @@ import {
 } from '@aws-cdk/aws-ecs';
 import { Construct } from '@aws-cdk/core';
 
-import { ServiceBindingInfo, TaskDefinitionBindingInfo } from './ecs-extension';
+import { EcsWorkloadServiceInfo, EcsWorkloadTaskInfo } from './ecs-workload';
 import { findSmallestPublishedFargateSpec } from './fargate-spec-finder';
 
 /**
  * Props for `EcsServicePatternBase`
  * @internal
  */
-export interface EcsServicePatternBaseProps {
+export interface EcsWorkloadPatternBaseProps {
   /**
    * Desired number of tasks.
    * @default 1
@@ -50,28 +50,29 @@ export interface EcsServicePatternBaseProps {
 
 /**
  * Interface for the pattern of creating ECS task definitions and services.
+ * @internal
  */
-export interface IEcsServicePattern {
-  bindTaskDefinition(scope: Construct, cluster: ICluster): TaskDefinitionBindingInfo;
+export interface IEcsWorkloadPattern {
+  bindTaskDefinition(scope: Construct, cluster: ICluster): EcsWorkloadTaskInfo;
 
   bindService(
     scope: Construct,
     cluster: ICluster,
-    taskDefinitionBinding: TaskDefinitionBindingInfo,
-  ): ServiceBindingInfo;
+    taskDefinitionBinding: EcsWorkloadTaskInfo,
+  ): EcsWorkloadServiceInfo;
 }
 
 /**
  * Base class for creating task definitions and services.
  * @internal
  */
-export abstract class EcsServicePatternBase {
+export abstract class EcsWorkloadPatternBase {
   protected readonly cpuMinimum: number;
   protected readonly memoryReserved: number;
   protected readonly memoryLimit: number;
   protected readonly desiredCount: number;
 
-  protected constructor(props: EcsServicePatternBaseProps) {
+  protected constructor(props: EcsWorkloadPatternBaseProps) {
     this.cpuMinimum = props.cpuMinimum ?? 0;
     this.memoryReserved = props.memoryReserved ?? 64;
     this.memoryLimit = props.memoryLimit ?? 512;
@@ -80,25 +81,25 @@ export abstract class EcsServicePatternBase {
 }
 
 /**
- * Props for `Ec2ServicePattern`
+ * Props for `Ec2WorkloadPattern`
  * @internal
  */
-export interface Ec2ServicePatternProps extends EcsServicePatternBaseProps {
+export interface Ec2WorkloadPatternProps extends EcsWorkloadPatternBaseProps {
 }
 
 /**
  * Creates an EC2 task definition and service.
  * @internal
  */
-export class Ec2ServicePattern extends EcsServicePatternBase implements IEcsServicePattern {
+export class Ec2WorkloadPattern extends EcsWorkloadPatternBase implements IEcsWorkloadPattern {
   protected readonly networkMode: NetworkMode;
 
-  constructor(props: Ec2ServicePatternProps) {
+  constructor(props: Ec2WorkloadPatternProps) {
     super(props);
     this.networkMode = props.networkMode ?? NetworkMode.BRIDGE;
   }
 
-  bindTaskDefinition(scope: Construct, _cluster: ICluster): TaskDefinitionBindingInfo {
+  bindTaskDefinition(scope: Construct, _cluster: ICluster): EcsWorkloadTaskInfo {
     const taskDefinition = new Ec2TaskDefinition(scope, 'Task', {
       networkMode: this.networkMode,
     });
@@ -113,8 +114,8 @@ export class Ec2ServicePattern extends EcsServicePatternBase implements IEcsServ
   bindService(
     scope: Construct,
     cluster: ICluster,
-    taskDefinitionBinding: TaskDefinitionBindingInfo,
-  ): ServiceBindingInfo {
+    taskDefinitionBinding: EcsWorkloadTaskInfo,
+  ): EcsWorkloadServiceInfo {
     const service = new Ec2Service(scope, 'Service', {
       cluster: cluster,
       taskDefinition: taskDefinitionBinding.taskDefinition,
@@ -128,22 +129,22 @@ export class Ec2ServicePattern extends EcsServicePatternBase implements IEcsServ
 }
 
 /**
- * Props for `FargateServicePattern`
+ * Props for `FargateWorkloadPattern`
  * @internal
  */
-export interface FargateServicePatternProps extends EcsServicePatternBaseProps {
+export interface FargateWorkloadPatternProps extends EcsWorkloadPatternBaseProps {
 }
 
 /**
  * Creates fargate task definitions and services.
  * @internal
  */
-export class FargateServicePattern extends EcsServicePatternBase implements IEcsServicePattern {
-  constructor(props: FargateServicePatternProps) {
+export class FargateWorkloadPattern extends EcsWorkloadPatternBase implements IEcsWorkloadPattern {
+  constructor(props: FargateWorkloadPatternProps) {
     super(props);
   }
 
-  bindTaskDefinition(scope: Construct, _cluster: ICluster): TaskDefinitionBindingInfo {
+  bindTaskDefinition(scope: Construct, _cluster: ICluster): EcsWorkloadTaskInfo {
     const fargateSpec = findSmallestPublishedFargateSpec(this.cpuMinimum, this.memoryLimit);
 
     const taskDefinition = new FargateTaskDefinition(scope, 'Task', {
@@ -160,8 +161,8 @@ export class FargateServicePattern extends EcsServicePatternBase implements IEcs
   bindService(
     scope: Construct,
     cluster: ICluster,
-    taskDefinitionBinding: TaskDefinitionBindingInfo,
-  ): ServiceBindingInfo {
+    taskDefinitionBinding: EcsWorkloadTaskInfo,
+  ): EcsWorkloadServiceInfo {
     const service = new FargateService(scope, 'Service', {
       cluster: cluster,
       taskDefinition: taskDefinitionBinding.taskDefinition,

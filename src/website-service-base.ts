@@ -1,18 +1,18 @@
 import { IConnectable, Port } from '@aws-cdk/aws-ec2';
 import { ICluster } from '@aws-cdk/aws-ecs';
-import { IApplicationListener } from '@aws-cdk/aws-elasticloadbalancingv2';
+import { IApplicationListener, RedirectOptions } from '@aws-cdk/aws-elasticloadbalancingv2';
 import { Construct } from '@aws-cdk/core';
 
-import { IEcsExtension, EcsExtensionServiceCapacityType, EcsExtensionService } from './ecs-extensions';
+import { IEcsWorkload, EcsWorkloadCapacityType, EcsWorkloadService } from './ecs-workloads';
 import {
-  AuthWithUserPoolProps,
-  DefaultingRedirectResponse,
+  CognitoAuthenticationConfig,
   IWebsiteService,
   ListenerRulesBuilder,
 } from './listener-rules-builder';
 
 /**
  * Non-workload options for `WebsiteServiceBase`
+ * @internal
  */
 export interface WebsiteServiceOptions {
   /**
@@ -33,7 +33,7 @@ export interface WebsiteServiceOptions {
   /**
    * Instruct the service to authenticate with the cognito user pool
    */
-  readonly authWithUserPool?: AuthWithUserPoolProps;
+  readonly authWithUserPool?: CognitoAuthenticationConfig;
 
   /**
    * The ECS cluster to add the service to
@@ -44,7 +44,7 @@ export interface WebsiteServiceOptions {
    * Type of compute capacity.
    * @default EcsExtensionCapacityType.EC2
    */
-  readonly capacityType?: EcsExtensionServiceCapacityType;
+  readonly capacityType?: EcsWorkloadCapacityType;
 
   /**
    * Desired task count
@@ -70,16 +70,18 @@ export interface WebsiteServiceOptions {
 
 /**
  * Props for `WebsiteServiceBase`
+ * @internal
  */
 export interface WebsiteServiceBaseProps extends WebsiteServiceOptions {
   /**
    * Workload extension.
    */
-  readonly ecsExtension: IEcsExtension;
+  readonly ecsExtension: IEcsWorkload;
 }
 
 /**
  * Base class for the builder-style website service classes.
+ * @internal
  */
 export class WebsiteServiceBase extends Construct implements IWebsiteService {
   private listenerRuleBuilder: ListenerRulesBuilder;
@@ -87,9 +89,9 @@ export class WebsiteServiceBase extends Construct implements IWebsiteService {
   constructor(scope: Construct, id: string, props: WebsiteServiceBaseProps) {
     super(scope, id);
 
-    const extensionService = new EcsExtensionService(this, 'Service', {
+    const extensionService = new EcsWorkloadService(this, 'Service', {
       ...props,
-      capacityType: EcsExtensionServiceCapacityType.EC2,
+      capacityType: EcsWorkloadCapacityType.EC2,
       serviceExtension: props.ecsExtension,
     });
 
@@ -136,7 +138,7 @@ export class WebsiteServiceBase extends Construct implements IWebsiteService {
     }
   }
 
-  addRedirectResponse(hostHeader: string, redirectResponse: DefaultingRedirectResponse): void {
+  addRedirectResponse(hostHeader: string, redirectResponse: RedirectOptions): void {
     return this.listenerRuleBuilder.addRedirectResponse(hostHeader, redirectResponse);
   }
 

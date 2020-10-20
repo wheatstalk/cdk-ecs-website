@@ -2,19 +2,21 @@ import { Ec2Service, FargateService, TaskDefinition } from '@aws-cdk/aws-ecs';
 
 /**
  * Rough compatibility interface.
+ * @internal
  */
-export interface IEcsExtension {
+export interface IEcsWorkload {
   readonly trafficContainer: string;
   readonly trafficPort: number;
-  useTaskDefinition(taskDefinitionInfo: TaskDefinitionBindingInfo): void;
+  useTaskDefinition(taskDefinitionInfo: EcsWorkloadTaskInfo): void;
   useService(service: Ec2Service | FargateService): void;
 }
 
 /**
- * Provides information to `IEcsExtension.useTaskDefinition` about the task
+ * Provides information to `IEcsWorkload.useTaskDefinition` about the task
  * definition.
+ * @internal
  */
-export interface TaskDefinitionBindingInfo {
+export interface EcsWorkloadTaskInfo {
   /**
    * The task definition.
    */
@@ -32,8 +34,9 @@ export interface TaskDefinitionBindingInfo {
 }
 
 /**
- * Provides information to `IEcsExtension.useService` about the service.
+ * Provides information to `IEcsWorkload.useService` about the service.
+ * @internal
  */
-export interface ServiceBindingInfo {
+export interface EcsWorkloadServiceInfo {
   readonly service: Ec2Service | FargateService;
 }

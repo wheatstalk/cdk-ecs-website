@@ -10,6 +10,7 @@ import { CfnOutput, Construct, Stack, StackProps } from '@aws-cdk/core';
 
 /**
  * A stack for integration testing.
+ * @internal
  */
 export class TestingClusterStack extends Stack {
   public readonly cluster: Cluster;
