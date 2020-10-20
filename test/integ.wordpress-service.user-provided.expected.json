@@ -1,0 +1,2001 @@
+{
+  "Resources": {
+    "cluster611F8AFF": {
+      "Type": "AWS::ECS::Cluster",
+      "Metadata": {
+        "aws:cdk:path": "wordpress-service-user-provided-integ/cluster/Resource"
+      }
+    },
+    "clusterVpc91107A71": {
+      "Type": "AWS::EC2::VPC",
+      "Properties": {
+        "CidrBlock": "10.0.0.0/16",
+        "EnableDnsHostnames": true,
+        "EnableDnsSupport": true,
+        "InstanceTenancy": "default",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "wordpress-service-user-provided-integ/cluster/Vpc"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "wordpress-service-user-provided-integ/cluster/Vpc/Resource"
+      }
+    },
+    "clusterVpcPublicSubnet1Subnet3948EFCA": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "CidrBlock": "10.0.0.0/18",
+        "VpcId": {
+          "Ref": "clusterVpc91107A71"
+        },
+        "AvailabilityZone": {
+          "Fn::Select": [
+            0,
+            {
+              "Fn::GetAZs": ""
+            }
+          ]
+        },
+        "MapPublicIpOnLaunch": true,
+        "Tags": [
+          {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "Public"
+          },
+          {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Public"
+          },
+          {
+            "Key": "Name",
+            "Value": "wordpress-service-user-provided-integ/cluster/Vpc/PublicSubnet1"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "wordpress-service-user-provided-integ/cluster/Vpc/PublicSubnet1/Subnet"
+      }
+    },
+    "clusterVpcPublicSubnet1RouteTable85A91E8C": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "VpcId": {
+          "Ref": "clusterVpc91107A71"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "wordpress-service-user-provided-integ/cluster/Vpc/PublicSubnet1"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "wordpress-service-user-provided-integ/cluster/Vpc/PublicSubnet1/RouteTable"
+      }
+    },
+    "clusterVpcPublicSubnet1RouteTableAssociationABF3C3B6": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "clusterVpcPublicSubnet1RouteTable85A91E8C"
+        },
+        "SubnetId": {
+          "Ref": "clusterVpcPublicSubnet1Subnet3948EFCA"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "wordpress-service-user-provided-integ/cluster/Vpc/PublicSubnet1/RouteTableAssociation"
+      }
+    },
+    "clusterVpcPublicSubnet1DefaultRouteF41D2737": {
+      "Type": "AWS::EC2::Route",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "clusterVpcPublicSubnet1RouteTable85A91E8C"
+        },
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "GatewayId": {
+          "Ref": "clusterVpcIGW64BABB17"
+        }
+      },
+      "DependsOn": [
+        "clusterVpcVPCGW9E9B1FA8"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "wordpress-service-user-provided-integ/cluster/Vpc/PublicSubnet1/DefaultRoute"
+      }
+    },
+    "clusterVpcPublicSubnet1EIP0E24289A": {
+      "Type": "AWS::EC2::EIP",
+      "Properties": {
+        "Domain": "vpc",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "wordpress-service-user-provided-integ/cluster/Vpc/PublicSubnet1"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "wordpress-service-user-provided-integ/cluster/Vpc/PublicSubnet1/EIP"
+      }
+    },
+    "clusterVpcPublicSubnet1NATGateway278CA43C": {
+      "Type": "AWS::EC2::NatGateway",
+      "Properties": {
+        "AllocationId": {
+          "Fn::GetAtt": [
+            "clusterVpcPublicSubnet1EIP0E24289A",
+            "AllocationId"
+          ]
+        },
+        "SubnetId": {
+          "Ref": "clusterVpcPublicSubnet1Subnet3948EFCA"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "wordpress-service-user-provided-integ/cluster/Vpc/PublicSubnet1"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "wordpress-service-user-provided-integ/cluster/Vpc/PublicSubnet1/NATGateway"
+      }
+    },
+    "clusterVpcPublicSubnet2SubnetEFB8E71C": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "CidrBlock": "10.0.64.0/18",
+        "VpcId": {
+          "Ref": "clusterVpc91107A71"
+        },
+        "AvailabilityZone": {
+          "Fn::Select": [
+            1,
+            {
+              "Fn::GetAZs": ""
+            }
+          ]
+        },
+        "MapPublicIpOnLaunch": true,
+        "Tags": [
+          {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "Public"
+          },
+          {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Public"
+          },
+          {
+            "Key": "Name",
+            "Value": "wordpress-service-user-provided-integ/cluster/Vpc/PublicSubnet2"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "wordpress-service-user-provided-integ/cluster/Vpc/PublicSubnet2/Subnet"
+      }
+    },
+    "clusterVpcPublicSubnet2RouteTable21948248": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "VpcId": {
+          "Ref": "clusterVpc91107A71"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "wordpress-service-user-provided-integ/cluster/Vpc/PublicSubnet2"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "wordpress-service-user-provided-integ/cluster/Vpc/PublicSubnet2/RouteTable"
+      }
+    },
+    "clusterVpcPublicSubnet2RouteTableAssociation21B4DF05": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "clusterVpcPublicSubnet2RouteTable21948248"
+        },
+        "SubnetId": {
+          "Ref": "clusterVpcPublicSubnet2SubnetEFB8E71C"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "wordpress-service-user-provided-integ/cluster/Vpc/PublicSubnet2/RouteTableAssociation"
+      }
+    },
+    "clusterVpcPublicSubnet2DefaultRouteC71B8373": {
+      "Type": "AWS::EC2::Route",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "clusterVpcPublicSubnet2RouteTable21948248"
+        },
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "GatewayId": {
+          "Ref": "clusterVpcIGW64BABB17"
+        }
+      },
+      "DependsOn": [
+        "clusterVpcVPCGW9E9B1FA8"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "wordpress-service-user-provided-integ/cluster/Vpc/PublicSubnet2/DefaultRoute"
+      }
+    },
+    "clusterVpcPublicSubnet2EIP6FF291E5": {
+      "Type": "AWS::EC2::EIP",
+      "Properties": {
+        "Domain": "vpc",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "wordpress-service-user-provided-integ/cluster/Vpc/PublicSubnet2"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "wordpress-service-user-provided-integ/cluster/Vpc/PublicSubnet2/EIP"
+      }
+    },
+    "clusterVpcPublicSubnet2NATGatewayD971ED50": {
+      "Type": "AWS::EC2::NatGateway",
+      "Properties": {
+        "AllocationId": {
+          "Fn::GetAtt": [
+            "clusterVpcPublicSubnet2EIP6FF291E5",
+            "AllocationId"
+          ]
+        },
+        "SubnetId": {
+          "Ref": "clusterVpcPublicSubnet2SubnetEFB8E71C"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "wordpress-service-user-provided-integ/cluster/Vpc/PublicSubnet2"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "wordpress-service-user-provided-integ/cluster/Vpc/PublicSubnet2/NATGateway"
+      }
+    },
+    "clusterVpcPrivateSubnet1Subnet4D445D11": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "CidrBlock": "10.0.128.0/18",
+        "VpcId": {
+          "Ref": "clusterVpc91107A71"
+        },
+        "AvailabilityZone": {
+          "Fn::Select": [
+            0,
+            {
+              "Fn::GetAZs": ""
+            }
+          ]
+        },
+        "MapPublicIpOnLaunch": false,
+        "Tags": [
+          {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "Private"
+          },
+          {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Private"
+          },
+          {
+            "Key": "Name",
+            "Value": "wordpress-service-user-provided-integ/cluster/Vpc/PrivateSubnet1"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "wordpress-service-user-provided-integ/cluster/Vpc/PrivateSubnet1/Subnet"
+      }
+    },
+    "clusterVpcPrivateSubnet1RouteTable6B7B6A77": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "VpcId": {
+          "Ref": "clusterVpc91107A71"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "wordpress-service-user-provided-integ/cluster/Vpc/PrivateSubnet1"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "wordpress-service-user-provided-integ/cluster/Vpc/PrivateSubnet1/RouteTable"
+      }
+    },
+    "clusterVpcPrivateSubnet1RouteTableAssociationDE66313E": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "clusterVpcPrivateSubnet1RouteTable6B7B6A77"
+        },
+        "SubnetId": {
+          "Ref": "clusterVpcPrivateSubnet1Subnet4D445D11"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "wordpress-service-user-provided-integ/cluster/Vpc/PrivateSubnet1/RouteTableAssociation"
+      }
+    },
+    "clusterVpcPrivateSubnet1DefaultRoute6A776454": {
+      "Type": "AWS::EC2::Route",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "clusterVpcPrivateSubnet1RouteTable6B7B6A77"
+        },
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "NatGatewayId": {
+          "Ref": "clusterVpcPublicSubnet1NATGateway278CA43C"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "wordpress-service-user-provided-integ/cluster/Vpc/PrivateSubnet1/DefaultRoute"
+      }
+    },
+    "clusterVpcPrivateSubnet2Subnet6DFF6572": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "CidrBlock": "10.0.192.0/18",
+        "VpcId": {
+          "Ref": "clusterVpc91107A71"
+        },
+        "AvailabilityZone": {
+          "Fn::Select": [
+            1,
+            {
+              "Fn::GetAZs": ""
+            }
+          ]
+        },
+        "MapPublicIpOnLaunch": false,
+        "Tags": [
+          {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "Private"
+          },
+          {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Private"
+          },
+          {
+            "Key": "Name",
+            "Value": "wordpress-service-user-provided-integ/cluster/Vpc/PrivateSubnet2"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "wordpress-service-user-provided-integ/cluster/Vpc/PrivateSubnet2/Subnet"
+      }
+    },
+    "clusterVpcPrivateSubnet2RouteTable0D967850": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "VpcId": {
+          "Ref": "clusterVpc91107A71"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "wordpress-service-user-provided-integ/cluster/Vpc/PrivateSubnet2"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "wordpress-service-user-provided-integ/cluster/Vpc/PrivateSubnet2/RouteTable"
+      }
+    },
+    "clusterVpcPrivateSubnet2RouteTableAssociation0E224256": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "clusterVpcPrivateSubnet2RouteTable0D967850"
+        },
+        "SubnetId": {
+          "Ref": "clusterVpcPrivateSubnet2Subnet6DFF6572"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "wordpress-service-user-provided-integ/cluster/Vpc/PrivateSubnet2/RouteTableAssociation"
+      }
+    },
+    "clusterVpcPrivateSubnet2DefaultRouteF3B52CD2": {
+      "Type": "AWS::EC2::Route",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "clusterVpcPrivateSubnet2RouteTable0D967850"
+        },
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "NatGatewayId": {
+          "Ref": "clusterVpcPublicSubnet2NATGatewayD971ED50"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "wordpress-service-user-provided-integ/cluster/Vpc/PrivateSubnet2/DefaultRoute"
+      }
+    },
+    "clusterVpcIGW64BABB17": {
+      "Type": "AWS::EC2::InternetGateway",
+      "Properties": {
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "wordpress-service-user-provided-integ/cluster/Vpc"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "wordpress-service-user-provided-integ/cluster/Vpc/IGW"
+      }
+    },
+    "clusterVpcVPCGW9E9B1FA8": {
+      "Type": "AWS::EC2::VPCGatewayAttachment",
+      "Properties": {
+        "VpcId": {
+          "Ref": "clusterVpc91107A71"
+        },
+        "InternetGatewayId": {
+          "Ref": "clusterVpcIGW64BABB17"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "wordpress-service-user-provided-integ/cluster/Vpc/VPCGW"
+      }
+    },
+    "clustercapacityInstanceSecurityGroup8AD6E10E": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "wordpress-service-user-provided-integ/cluster/capacity/InstanceSecurityGroup",
+        "SecurityGroupEgress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "wordpress-service-user-provided-integ/cluster/capacity"
+          }
+        ],
+        "VpcId": {
+          "Ref": "clusterVpc91107A71"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "wordpress-service-user-provided-integ/cluster/capacity/InstanceSecurityGroup/Resource"
+      }
+    },
+    "clustercapacityInstanceSecurityGroupfromwordpressserviceuserprovidedintegalbSecurityGroup4BFD1FCDALLPORTS16170038": {
+      "Type": "AWS::EC2::SecurityGroupIngress",
+      "Properties": {
+        "IpProtocol": "tcp",
+        "Description": "from wordpressserviceuserprovidedintegalbSecurityGroup4BFD1FCD:ALL PORTS",
+        "FromPort": 0,
+        "GroupId": {
+          "Fn::GetAtt": [
+            "clustercapacityInstanceSecurityGroup8AD6E10E",
+            "GroupId"
+          ]
+        },
+        "SourceSecurityGroupId": {
+          "Fn::GetAtt": [
+            "albSecurityGroup49866104",
+            "GroupId"
+          ]
+        },
+        "ToPort": 65535
+      },
+      "Metadata": {
+        "aws:cdk:path": "wordpress-service-user-provided-integ/cluster/capacity/InstanceSecurityGroup/from wordpressserviceuserprovidedintegalbSecurityGroup4BFD1FCD:ALL PORTS"
+      }
+    },
+    "clustercapacityInstanceSecurityGroupfromwordpressserviceuserprovidedintegalbSecurityGroup4BFD1FCD80FAED73EB": {
+      "Type": "AWS::EC2::SecurityGroupIngress",
+      "Properties": {
+        "IpProtocol": "tcp",
+        "Description": "from wordpressserviceuserprovidedintegalbSecurityGroup4BFD1FCD:80",
+        "FromPort": 80,
+        "GroupId": {
+          "Fn::GetAtt": [
+            "clustercapacityInstanceSecurityGroup8AD6E10E",
+            "GroupId"
+          ]
+        },
+        "SourceSecurityGroupId": {
+          "Fn::GetAtt": [
+            "albSecurityGroup49866104",
+            "GroupId"
+          ]
+        },
+        "ToPort": 80
+      },
+      "Metadata": {
+        "aws:cdk:path": "wordpress-service-user-provided-integ/cluster/capacity/InstanceSecurityGroup/from wordpressserviceuserprovidedintegalbSecurityGroup4BFD1FCD:80"
+      }
+    },
+    "clustercapacityInstanceSecurityGroupfromwordpressserviceuserprovidedintegalbSecurityGroup4BFD1FCD32768655355F91ABAB": {
+      "Type": "AWS::EC2::SecurityGroupIngress",
+      "Properties": {
+        "IpProtocol": "tcp",
+        "Description": "Load balancer to target",
+        "FromPort": 32768,
+        "GroupId": {
+          "Fn::GetAtt": [
+            "clustercapacityInstanceSecurityGroup8AD6E10E",
+            "GroupId"
+          ]
+        },
+        "SourceSecurityGroupId": {
+          "Fn::GetAtt": [
+            "albSecurityGroup49866104",
+            "GroupId"
+          ]
+        },
+        "ToPort": 65535
+      },
+      "Metadata": {
+        "aws:cdk:path": "wordpress-service-user-provided-integ/cluster/capacity/InstanceSecurityGroup/from wordpressserviceuserprovidedintegalbSecurityGroup4BFD1FCD:32768-65535"
+      }
+    },
+    "clustercapacityInstanceRole4828E066": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "ec2.",
+                      {
+                        "Ref": "AWS::URLSuffix"
+                      }
+                    ]
+                  ]
+                }
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "wordpress-service-user-provided-integ/cluster/capacity"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "wordpress-service-user-provided-integ/cluster/capacity/InstanceRole/Resource"
+      }
+    },
+    "clustercapacityInstanceRoleDefaultPolicyCBC0BBC3": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "ecs:DeregisterContainerInstance",
+                "ecs:RegisterContainerInstance",
+                "ecs:Submit*"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "cluster611F8AFF",
+                  "Arn"
+                ]
+              }
+            },
+            {
+              "Action": [
+                "ecs:Poll",
+                "ecs:StartTelemetrySession"
+              ],
+              "Condition": {
+                "ArnEquals": {
+                  "ecs:cluster": {
+                    "Fn::GetAtt": [
+                      "cluster611F8AFF",
+                      "Arn"
+                    ]
+                  }
+                }
+              },
+              "Effect": "Allow",
+              "Resource": "*"
+            },
+            {
+              "Action": [
+                "ecs:DiscoverPollEndpoint",
+                "ecr:GetAuthorizationToken",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents"
+              ],
+              "Effect": "Allow",
+              "Resource": "*"
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "clustercapacityInstanceRoleDefaultPolicyCBC0BBC3",
+        "Roles": [
+          {
+            "Ref": "clustercapacityInstanceRole4828E066"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "wordpress-service-user-provided-integ/cluster/capacity/InstanceRole/DefaultPolicy/Resource"
+      }
+    },
+    "clustercapacityInstanceProfile36C4BC01": {
+      "Type": "AWS::IAM::InstanceProfile",
+      "Properties": {
+        "Roles": [
+          {
+            "Ref": "clustercapacityInstanceRole4828E066"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "wordpress-service-user-provided-integ/cluster/capacity/InstanceProfile"
+      }
+    },
+    "clustercapacityLaunchConfig30223FC6": {
+      "Type": "AWS::AutoScaling::LaunchConfiguration",
+      "Properties": {
+        "ImageId": {
+          "Ref": "SsmParameterValueawsserviceecsoptimizedamiamazonlinux2recommendedimageidC96584B6F00A464EAD1953AFF4B05118Parameter"
+        },
+        "InstanceType": "t3.micro",
+        "IamInstanceProfile": {
+          "Ref": "clustercapacityInstanceProfile36C4BC01"
+        },
+        "SecurityGroups": [
+          {
+            "Fn::GetAtt": [
+              "clustercapacityInstanceSecurityGroup8AD6E10E",
+              "GroupId"
+            ]
+          }
+        ],
+        "UserData": {
+          "Fn::Base64": {
+            "Fn::Join": [
+              "",
+              [
+                "#!/bin/bash\necho ECS_CLUSTER=",
+                {
+                  "Ref": "cluster611F8AFF"
+                },
+                " >> /etc/ecs/ecs.config\nsudo iptables --insert FORWARD 1 --in-interface docker+ --destination 169.254.169.254/32 --jump DROP\nsudo service iptables save\necho ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config"
+              ]
+            ]
+          }
+        }
+      },
+      "DependsOn": [
+        "clustercapacityInstanceRoleDefaultPolicyCBC0BBC3",
+        "clustercapacityInstanceRole4828E066"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "wordpress-service-user-provided-integ/cluster/capacity/LaunchConfig"
+      }
+    },
+    "clustercapacityASG18452D96": {
+      "Type": "AWS::AutoScaling::AutoScalingGroup",
+      "Properties": {
+        "MaxSize": "1",
+        "MinSize": "1",
+        "LaunchConfigurationName": {
+          "Ref": "clustercapacityLaunchConfig30223FC6"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "PropagateAtLaunch": true,
+            "Value": "wordpress-service-user-provided-integ/cluster/capacity"
+          }
+        ],
+        "VPCZoneIdentifier": [
+          {
+            "Ref": "clusterVpcPrivateSubnet1Subnet4D445D11"
+          },
+          {
+            "Ref": "clusterVpcPrivateSubnet2Subnet6DFF6572"
+          }
+        ]
+      },
+      "UpdatePolicy": {
+        "AutoScalingReplacingUpdate": {
+          "WillReplace": true
+        },
+        "AutoScalingScheduledAction": {
+          "IgnoreUnmodifiedGroupSizeProperties": true
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "wordpress-service-user-provided-integ/cluster/capacity/ASG"
+      }
+    },
+    "clustercapacityDrainECSHookFunctionServiceRole0E437FBA": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+              ]
+            ]
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "wordpress-service-user-provided-integ/cluster/capacity"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "wordpress-service-user-provided-integ/cluster/capacity/DrainECSHook/Function/ServiceRole/Resource"
+      }
+    },
+    "clustercapacityDrainECSHookFunctionServiceRoleDefaultPolicyE735F19E": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "ec2:DescribeInstances",
+                "ec2:DescribeInstanceAttribute",
+                "ec2:DescribeInstanceStatus",
+                "ec2:DescribeHosts"
+              ],
+              "Effect": "Allow",
+              "Resource": "*"
+            },
+            {
+              "Action": "autoscaling:CompleteLifecycleAction",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":autoscaling:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":autoScalingGroup:*:autoScalingGroupName/",
+                    {
+                      "Ref": "clustercapacityASG18452D96"
+                    }
+                  ]
+                ]
+              }
+            },
+            {
+              "Action": [
+                "ecs:DescribeContainerInstances",
+                "ecs:DescribeTasks"
+              ],
+              "Condition": {
+                "ArnEquals": {
+                  "ecs:cluster": {
+                    "Fn::GetAtt": [
+                      "cluster611F8AFF",
+                      "Arn"
+                    ]
+                  }
+                }
+              },
+              "Effect": "Allow",
+              "Resource": "*"
+            },
+            {
+              "Action": [
+                "ecs:ListContainerInstances",
+                "ecs:SubmitContainerStateChange",
+                "ecs:SubmitTaskStateChange"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "cluster611F8AFF",
+                  "Arn"
+                ]
+              }
+            },
+            {
+              "Action": [
+                "ecs:UpdateContainerInstancesState",
+                "ecs:ListTasks"
+              ],
+              "Condition": {
+                "ArnEquals": {
+                  "ecs:cluster": {
+                    "Fn::GetAtt": [
+                      "cluster611F8AFF",
+                      "Arn"
+                    ]
+                  }
+                }
+              },
+              "Effect": "Allow",
+              "Resource": "*"
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "clustercapacityDrainECSHookFunctionServiceRoleDefaultPolicyE735F19E",
+        "Roles": [
+          {
+            "Ref": "clustercapacityDrainECSHookFunctionServiceRole0E437FBA"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "wordpress-service-user-provided-integ/cluster/capacity/DrainECSHook/Function/ServiceRole/DefaultPolicy/Resource"
+      }
+    },
+    "clustercapacityDrainECSHookFunction2531C0BF": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "ZipFile": "import boto3, json, os, time\n\necs = boto3.client('ecs')\nautoscaling = boto3.client('autoscaling')\n\n\ndef lambda_handler(event, context):\n  print(json.dumps(event))\n  cluster = os.environ['CLUSTER']\n  snsTopicArn = event['Records'][0]['Sns']['TopicArn']\n  lifecycle_event = json.loads(event['Records'][0]['Sns']['Message'])\n  instance_id = lifecycle_event.get('EC2InstanceId')\n  if not instance_id:\n    print('Got event without EC2InstanceId: %s', json.dumps(event))\n    return\n\n  instance_arn = container_instance_arn(cluster, instance_id)\n  print('Instance %s has container instance ARN %s' % (lifecycle_event['EC2InstanceId'], instance_arn))\n\n  if not instance_arn:\n    return\n\n  while has_tasks(cluster, instance_arn):\n    time.sleep(10)\n\n  try:\n    print('Terminating instance %s' % instance_id)\n    autoscaling.complete_lifecycle_action(\n        LifecycleActionResult='CONTINUE',\n        **pick(lifecycle_event, 'LifecycleHookName', 'LifecycleActionToken', 'AutoScalingGroupName'))\n  except Exception as e:\n    # Lifecycle action may have already completed.\n    print(str(e))\n\n\ndef container_instance_arn(cluster, instance_id):\n  \"\"\"Turn an instance ID into a container instance ARN.\"\"\"\n  arns = ecs.list_container_instances(cluster=cluster, filter='ec2InstanceId==' + instance_id)['containerInstanceArns']\n  if not arns:\n    return None\n  return arns[0]\n\n\ndef has_tasks(cluster, instance_arn):\n  \"\"\"Return True if the instance is running tasks for the given cluster.\"\"\"\n  instances = ecs.describe_container_instances(cluster=cluster, containerInstances=[instance_arn])['containerInstances']\n  if not instances:\n    return False\n  instance = instances[0]\n\n  if instance['status'] == 'ACTIVE':\n    # Start draining, then try again later\n    set_container_instance_to_draining(cluster, instance_arn)\n    return True\n\n  tasks = instance['runningTasksCount'] + instance['pendingTasksCount']\n  print('Instance %s has %s tasks' % (instance_arn, tasks))\n\n  return tasks > 0\n\n\ndef set_container_instance_to_draining(cluster, instance_arn):\n  ecs.update_container_instances_state(\n      cluster=cluster,\n      containerInstances=[instance_arn], status='DRAINING')\n\n\ndef pick(dct, *keys):\n  \"\"\"Pick a subset of a dict.\"\"\"\n  return {k: v for k, v in dct.items() if k in keys}\n"
+        },
+        "Handler": "index.lambda_handler",
+        "Role": {
+          "Fn::GetAtt": [
+            "clustercapacityDrainECSHookFunctionServiceRole0E437FBA",
+            "Arn"
+          ]
+        },
+        "Runtime": "python3.6",
+        "Environment": {
+          "Variables": {
+            "CLUSTER": {
+              "Ref": "cluster611F8AFF"
+            }
+          }
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "wordpress-service-user-provided-integ/cluster/capacity"
+          }
+        ],
+        "Timeout": 310
+      },
+      "DependsOn": [
+        "clustercapacityDrainECSHookFunctionServiceRoleDefaultPolicyE735F19E",
+        "clustercapacityDrainECSHookFunctionServiceRole0E437FBA"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "wordpress-service-user-provided-integ/cluster/capacity/DrainECSHook/Function/Resource"
+      }
+    },
+    "clustercapacityDrainECSHookFunctionAllowInvokewordpressserviceuserprovidedintegclustercapacityLifecycleHookDrainHookTopicA96BE3508BDBF1A1": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "clustercapacityDrainECSHookFunction2531C0BF",
+            "Arn"
+          ]
+        },
+        "Principal": "sns.amazonaws.com",
+        "SourceArn": {
+          "Ref": "clustercapacityLifecycleHookDrainHookTopic9FF76987"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "wordpress-service-user-provided-integ/cluster/capacity/DrainECSHook/Function/AllowInvoke:wordpressserviceuserprovidedintegclustercapacityLifecycleHookDrainHookTopicA96BE350"
+      }
+    },
+    "clustercapacityDrainECSHookFunctionTopic3952FEF2": {
+      "Type": "AWS::SNS::Subscription",
+      "Properties": {
+        "Protocol": "lambda",
+        "TopicArn": {
+          "Ref": "clustercapacityLifecycleHookDrainHookTopic9FF76987"
+        },
+        "Endpoint": {
+          "Fn::GetAtt": [
+            "clustercapacityDrainECSHookFunction2531C0BF",
+            "Arn"
+          ]
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "wordpress-service-user-provided-integ/cluster/capacity/DrainECSHook/Function/Topic/Resource"
+      }
+    },
+    "clustercapacityLifecycleHookDrainHookRole14F5EDA5": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "autoscaling.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "wordpress-service-user-provided-integ/cluster/capacity"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "wordpress-service-user-provided-integ/cluster/capacity/LifecycleHookDrainHook/Role/Resource"
+      }
+    },
+    "clustercapacityLifecycleHookDrainHookRoleDefaultPolicy8E559502": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sns:Publish",
+              "Effect": "Allow",
+              "Resource": {
+                "Ref": "clustercapacityLifecycleHookDrainHookTopic9FF76987"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "clustercapacityLifecycleHookDrainHookRoleDefaultPolicy8E559502",
+        "Roles": [
+          {
+            "Ref": "clustercapacityLifecycleHookDrainHookRole14F5EDA5"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "wordpress-service-user-provided-integ/cluster/capacity/LifecycleHookDrainHook/Role/DefaultPolicy/Resource"
+      }
+    },
+    "clustercapacityLifecycleHookDrainHookTopic9FF76987": {
+      "Type": "AWS::SNS::Topic",
+      "Properties": {
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "wordpress-service-user-provided-integ/cluster/capacity"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "wordpress-service-user-provided-integ/cluster/capacity/LifecycleHookDrainHook/Topic/Resource"
+      }
+    },
+    "clustercapacityLifecycleHookDrainHook88AF13E8": {
+      "Type": "AWS::AutoScaling::LifecycleHook",
+      "Properties": {
+        "AutoScalingGroupName": {
+          "Ref": "clustercapacityASG18452D96"
+        },
+        "LifecycleTransition": "autoscaling:EC2_INSTANCE_TERMINATING",
+        "DefaultResult": "CONTINUE",
+        "HeartbeatTimeout": 300,
+        "NotificationTargetARN": {
+          "Ref": "clustercapacityLifecycleHookDrainHookTopic9FF76987"
+        },
+        "RoleARN": {
+          "Fn::GetAtt": [
+            "clustercapacityLifecycleHookDrainHookRole14F5EDA5",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "clustercapacityLifecycleHookDrainHookRoleDefaultPolicy8E559502",
+        "clustercapacityLifecycleHookDrainHookRole14F5EDA5"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "wordpress-service-user-provided-integ/cluster/capacity/LifecycleHookDrainHook/Resource"
+      }
+    },
+    "alb8A8B13C2": {
+      "Type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
+      "Properties": {
+        "LoadBalancerAttributes": [
+          {
+            "Key": "deletion_protection.enabled",
+            "Value": "false"
+          }
+        ],
+        "Scheme": "internet-facing",
+        "SecurityGroups": [
+          {
+            "Fn::GetAtt": [
+              "albSecurityGroup49866104",
+              "GroupId"
+            ]
+          }
+        ],
+        "Subnets": [
+          {
+            "Ref": "clusterVpcPublicSubnet1Subnet3948EFCA"
+          },
+          {
+            "Ref": "clusterVpcPublicSubnet2SubnetEFB8E71C"
+          }
+        ],
+        "Type": "application"
+      },
+      "DependsOn": [
+        "clusterVpcPublicSubnet1DefaultRouteF41D2737",
+        "clusterVpcPublicSubnet2DefaultRouteC71B8373"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "wordpress-service-user-provided-integ/alb/Resource"
+      }
+    },
+    "albSecurityGroup49866104": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "Automatically created Security Group for ELB wordpressserviceuserprovidedintegalb02C9214B",
+        "SecurityGroupIngress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow from anyone on port 80",
+            "FromPort": 80,
+            "IpProtocol": "tcp",
+            "ToPort": 80
+          }
+        ],
+        "VpcId": {
+          "Ref": "clusterVpc91107A71"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "wordpress-service-user-provided-integ/alb/SecurityGroup/Resource"
+      }
+    },
+    "albSecurityGrouptowordpressserviceuserprovidedintegclustercapacityInstanceSecurityGroup458470E2ALLPORTSFEA27C77": {
+      "Type": "AWS::EC2::SecurityGroupEgress",
+      "Properties": {
+        "GroupId": {
+          "Fn::GetAtt": [
+            "albSecurityGroup49866104",
+            "GroupId"
+          ]
+        },
+        "IpProtocol": "tcp",
+        "Description": "to wordpressserviceuserprovidedintegclustercapacityInstanceSecurityGroup458470E2:ALL PORTS",
+        "DestinationSecurityGroupId": {
+          "Fn::GetAtt": [
+            "clustercapacityInstanceSecurityGroup8AD6E10E",
+            "GroupId"
+          ]
+        },
+        "FromPort": 0,
+        "ToPort": 65535
+      },
+      "Metadata": {
+        "aws:cdk:path": "wordpress-service-user-provided-integ/alb/SecurityGroup/to wordpressserviceuserprovidedintegclustercapacityInstanceSecurityGroup458470E2:ALL PORTS"
+      }
+    },
+    "albSecurityGrouptowordpressserviceuserprovidedintegclustercapacityInstanceSecurityGroup458470E2809D78FEE1": {
+      "Type": "AWS::EC2::SecurityGroupEgress",
+      "Properties": {
+        "GroupId": {
+          "Fn::GetAtt": [
+            "albSecurityGroup49866104",
+            "GroupId"
+          ]
+        },
+        "IpProtocol": "tcp",
+        "Description": "to wordpressserviceuserprovidedintegclustercapacityInstanceSecurityGroup458470E2:80",
+        "DestinationSecurityGroupId": {
+          "Fn::GetAtt": [
+            "clustercapacityInstanceSecurityGroup8AD6E10E",
+            "GroupId"
+          ]
+        },
+        "FromPort": 80,
+        "ToPort": 80
+      },
+      "Metadata": {
+        "aws:cdk:path": "wordpress-service-user-provided-integ/alb/SecurityGroup/to wordpressserviceuserprovidedintegclustercapacityInstanceSecurityGroup458470E2:80"
+      }
+    },
+    "albSecurityGrouptowordpressserviceuserprovidedintegclustercapacityInstanceSecurityGroup458470E23276865535827A518D": {
+      "Type": "AWS::EC2::SecurityGroupEgress",
+      "Properties": {
+        "GroupId": {
+          "Fn::GetAtt": [
+            "albSecurityGroup49866104",
+            "GroupId"
+          ]
+        },
+        "IpProtocol": "tcp",
+        "Description": "Load balancer to target",
+        "DestinationSecurityGroupId": {
+          "Fn::GetAtt": [
+            "clustercapacityInstanceSecurityGroup8AD6E10E",
+            "GroupId"
+          ]
+        },
+        "FromPort": 32768,
+        "ToPort": 65535
+      },
+      "Metadata": {
+        "aws:cdk:path": "wordpress-service-user-provided-integ/alb/SecurityGroup/to wordpressserviceuserprovidedintegclustercapacityInstanceSecurityGroup458470E2:32768-65535"
+      }
+    },
+    "albhttpF1B39DBC": {
+      "Type": "AWS::ElasticLoadBalancingV2::Listener",
+      "Properties": {
+        "DefaultActions": [
+          {
+            "FixedResponseConfig": {
+              "ContentType": "text/plain",
+              "MessageBody": "404 not found",
+              "StatusCode": "404"
+            },
+            "Type": "fixed-response"
+          }
+        ],
+        "LoadBalancerArn": {
+          "Ref": "alb8A8B13C2"
+        },
+        "Port": 80,
+        "Protocol": "HTTP"
+      },
+      "Metadata": {
+        "aws:cdk:path": "wordpress-service-user-provided-integ/alb/http/Resource"
+      }
+    },
+    "databaseSubnetGroup287EC735": {
+      "Type": "AWS::RDS::DBSubnetGroup",
+      "Properties": {
+        "DBSubnetGroupDescription": "Subnet group for database database",
+        "SubnetIds": [
+          {
+            "Ref": "clusterVpcPrivateSubnet1Subnet4D445D11"
+          },
+          {
+            "Ref": "clusterVpcPrivateSubnet2Subnet6DFF6572"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "wordpress-service-user-provided-integ/database/SubnetGroup/Default"
+      }
+    },
+    "databaseSecurityGroup984F86C4": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "Security group for database database",
+        "SecurityGroupEgress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1"
+          }
+        ],
+        "VpcId": {
+          "Ref": "clusterVpc91107A71"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "wordpress-service-user-provided-integ/database/SecurityGroup/Resource"
+      }
+    },
+    "databaseSecurityGroupfromwordpressserviceuserprovidedintegclustercapacityInstanceSecurityGroup458470E2ALLTRAFFIC8324ADC8": {
+      "Type": "AWS::EC2::SecurityGroupIngress",
+      "Properties": {
+        "IpProtocol": "-1",
+        "Description": "from wordpressserviceuserprovidedintegclustercapacityInstanceSecurityGroup458470E2:ALL TRAFFIC",
+        "GroupId": {
+          "Fn::GetAtt": [
+            "databaseSecurityGroup984F86C4",
+            "GroupId"
+          ]
+        },
+        "SourceSecurityGroupId": {
+          "Fn::GetAtt": [
+            "clustercapacityInstanceSecurityGroup8AD6E10E",
+            "GroupId"
+          ]
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "wordpress-service-user-provided-integ/database/SecurityGroup/from wordpressserviceuserprovidedintegclustercapacityInstanceSecurityGroup458470E2:ALL TRAFFIC"
+      }
+    },
+    "databaseSecret87F1207C": {
+      "Type": "AWS::SecretsManager::Secret",
+      "Properties": {
+        "Description": {
+          "Fn::Join": [
+            "",
+            [
+              "Generated by the CDK for stack: ",
+              {
+                "Ref": "AWS::StackName"
+              }
+            ]
+          ]
+        },
+        "GenerateSecretString": {
+          "ExcludeCharacters": " %+~`#$&*()|[]{}:;<>?!'/@\"\\",
+          "GenerateStringKey": "password",
+          "PasswordLength": 30,
+          "SecretStringTemplate": "{\"username\":\"admin\"}"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "wordpress-service-user-provided-integ/database/Secret/Resource"
+      }
+    },
+    "databaseSecretAttachment5618DFB3": {
+      "Type": "AWS::SecretsManager::SecretTargetAttachment",
+      "Properties": {
+        "SecretId": {
+          "Ref": "databaseSecret87F1207C"
+        },
+        "TargetId": {
+          "Ref": "databaseEBDE4557"
+        },
+        "TargetType": "AWS::RDS::DBInstance"
+      },
+      "Metadata": {
+        "aws:cdk:path": "wordpress-service-user-provided-integ/database/Secret/Attachment/Resource"
+      }
+    },
+    "databaseEBDE4557": {
+      "Type": "AWS::RDS::DBInstance",
+      "Properties": {
+        "DBInstanceClass": "db.t3.micro",
+        "AllocatedStorage": "100",
+        "CopyTagsToSnapshot": true,
+        "DBName": "wordpress",
+        "DBSubnetGroupName": {
+          "Ref": "databaseSubnetGroup287EC735"
+        },
+        "Engine": "mysql",
+        "EngineVersion": "8.0",
+        "MasterUsername": {
+          "Fn::Join": [
+            "",
+            [
+              "{{resolve:secretsmanager:",
+              {
+                "Ref": "databaseSecret87F1207C"
+              },
+              ":SecretString:username::}}"
+            ]
+          ]
+        },
+        "MasterUserPassword": {
+          "Fn::Join": [
+            "",
+            [
+              "{{resolve:secretsmanager:",
+              {
+                "Ref": "databaseSecret87F1207C"
+              },
+              ":SecretString:password::}}"
+            ]
+          ]
+        },
+        "StorageType": "gp2",
+        "VPCSecurityGroups": [
+          {
+            "Fn::GetAtt": [
+              "databaseSecurityGroup984F86C4",
+              "GroupId"
+            ]
+          }
+        ]
+      },
+      "UpdateReplacePolicy": "Snapshot",
+      "Metadata": {
+        "aws:cdk:path": "wordpress-service-user-provided-integ/database/Resource"
+      }
+    },
+    "files6F97A25D": {
+      "Type": "AWS::EFS::FileSystem",
+      "Properties": {
+        "FileSystemTags": [
+          {
+            "Key": "Name",
+            "Value": "wordpress-service-user-provided-integ/files"
+          }
+        ]
+      },
+      "UpdateReplacePolicy": "Delete",
+      "DeletionPolicy": "Delete",
+      "Metadata": {
+        "aws:cdk:path": "wordpress-service-user-provided-integ/files/Resource"
+      }
+    },
+    "filesEfsSecurityGroupD12994BF": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "wordpress-service-user-provided-integ/files/EfsSecurityGroup",
+        "SecurityGroupEgress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "wordpress-service-user-provided-integ/files"
+          }
+        ],
+        "VpcId": {
+          "Ref": "clusterVpc91107A71"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "wordpress-service-user-provided-integ/files/EfsSecurityGroup/Resource"
+      }
+    },
+    "filesEfsSecurityGroupfromwordpressserviceuserprovidedintegclustercapacityInstanceSecurityGroup458470E2ALLTRAFFICF285B928": {
+      "Type": "AWS::EC2::SecurityGroupIngress",
+      "Properties": {
+        "IpProtocol": "-1",
+        "Description": "from wordpressserviceuserprovidedintegclustercapacityInstanceSecurityGroup458470E2:ALL TRAFFIC",
+        "GroupId": {
+          "Fn::GetAtt": [
+            "filesEfsSecurityGroupD12994BF",
+            "GroupId"
+          ]
+        },
+        "SourceSecurityGroupId": {
+          "Fn::GetAtt": [
+            "clustercapacityInstanceSecurityGroup8AD6E10E",
+            "GroupId"
+          ]
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "wordpress-service-user-provided-integ/files/EfsSecurityGroup/from wordpressserviceuserprovidedintegclustercapacityInstanceSecurityGroup458470E2:ALL TRAFFIC"
+      }
+    },
+    "filesEfsMountTarget1BBCBA392": {
+      "Type": "AWS::EFS::MountTarget",
+      "Properties": {
+        "FileSystemId": {
+          "Ref": "files6F97A25D"
+        },
+        "SecurityGroups": [
+          {
+            "Fn::GetAtt": [
+              "filesEfsSecurityGroupD12994BF",
+              "GroupId"
+            ]
+          }
+        ],
+        "SubnetId": {
+          "Ref": "clusterVpcPrivateSubnet1Subnet4D445D11"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "wordpress-service-user-provided-integ/files/EfsMountTarget1"
+      }
+    },
+    "filesEfsMountTarget2A643D119": {
+      "Type": "AWS::EFS::MountTarget",
+      "Properties": {
+        "FileSystemId": {
+          "Ref": "files6F97A25D"
+        },
+        "SecurityGroups": [
+          {
+            "Fn::GetAtt": [
+              "filesEfsSecurityGroupD12994BF",
+              "GroupId"
+            ]
+          }
+        ],
+        "SubnetId": {
+          "Ref": "clusterVpcPrivateSubnet2Subnet6DFF6572"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "wordpress-service-user-provided-integ/files/EfsMountTarget2"
+      }
+    },
+    "SiteServiceTaskTaskRoleD3B1FF46": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "ecs-tasks.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "wordpress-service-user-provided-integ/Site/Service/Task/TaskRole/Resource"
+      }
+    },
+    "SiteServiceTaskBA453B60": {
+      "Type": "AWS::ECS::TaskDefinition",
+      "Properties": {
+        "ContainerDefinitions": [
+          {
+            "Environment": [],
+            "Essential": true,
+            "Image": {
+              "Fn::Join": [
+                "",
+                [
+                  {
+                    "Ref": "AWS::AccountId"
+                  },
+                  ".dkr.ecr.",
+                  {
+                    "Ref": "AWS::Region"
+                  },
+                  ".",
+                  {
+                    "Ref": "AWS::URLSuffix"
+                  },
+                  "/aws-cdk/assets:d1249ca7a3a3cd2414d4f2fa56cd54a97845ffc708f4f5a24e97c4ac16dbe606"
+                ]
+              ]
+            },
+            "LogConfiguration": {
+              "LogDriver": "awslogs",
+              "Options": {
+                "awslogs-group": {
+                  "Ref": "SiteServiceTaskwebLogGroup1A4B98D6"
+                },
+                "awslogs-stream-prefix": "WordpressExtension",
+                "awslogs-region": {
+                  "Ref": "AWS::Region"
+                }
+              }
+            },
+            "Memory": 512,
+            "MemoryReservation": 64,
+            "MountPoints": [
+              {
+                "ContainerPath": "/data",
+                "ReadOnly": false,
+                "SourceVolume": "files"
+              }
+            ],
+            "Name": "web",
+            "PortMappings": [
+              {
+                "ContainerPort": 80,
+                "HostPort": 0,
+                "Protocol": "tcp"
+              }
+            ],
+            "Secrets": [
+              {
+                "Name": "WORDPRESS_DB_SECRET",
+                "ValueFrom": {
+                  "Ref": "databaseSecretAttachment5618DFB3"
+                }
+              }
+            ]
+          }
+        ],
+        "ExecutionRoleArn": {
+          "Fn::GetAtt": [
+            "SiteServiceTaskExecutionRoleB0147D69",
+            "Arn"
+          ]
+        },
+        "Family": "wordpressserviceuserprovidedintegSiteServiceTask3FC209D9",
+        "NetworkMode": "bridge",
+        "RequiresCompatibilities": [
+          "EC2"
+        ],
+        "TaskRoleArn": {
+          "Fn::GetAtt": [
+            "SiteServiceTaskTaskRoleD3B1FF46",
+            "Arn"
+          ]
+        },
+        "Volumes": [
+          {
+            "Name": "files",
+            "EfsVolumeConfiguration": {
+              "FileSystemId": {
+                "Ref": "files6F97A25D"
+              }
+            }
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "wordpress-service-user-provided-integ/Site/Service/Task/Resource"
+      }
+    },
+    "SiteServiceTaskwebLogGroup1A4B98D6": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "RetentionInDays": 30
+      },
+      "UpdateReplacePolicy": "Retain",
+      "DeletionPolicy": "Retain",
+      "Metadata": {
+        "aws:cdk:path": "wordpress-service-user-provided-integ/Site/Service/Task/web/LogGroup/Resource"
+      }
+    },
+    "SiteServiceTaskExecutionRoleB0147D69": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "ecs-tasks.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "wordpress-service-user-provided-integ/Site/Service/Task/ExecutionRole/Resource"
+      }
+    },
+    "SiteServiceTaskExecutionRoleDefaultPolicy4440ACD8": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "ecr:BatchCheckLayerAvailability",
+                "ecr:GetDownloadUrlForLayer",
+                "ecr:BatchGetImage"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":ecr:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":repository/aws-cdk/assets"
+                  ]
+                ]
+              }
+            },
+            {
+              "Action": "ecr:GetAuthorizationToken",
+              "Effect": "Allow",
+              "Resource": "*"
+            },
+            {
+              "Action": [
+                "logs:CreateLogStream",
+                "logs:PutLogEvents"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "SiteServiceTaskwebLogGroup1A4B98D6",
+                  "Arn"
+                ]
+              }
+            },
+            {
+              "Action": [
+                "secretsmanager:GetSecretValue",
+                "secretsmanager:DescribeSecret"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Ref": "databaseSecretAttachment5618DFB3"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "SiteServiceTaskExecutionRoleDefaultPolicy4440ACD8",
+        "Roles": [
+          {
+            "Ref": "SiteServiceTaskExecutionRoleB0147D69"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "wordpress-service-user-provided-integ/Site/Service/Task/ExecutionRole/DefaultPolicy/Resource"
+      }
+    },
+    "SiteServiceF00AE2D6": {
+      "Type": "AWS::ECS::Service",
+      "Properties": {
+        "Cluster": {
+          "Ref": "cluster611F8AFF"
+        },
+        "DeploymentConfiguration": {
+          "MaximumPercent": 200,
+          "MinimumHealthyPercent": 50
+        },
+        "DesiredCount": 4,
+        "EnableECSManagedTags": false,
+        "HealthCheckGracePeriodSeconds": 60,
+        "LaunchType": "EC2",
+        "LoadBalancers": [
+          {
+            "ContainerName": "web",
+            "ContainerPort": 80,
+            "TargetGroupArn": {
+              "Ref": "SiteRulesBuilderTargetGroup7E6AA8B8"
+            }
+          }
+        ],
+        "SchedulingStrategy": "REPLICA",
+        "TaskDefinition": {
+          "Ref": "SiteServiceTaskBA453B60"
+        }
+      },
+      "DependsOn": [
+        "SiteRulesBuilderTargettokentoken22133181FAF"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "wordpress-service-user-provided-integ/Site/Service/Service/Service"
+      }
+    },
+    "SiteRulesBuilderTargetGroup7E6AA8B8": {
+      "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
+      "Properties": {
+        "HealthCheckEnabled": true,
+        "HealthCheckIntervalSeconds": 15,
+        "HealthCheckProtocol": "HTTP",
+        "HealthCheckTimeoutSeconds": 5,
+        "HealthyThresholdCount": 5,
+        "Port": 80,
+        "Protocol": "HTTP",
+        "TargetGroupAttributes": [
+          {
+            "Key": "deregistration_delay.timeout_seconds",
+            "Value": "15"
+          }
+        ],
+        "TargetType": "instance",
+        "UnhealthyThresholdCount": 2,
+        "VpcId": {
+          "Ref": "clusterVpc91107A71"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "wordpress-service-user-provided-integ/Site/RulesBuilder/TargetGroup/Resource"
+      }
+    },
+    "SiteRulesBuilderTargettokentoken22133181FAF": {
+      "Type": "AWS::ElasticLoadBalancingV2::ListenerRule",
+      "Properties": {
+        "Actions": [
+          {
+            "TargetGroupArn": {
+              "Ref": "SiteRulesBuilderTargetGroup7E6AA8B8"
+            },
+            "Type": "forward"
+          }
+        ],
+        "Conditions": [
+          {
+            "Field": "host-header",
+            "HostHeaderConfig": {
+              "Values": [
+                {
+                  "Fn::GetAtt": [
+                    "alb8A8B13C2",
+                    "DNSName"
+                  ]
+                }
+              ]
+            }
+          }
+        ],
+        "ListenerArn": {
+          "Ref": "albhttpF1B39DBC"
+        },
+        "Priority": 1
+      },
+      "Metadata": {
+        "aws:cdk:path": "wordpress-service-user-provided-integ/Site/RulesBuilder/Target-tokentoken221/Resource"
+      }
+    },
+    "CDKMetadata": {
+      "Type": "AWS::CDK::Metadata",
+      "Properties": {
+        "Modules": "aws-cdk=1.68.0,@aws-cdk/assets=1.69.0,@aws-cdk/aws-applicationautoscaling=1.69.0,@aws-cdk/aws-autoscaling=1.69.0,@aws-cdk/aws-autoscaling-common=1.69.0,@aws-cdk/aws-autoscaling-hooktargets=1.69.0,@aws-cdk/aws-cloudwatch=1.69.0,@aws-cdk/aws-codeguruprofiler=1.69.0,@aws-cdk/aws-cognito=1.69.0,@aws-cdk/aws-ec2=1.69.0,@aws-cdk/aws-ecr=1.69.0,@aws-cdk/aws-ecr-assets=1.69.0,@aws-cdk/aws-ecs=1.69.0,@aws-cdk/aws-efs=1.69.0,@aws-cdk/aws-elasticloadbalancingv2=1.69.0,@aws-cdk/aws-events=1.69.0,@aws-cdk/aws-iam=1.69.0,@aws-cdk/aws-kms=1.69.0,@aws-cdk/aws-lambda=1.69.0,@aws-cdk/aws-logs=1.69.0,@aws-cdk/aws-rds=1.69.0,@aws-cdk/aws-s3=1.69.0,@aws-cdk/aws-s3-assets=1.69.0,@aws-cdk/aws-sam=1.69.0,@aws-cdk/aws-secretsmanager=1.69.0,@aws-cdk/aws-servicediscovery=1.69.0,@aws-cdk/aws-sns=1.69.0,@aws-cdk/aws-sns-subscriptions=1.69.0,@aws-cdk/aws-sqs=1.69.0,@aws-cdk/aws-ssm=1.69.0,@aws-cdk/cloud-assembly-schema=1.69.0,@aws-cdk/core=1.69.0,@aws-cdk/custom-resources=1.69.0,@aws-cdk/cx-api=1.69.0,@aws-cdk/region-info=1.69.0,jsii-runtime=node.js/v12.18.1"
+      },
+      "Metadata": {
+        "aws:cdk:path": "wordpress-service-user-provided-integ/CDKMetadata/Default"
+      },
+      "Condition": "CDKMetadataAvailable"
+    }
+  },
+  "Parameters": {
+    "SsmParameterValueawsserviceecsoptimizedamiamazonlinux2recommendedimageidC96584B6F00A464EAD1953AFF4B05118Parameter": {
+      "Type": "AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>",
+      "Default": "/aws/service/ecs/optimized-ami/amazon-linux-2/recommended/image_id"
+    }
+  },
+  "Outputs": {
+    "AlbDnsName": {
+      "Value": {
+        "Fn::GetAtt": [
+          "alb8A8B13C2",
+          "DNSName"
+        ]
+      }
+    },
+    "SiteUrl": {
+      "Value": {
+        "Fn::Sub": [
+          "http://${Domain}/",
+          {
+            "Domain": {
+              "Fn::GetAtt": [
+                "alb8A8B13C2",
+                "DNSName"
+              ]
+            }
+          }
+        ]
+      }
+    }
+  },
+  "Conditions": {
+    "CDKMetadataAvailable": {
+      "Fn::Or": [
+        {
+          "Fn::Or": [
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "ap-east-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "ap-northeast-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "ap-northeast-2"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "ap-south-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "ap-southeast-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "ap-southeast-2"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "ca-central-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "cn-north-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "cn-northwest-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "eu-central-1"
+              ]
+            }
+          ]
+        },
+        {
+          "Fn::Or": [
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "eu-north-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "eu-west-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "eu-west-2"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "eu-west-3"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "me-south-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "sa-east-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "us-east-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "us-east-2"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "us-west-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "us-west-2"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
