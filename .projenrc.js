@@ -8,7 +8,7 @@ const project = new AwsCdkConstructLibrary({
   cdkVersion: "1.68.0",
   name: "@wheatstalk/cdk-ecs-website",
   repository: "git@github.com:wheatstalk/cdk-ecs-website.git",
-  releaseBranches: ['release'],
+  releaseEveryCommit: false,
   gitignore: [
     ".idea",
     "*.iml",
