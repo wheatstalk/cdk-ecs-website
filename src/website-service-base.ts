@@ -12,7 +12,6 @@ import {
 
 /**
  * Non-workload options for `WebsiteServiceBase`
- * @internal
  */
 export interface WebsiteServiceOptions {
   /**
@@ -70,7 +69,6 @@ export interface WebsiteServiceOptions {
 
 /**
  * Props for `WebsiteServiceBase`
- * @internal
  */
 export interface WebsiteServiceBaseProps extends WebsiteServiceOptions {
   /**
@@ -81,7 +79,6 @@ export interface WebsiteServiceBaseProps extends WebsiteServiceOptions {
 
 /**
  * Base class for the builder-style website service classes.
- * @internal
  */
 export class WebsiteServiceBase extends Construct implements IWebsiteService {
   private listenerRuleBuilder: ListenerRulesBuilder;
