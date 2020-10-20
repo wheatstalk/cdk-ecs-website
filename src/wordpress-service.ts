@@ -1,18 +1,21 @@
 import { Construct } from '@aws-cdk/core';
 
 import { WebsiteServiceBase, WebsiteServiceOptions } from './website-service-base';
-import { WordpressExtension, WordpressExtensionOptions } from './wordpress-extension';
-
-export interface WordpressServiceProps extends WebsiteServiceOptions, WordpressExtensionOptions {}
+import { WordpressWorkload, WordpressWorkloadOptions } from './wordpress-workload';
 
 /**
- * Create a website service.
+ * Props for `WordpressService`
+ */
+export interface WordpressServiceProps extends WebsiteServiceOptions, WordpressWorkloadOptions {}
+
+/**
+ * Create a wordpress website.
  */
 export class WordpressService extends WebsiteServiceBase {
   constructor(scope: Construct, id: string, props: WordpressServiceProps) {
     super(scope, id, {
       ...props,
-      ecsExtension: new WordpressExtension(props),
+      ecsExtension: new WordpressWorkload(props),
     });
   }
 }

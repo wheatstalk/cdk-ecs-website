@@ -4,13 +4,13 @@ import { IFileSystem } from '@aws-cdk/aws-efs';
 import { RetentionDays } from '@aws-cdk/aws-logs';
 import { ISecret } from '@aws-cdk/aws-secretsmanager';
 
-import { IEcsExtension, TaskDefinitionBindingInfo } from '../ecs-extensions';
+import { IEcsWorkload, EcsWorkloadTaskInfo } from '../ecs-workloads';
 import { createWordpressImage } from './create-wordpress-image';
 
 /**
  * Configuration options for building the WordPress container image.
  */
-export interface CreateImageOptions {
+export interface WordpressImageOptions {
   /**
    * PHP container to build the container from.
    *
@@ -35,9 +35,10 @@ export interface CreateImageOptions {
 }
 
 /**
- * Props for `WordpressExtension`
+ * Props for `WordpressWorkload`
+ * @internal
  */
-export interface WordpressExtensionOptions {
+export interface WordpressWorkloadOptions {
   /**
    * Credentials for accessing the database server. We expect the standard
    * RDS json secret format.
@@ -60,7 +61,7 @@ export interface WordpressExtensionOptions {
   /**
    * Options building the Wordpress container.
    */
-  readonly wordpressImageOptions?: CreateImageOptions;
+  readonly wordpressImageOptions?: WordpressImageOptions;
 
   /**
    * Name of the database containing the Wordpress site.
@@ -84,15 +85,16 @@ export interface WordpressExtensionOptions {
 
 /**
  * Provides an opinionated ECS-hosted website workload.
+ * @internal
  */
-export class WordpressExtension implements IEcsExtension {
+export class WordpressWorkload implements IEcsWorkload {
   public readonly trafficContainer = 'web';
   public readonly trafficPort = 80;
 
-  constructor(private readonly props: WordpressExtensionOptions) {
+  constructor(private readonly props: WordpressWorkloadOptions) {
   }
 
-  useTaskDefinition(taskDefinitionInfo: TaskDefinitionBindingInfo): void {
+  useTaskDefinition(taskDefinitionInfo: EcsWorkloadTaskInfo): void {
     const { taskDefinition } = taskDefinitionInfo;
 
     const props = this.props;
@@ -117,7 +119,7 @@ export class WordpressExtension implements IEcsExtension {
       memoryReservationMiB: taskDefinitionInfo.taskMemoryReserved,
       memoryLimitMiB: taskDefinitionInfo.taskMemoryLimit,
       logging: LogDriver.awsLogs({
-        streamPrefix: 'WordpressExtension',
+        streamPrefix: 'WordpressWorkload',
         logRetention: RetentionDays.ONE_MONTH,
       }),
       environment: environment,

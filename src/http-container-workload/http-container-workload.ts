@@ -1,12 +1,13 @@
 import { ContainerImage, Ec2Service, FargateService, LogDriver, Secret } from '@aws-cdk/aws-ecs';
 import { RetentionDays } from '@aws-cdk/aws-logs';
 
-import { IEcsExtension, TaskDefinitionBindingInfo } from '../ecs-extensions';
+import { IEcsWorkload, EcsWorkloadTaskInfo } from '../ecs-workloads';
 
 /**
- * Props for `HttpContainerExtension`
+ * Props for `HttpContainerWorkload`
+ * @internal
  */
-export interface HttpContainerExtensionProps {
+export interface HttpContainerWorkloadProps {
   /**
    * The container image.
    */
@@ -31,16 +32,17 @@ export interface HttpContainerExtensionProps {
 
 /**
  * Provides a simple HTTP-serving container as a service workload.
+ * @internal
  */
-export class HttpContainerExtension implements IEcsExtension {
+export class HttpContainerWorkload implements IEcsWorkload {
   public readonly trafficContainer = 'web';
   public readonly trafficPort: number;
 
-  constructor(private readonly props: HttpContainerExtensionProps) {
+  constructor(private readonly props: HttpContainerWorkloadProps) {
     this.trafficPort = props.trafficPort ?? 80;
   }
 
-  useTaskDefinition(taskDefinitionInfo: TaskDefinitionBindingInfo): void {
+  useTaskDefinition(taskDefinitionInfo: EcsWorkloadTaskInfo): void {
     const { taskDefinition } = taskDefinitionInfo;
     const props = this.props;
 
@@ -50,7 +52,7 @@ export class HttpContainerExtension implements IEcsExtension {
       memoryReservationMiB: taskDefinitionInfo.taskMemoryReserved,
       memoryLimitMiB: taskDefinitionInfo.taskMemoryLimit,
       logging: LogDriver.awsLogs({
-        streamPrefix: 'HttpContainerExtension',
+        streamPrefix: 'HttpContainerWorkload',
         logRetention: RetentionDays.ONE_MONTH,
       }),
       environment: props.envVars,

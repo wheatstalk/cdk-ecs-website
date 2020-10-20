@@ -1,9 +1,12 @@
 import { ContainerImage, Secret } from '@aws-cdk/aws-ecs';
 import { Construct } from '@aws-cdk/core';
 
-import { HttpContainerExtension } from './http-container-extension';
+import { HttpContainerWorkload } from './http-container-workload';
 import { WebsiteServiceBase, WebsiteServiceOptions } from './website-service-base';
 
+/**
+ * Props for `WebsiteService`
+ */
 export interface WebsiteServiceProps extends WebsiteServiceOptions {
   /**
    * The main container image
@@ -28,13 +31,13 @@ export interface WebsiteServiceProps extends WebsiteServiceOptions {
 }
 
 /**
- * Create a website service.
+ * Create a website from an http-serving container.
  */
 export class WebsiteService extends WebsiteServiceBase {
   constructor(scope: Construct, id: string, props: WebsiteServiceProps) {
     super(scope, id, {
       ...props,
-      ecsExtension: new HttpContainerExtension({
+      ecsExtension: new HttpContainerWorkload({
         containerImage: props.containerImage,
         trafficPort: props.containerPort,
         envVars: props.envVars,

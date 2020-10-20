@@ -1,40 +1,42 @@
 import { Ec2Service, FargateService, ICluster } from '@aws-cdk/aws-ecs';
 import { Construct } from '@aws-cdk/core';
 
-import { IEcsExtension } from './ecs-extension';
+import { IEcsWorkload } from './ecs-workload';
 import {
-  Ec2ServicePattern,
-  EcsServicePatternBaseProps,
-  FargateServicePattern,
-  IEcsServicePattern,
-} from './ecs-service-pattern';
+  Ec2WorkloadPattern,
+  EcsWorkloadPatternBaseProps,
+  FargateWorkloadPattern,
+  IEcsWorkloadPattern,
+} from './ecs-workload-pattern';
 
 /**
  * Type of capacity to use.
  */
-export enum EcsExtensionServiceCapacityType {
+export enum EcsWorkloadCapacityType {
   EC2 = 'ec2',
   FARGATE = 'fargate',
 }
 
 /**
- * Props for `EcsExtensionService`
+ * Props for `EcsWorkloadService`
+ * @internal
  */
-export interface EcsExtensionServiceProps extends EcsServicePatternBaseProps {
+export interface EcsWorkloadServiceProps extends EcsWorkloadPatternBaseProps {
   readonly cluster: ICluster;
-  readonly capacityType?: EcsExtensionServiceCapacityType;
-  readonly serviceExtension: IEcsExtension;
+  readonly capacityType?: EcsWorkloadCapacityType;
+  readonly serviceExtension: IEcsWorkload;
 }
 
 /**
- * Creates an EC2 or Fargate service from an `IEcsExtension`.
+ * Creates an EC2 or Fargate service from an
+ * @internal
  */
-export class EcsExtensionService extends Construct {
+export class EcsWorkloadService extends Construct {
   public service: Ec2Service | FargateService;
   public containerName: string;
   public trafficPort: number;
 
-  constructor(scope: Construct, id: string, props: EcsExtensionServiceProps) {
+  constructor(scope: Construct, id: string, props: EcsWorkloadServiceProps) {
     super(scope, id);
 
     const servicePattern = getServicePattern(props);
@@ -58,16 +60,14 @@ export class EcsExtensionService extends Construct {
  * Gets the appropriate service pattern for the requested capacity type.
  * @internal
  */
-function getServicePattern(props: EcsExtensionServiceProps): IEcsServicePattern {
-  const capacityType = props.capacityType ?? EcsExtensionServiceCapacityType.EC2;
+function getServicePattern(props: EcsWorkloadServiceProps): IEcsWorkloadPattern {
+  const capacityType = props.capacityType ?? EcsWorkloadCapacityType.EC2;
 
-  let ec2ServicePattern;
   switch (capacityType) {
-    case EcsExtensionServiceCapacityType.EC2:
-      ec2ServicePattern = new Ec2ServicePattern(props);
-      return ec2ServicePattern;
-    case EcsExtensionServiceCapacityType.FARGATE:
-      return new FargateServicePattern(props);
+    case EcsWorkloadCapacityType.EC2:
+      return new Ec2WorkloadPattern(props);
+    case EcsWorkloadCapacityType.FARGATE:
+      return new FargateWorkloadPattern(props);
     default:
       throw new Error(`unsupported capacity type: ${capacityType}`);
   }

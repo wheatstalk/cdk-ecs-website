@@ -4,7 +4,7 @@ import * as efs from '@aws-cdk/aws-efs';
 import * as ssm from '@aws-cdk/aws-secretsmanager';
 import { Stack } from '@aws-cdk/core';
 
-import { WordpressExtension } from '../../src/wordpress-extension';
+import { WordpressWorkload } from '../../src/wordpress-workload';
 
 it('configures a task definition', () => {
   const stack = new Stack();
@@ -21,7 +21,7 @@ it('configures a task definition', () => {
   });
 
   // WHEN
-  const ext = new WordpressExtension({
+  const ext = new WordpressWorkload({
     databaseSecret: databaseSecret,
     fileSystem: fileSystem,
     wordpressDatabaseName: 'foobar',

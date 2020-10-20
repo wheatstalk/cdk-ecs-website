@@ -4,7 +4,7 @@ import * as ecs from '@aws-cdk/aws-ecs';
 import * as ssm from '@aws-cdk/aws-secretsmanager';
 import { Stack } from '@aws-cdk/core';
 
-import { HttpContainerExtension } from '../../src/http-container-extension';
+import { HttpContainerWorkload } from '../../src/http-container-workload';
 
 it('sets all properties', () => {
   const stack = new Stack();
@@ -16,7 +16,7 @@ it('sets all properties', () => {
   const secret = new ssm.Secret(stack, 'secret');
 
   // WHEN
-  const binding = new HttpContainerExtension({
+  const binding = new HttpContainerWorkload({
     containerImage: ecs.ContainerImage.fromRegistry('nginx'),
     trafficPort: 3000,
     envVars: {
@@ -57,7 +57,7 @@ it('works with fargate', () => {
   const taskDefinition = new ecs.FargateTaskDefinition(stack, 'TaskDefinition');
 
   // WHEN
-  const binding = new HttpContainerExtension({
+  const binding = new HttpContainerWorkload({
     containerImage: ecs.ContainerImage.fromRegistry('nginx'),
   });
   binding.useTaskDefinition({

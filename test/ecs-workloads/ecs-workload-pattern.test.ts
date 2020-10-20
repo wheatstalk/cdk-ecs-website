@@ -2,14 +2,14 @@ import { expect as expectCDK, haveResourceLike } from '@aws-cdk/assert';
 import { ContainerImage } from '@aws-cdk/aws-ecs';
 import { App } from '@aws-cdk/core';
 
-import { Ec2ServicePattern, FargateServicePattern } from '../../src/ecs-extensions/ecs-service-pattern';
+import { Ec2WorkloadPattern, FargateWorkloadPattern } from '../../src/ecs-workloads';
 import { TestingClusterStack } from '../../src/testing-cluster';
 
 test('ec2 task memory limit/reserved should come from user input', () => {
   const app = new App();
   const testingCluster = new TestingClusterStack(app, 'stack');
 
-  const pattern = new Ec2ServicePattern({
+  const pattern = new Ec2WorkloadPattern({
     cpuMinimum: 999,
     memoryReserved: 123,
     memoryLimit: 1234,
@@ -27,7 +27,7 @@ test('ec2 task memory reserved should have a reasonable default', () => {
   const testingClusterStack = new TestingClusterStack(app, 'stack');
 
   // WHEN
-  const pattern = new Ec2ServicePattern({
+  const pattern = new Ec2WorkloadPattern({
     memoryLimit: 1234,
   });
 
@@ -43,7 +43,7 @@ test('fargate task memory limit/reserved should come from fargate task size sele
   const testingClusterStack = new TestingClusterStack(app, 'stack');
 
   // WHEN
-  const pattern = new FargateServicePattern({
+  const pattern = new FargateWorkloadPattern({
     memoryReserved: 64,
     cpuMinimum: 1,
     memoryLimit: 256,
@@ -62,7 +62,7 @@ test('fargate service configuration', () => {
   const testingClusterStack = new TestingClusterStack(app, 'stack');
 
   // WHEN
-  const pattern = new FargateServicePattern({
+  const pattern = new FargateWorkloadPattern({
     desiredCount: 50,
     memoryReserved: 64,
     cpuMinimum: 1,
