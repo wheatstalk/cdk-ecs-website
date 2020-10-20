@@ -19,12 +19,10 @@ const project = new AwsCdkConstructLibrary({
     "@types/fs-extra": "^8.1.0",
   },
   bundledDependencies: [
-    "@aws-cdk-containers/ecs-service-extensions",
     "fs-extra",
   ],
   dependencies: {
     "fs-extra": "^8.1.0",
-    "@aws-cdk-containers/ecs-service-extensions": "^1.68.0",
   },
   cdkTestDependencies: [
     "@aws-cdk/assert",
@@ -41,6 +39,7 @@ const project = new AwsCdkConstructLibrary({
     "@aws-cdk/aws-logs",
     "@aws-cdk/core",
   ],
+  npmignore: ['node_modules']
 });
 
 // project.tsconfig.include.push('test/**/*.integ.ts');

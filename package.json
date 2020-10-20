@@ -67,7 +67,6 @@
     "constructs": "^3.0.4"
   },
   "dependencies": {
-    "@aws-cdk-containers/ecs-service-extensions": "^1.68.0",
     "@aws-cdk/aws-cognito": "^1.68.0",
     "@aws-cdk/aws-ec2": "^1.68.0",
     "@aws-cdk/aws-ecs": "^1.68.0",
@@ -80,7 +79,6 @@
     "fs-extra": "^8.1.0"
   },
   "bundledDependencies": [
-    "@aws-cdk-containers/ecs-service-extensions",
     "fs-extra"
   ],
   "keywords": [
