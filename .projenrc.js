@@ -14,8 +14,11 @@ const project = new AwsCdkConstructLibrary({
     "cdk.out.*",
   ],
   devDependencies: {
-    "ts-node": "^9.0.0",
     "@types/fs-extra": "^8.1.0",
+    "@types/json-diff": "^0.5.0",
+    "json-diff": "^0.5.4",
+    "ts-node": "^9.0.0",
+    "yargs": "^16.1.0",
   },
   bundledDependencies: [
     "fs-extra",

@@ -41,11 +41,15 @@ function destroy() {
   cleanup
 }
 
+function diff() {
+  ts-node --project tsconfig.jest.json test/integ-compare.ts "$1" "$2"
+}
+
 function verify() {
   synth
 
   log "Comparing output with expected output"
-  diff -u $ASSEMBLY/*.template.json "$EXPECTED" || die "The template changed please deploy to manually verify and then approve if it works."
+  diff $ASSEMBLY/*.template.json "$EXPECTED" || die "The template changed please deploy to manually verify and then approve if it works."
 
   log "$INTEG_FILE is exactly as expected"
   cleanup
