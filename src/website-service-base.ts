@@ -65,6 +65,31 @@ export interface WebsiteServiceOptions {
    * Register the service as allowed in others' ingresses.
    */
   readonly connectToPeers?: IConnectable[];
+
+  /**
+   * Additional host names to serve traffic on.
+   */
+  readonly additionalServingHosts?: string[];
+
+  /**
+   * Redirect listener rules.
+   */
+  readonly redirects?: WebsiteHostRedirect[];
+}
+
+/**
+ * A redirect.
+ */
+export interface WebsiteHostRedirect {
+  /**
+   * Host header to match on
+   */
+  readonly hostHeader: string;
+
+  /**
+   * Details of the redirection. Omit to redirect to the primary host name.
+   */
+  readonly redirect?: RedirectOptions;
 }
 
 /**
@@ -132,6 +157,20 @@ export class WebsiteServiceBase extends Construct implements IWebsiteService {
       // If no special authentication scheme is requested, we add the primary
       // host name as a serving host.
       this.listenerRuleBuilder.addServingHost(props.primaryHostName);
+    }
+
+    // Add additional serving hosts.
+    for (const servingHost of props.additionalServingHosts ?? []) {
+      this.addServingHost(servingHost);
+    }
+
+    // Add any redirects.
+    for (const redirect of props.redirects ?? []) {
+      if (redirect.redirect) {
+        this.addRedirectResponse(redirect.hostHeader, redirect.redirect);
+      } else {
+        this.addRedirectToPrimaryHostName(redirect.hostHeader);
+      }
     }
   }
 

@@ -248,3 +248,89 @@ it('works on port 3000', () => {
 
   app.synth();
 });
+
+it('adds serving hosts from the constructor', () => {
+  const app = new App();
+  const stack = new TestingClusterStack(app, 'basic-http-service-integ');
+
+  new WebsiteService(stack, 'Website', {
+    albBasePriority: 2000,
+    albListener: stack.albListener,
+    cluster: stack.cluster,
+    containerImage: ContainerImage.fromRegistry('nginx'),
+    containerPort: 3000,
+    primaryHostName: stack.alb.loadBalancerDnsName,
+    additionalServingHosts: ['foobar.baz'],
+  });
+
+  expectCDK(stack).to(haveResourceLike('AWS::ElasticLoadBalancingV2::ListenerRule', {
+    Priority: 2001,
+    Conditions: [
+      {
+        Field: 'host-header',
+        HostHeaderConfig: {
+          Values: ['foobar.baz'],
+        },
+      },
+    ],
+    Actions: [
+      {
+        Type: 'forward',
+      },
+    ],
+  }));
+});
+
+it('adds redirects from the constructor', () => {
+  const app = new App();
+  const stack = new TestingClusterStack(app, 'basic-http-service-integ');
+
+  new WebsiteService(stack, 'Website', {
+    albBasePriority: 2000,
+    albListener: stack.albListener,
+    cluster: stack.cluster,
+    containerImage: ContainerImage.fromRegistry('nginx'),
+    containerPort: 3000,
+    primaryHostName: 'primary-domain.com',
+    redirects: [
+      { hostHeader: 'foobar1.baz' },
+      { hostHeader: 'foobar2.baz', redirect: { host: 'aws.amazon.com' } },
+    ],
+  });
+
+  expectCDK(stack).to(haveResourceLike('AWS::ElasticLoadBalancingV2::ListenerRule', {
+    Priority: 2001,
+    Conditions: [
+      {
+        Field: 'host-header',
+        Values: ['foobar1.baz'],
+      },
+    ],
+    Actions: [
+      {
+        Type: 'redirect',
+        RedirectConfig: {
+          Host: 'primary-domain.com',
+        },
+      },
+    ],
+  }));
+
+  expectCDK(stack).to(haveResourceLike('AWS::ElasticLoadBalancingV2::ListenerRule', {
+    Priority: 2002,
+    Conditions: [
+      {
+        Field: 'host-header',
+        Values: ['foobar2.baz'],
+      },
+    ],
+    Actions: [
+      {
+        Type: 'redirect',
+        RedirectConfig: {
+          Host: 'aws.amazon.com',
+        },
+      },
+    ],
+  }));
+});

@@ -16,6 +16,7 @@ Name|Description
 [CognitoAuthenticationConfig](#wheatstalk-cdk-ecs-website-cognitoauthenticationconfig)|Configuration for authentication through a Cognito user pool.
 [EcsWorkloadServiceInfo](#wheatstalk-cdk-ecs-website-ecsworkloadserviceinfo)|Provides information to `IEcsWorkload.useService` about the service.
 [EcsWorkloadTaskInfo](#wheatstalk-cdk-ecs-website-ecsworkloadtaskinfo)|Provides information to `IEcsWorkload.useTaskDefinition` about the task definition.
+[WebsiteHostRedirect](#wheatstalk-cdk-ecs-website-websitehostredirect)|A redirect.
 [WebsiteServiceBaseProps](#wheatstalk-cdk-ecs-website-websiteservicebaseprops)|Props for `WebsiteServiceBase`.
 [WebsiteServiceOptions](#wheatstalk-cdk-ecs-website-websiteserviceoptions)|Non-workload options for `WebsiteServiceBase`.
 [WebsiteServiceProps](#wheatstalk-cdk-ecs-website-websiteserviceprops)|Props for `WebsiteService`.
@@ -62,12 +63,14 @@ new WebsiteService(scope: Construct, id: string, props: WebsiteServiceProps)
   * **albListener** (<code>[IApplicationListener](#aws-cdk-aws-elasticloadbalancingv2-iapplicationlistener)</code>)  The load balancer listener to attach the service to. 
   * **cluster** (<code>[ICluster](#aws-cdk-aws-ecs-icluster)</code>)  The ECS cluster to add the service to. 
   * **primaryHostName** (<code>string</code>)  The primary host name that this service will serve from and redirect to. 
+  * **additionalServingHosts** (<code>Array<string></code>)  Additional host names to serve traffic on. __*Optional*__
   * **allowedConnections** (<code>Array<[IConnectable](#aws-cdk-aws-ec2-iconnectable)></code>)  Allow others access to the traffic port. __*Optional*__
   * **authBypassHeaderValue** (<code>string</code>)  Provide a value that can be used to bypass authentication with headers. __*Optional*__
   * **authWithUserPool** (<code>[CognitoAuthenticationConfig](#wheatstalk-cdk-ecs-website-cognitoauthenticationconfig)</code>)  Instruct the service to authenticate with the cognito user pool. __*Optional*__
   * **capacityType** (<code>[EcsWorkloadCapacityType](#wheatstalk-cdk-ecs-website-ecsworkloadcapacitytype)</code>)  Type of compute capacity. __*Default*__: EcsExtensionCapacityType.EC2
   * **connectToPeers** (<code>Array<[IConnectable](#aws-cdk-aws-ec2-iconnectable)></code>)  Register the service as allowed in others' ingresses. __*Optional*__
   * **desiredCount** (<code>number</code>)  Desired task count. __*Default*__: 1
+  * **redirects** (<code>Array<[WebsiteHostRedirect](#wheatstalk-cdk-ecs-website-websitehostredirect)></code>)  Redirect listener rules. __*Optional*__
   * **containerImage** (<code>[ContainerImage](#aws-cdk-aws-ecs-containerimage)</code>)  The main container image. 
   * **containerPort** (<code>number</code>)  The the main container port to expose by load balancer. __*Default*__: 80
   * **envSecrets** (<code>Map<string, [Secret](#aws-cdk-aws-ecs-secret)></code>)  Specify environment variables from secrets for the main container. __*Optional*__
@@ -99,12 +102,14 @@ new WebsiteServiceBase(scope: Construct, id: string, props: WebsiteServiceBasePr
   * **albListener** (<code>[IApplicationListener](#aws-cdk-aws-elasticloadbalancingv2-iapplicationlistener)</code>)  The load balancer listener to attach the service to. 
   * **cluster** (<code>[ICluster](#aws-cdk-aws-ecs-icluster)</code>)  The ECS cluster to add the service to. 
   * **primaryHostName** (<code>string</code>)  The primary host name that this service will serve from and redirect to. 
+  * **additionalServingHosts** (<code>Array<string></code>)  Additional host names to serve traffic on. __*Optional*__
   * **allowedConnections** (<code>Array<[IConnectable](#aws-cdk-aws-ec2-iconnectable)></code>)  Allow others access to the traffic port. __*Optional*__
   * **authBypassHeaderValue** (<code>string</code>)  Provide a value that can be used to bypass authentication with headers. __*Optional*__
   * **authWithUserPool** (<code>[CognitoAuthenticationConfig](#wheatstalk-cdk-ecs-website-cognitoauthenticationconfig)</code>)  Instruct the service to authenticate with the cognito user pool. __*Optional*__
   * **capacityType** (<code>[EcsWorkloadCapacityType](#wheatstalk-cdk-ecs-website-ecsworkloadcapacitytype)</code>)  Type of compute capacity. __*Default*__: EcsExtensionCapacityType.EC2
   * **connectToPeers** (<code>Array<[IConnectable](#aws-cdk-aws-ec2-iconnectable)></code>)  Register the service as allowed in others' ingresses. __*Optional*__
   * **desiredCount** (<code>number</code>)  Desired task count. __*Default*__: 1
+  * **redirects** (<code>Array<[WebsiteHostRedirect](#wheatstalk-cdk-ecs-website-websitehostredirect)></code>)  Redirect listener rules. __*Optional*__
   * **ecsExtension** (<code>[IEcsWorkload](#wheatstalk-cdk-ecs-website-iecsworkload)</code>)  Workload extension. 
 
 
@@ -182,12 +187,14 @@ new WordpressService(scope: Construct, id: string, props: WordpressServiceProps)
   * **albListener** (<code>[IApplicationListener](#aws-cdk-aws-elasticloadbalancingv2-iapplicationlistener)</code>)  The load balancer listener to attach the service to. 
   * **cluster** (<code>[ICluster](#aws-cdk-aws-ecs-icluster)</code>)  The ECS cluster to add the service to. 
   * **primaryHostName** (<code>string</code>)  The primary host name that this service will serve from and redirect to. 
+  * **additionalServingHosts** (<code>Array<string></code>)  Additional host names to serve traffic on. __*Optional*__
   * **allowedConnections** (<code>Array<[IConnectable](#aws-cdk-aws-ec2-iconnectable)></code>)  Allow others access to the traffic port. __*Optional*__
   * **authBypassHeaderValue** (<code>string</code>)  Provide a value that can be used to bypass authentication with headers. __*Optional*__
   * **authWithUserPool** (<code>[CognitoAuthenticationConfig](#wheatstalk-cdk-ecs-website-cognitoauthenticationconfig)</code>)  Instruct the service to authenticate with the cognito user pool. __*Optional*__
   * **capacityType** (<code>[EcsWorkloadCapacityType](#wheatstalk-cdk-ecs-website-ecsworkloadcapacitytype)</code>)  Type of compute capacity. __*Default*__: EcsExtensionCapacityType.EC2
   * **connectToPeers** (<code>Array<[IConnectable](#aws-cdk-aws-ec2-iconnectable)></code>)  Register the service as allowed in others' ingresses. __*Optional*__
   * **desiredCount** (<code>number</code>)  Desired task count. __*Default*__: 1
+  * **redirects** (<code>Array<[WebsiteHostRedirect](#wheatstalk-cdk-ecs-website-websitehostredirect)></code>)  Redirect listener rules. __*Optional*__
   * **databaseSecret** (<code>[ISecret](#aws-cdk-aws-secretsmanager-isecret)</code>)  Credentials for accessing the database server. 
   * **fileSystem** (<code>[IFileSystem](#aws-cdk-aws-efs-ifilesystem)</code>)  A filesystem in which to put the user uploads. 
   * **databaseConnection** (<code>[IConnectable](#aws-cdk-aws-ec2-iconnectable)</code>)  When provided, an ingress rule will be added to the database's security group so that ECS can connect to the database. __*Optional*__
@@ -344,6 +351,20 @@ addServingHost(hostHeader: string): void
 
 
 
+## struct WebsiteHostRedirect  <a id="wheatstalk-cdk-ecs-website-websitehostredirect"></a>
+
+
+A redirect.
+
+
+
+Name | Type | Description 
+-----|------|-------------
+**hostHeader** | <code>string</code> | Host header to match on.
+**redirect**? | <code>[RedirectOptions](#aws-cdk-aws-elasticloadbalancingv2-redirectoptions)</code> | Details of the redirection.<br/>__*Optional*__
+
+
+
 ## struct WebsiteServiceBaseProps  <a id="wheatstalk-cdk-ecs-website-websiteservicebaseprops"></a>
 
 
@@ -358,12 +379,14 @@ Name | Type | Description
 **cluster** | <code>[ICluster](#aws-cdk-aws-ecs-icluster)</code> | The ECS cluster to add the service to.
 **ecsExtension** | <code>[IEcsWorkload](#wheatstalk-cdk-ecs-website-iecsworkload)</code> | Workload extension.
 **primaryHostName** | <code>string</code> | The primary host name that this service will serve from and redirect to.
+**additionalServingHosts**? | <code>Array<string></code> | Additional host names to serve traffic on.<br/>__*Optional*__
 **allowedConnections**? | <code>Array<[IConnectable](#aws-cdk-aws-ec2-iconnectable)></code> | Allow others access to the traffic port.<br/>__*Optional*__
 **authBypassHeaderValue**? | <code>string</code> | Provide a value that can be used to bypass authentication with headers.<br/>__*Optional*__
 **authWithUserPool**? | <code>[CognitoAuthenticationConfig](#wheatstalk-cdk-ecs-website-cognitoauthenticationconfig)</code> | Instruct the service to authenticate with the cognito user pool.<br/>__*Optional*__
 **capacityType**? | <code>[EcsWorkloadCapacityType](#wheatstalk-cdk-ecs-website-ecsworkloadcapacitytype)</code> | Type of compute capacity.<br/>__*Default*__: EcsExtensionCapacityType.EC2
 **connectToPeers**? | <code>Array<[IConnectable](#aws-cdk-aws-ec2-iconnectable)></code> | Register the service as allowed in others' ingresses.<br/>__*Optional*__
 **desiredCount**? | <code>number</code> | Desired task count.<br/>__*Default*__: 1
+**redirects**? | <code>Array<[WebsiteHostRedirect](#wheatstalk-cdk-ecs-website-websitehostredirect)></code> | Redirect listener rules.<br/>__*Optional*__
 
 
 
@@ -380,12 +403,14 @@ Name | Type | Description
 **albListener** | <code>[IApplicationListener](#aws-cdk-aws-elasticloadbalancingv2-iapplicationlistener)</code> | The load balancer listener to attach the service to.
 **cluster** | <code>[ICluster](#aws-cdk-aws-ecs-icluster)</code> | The ECS cluster to add the service to.
 **primaryHostName** | <code>string</code> | The primary host name that this service will serve from and redirect to.
+**additionalServingHosts**? | <code>Array<string></code> | Additional host names to serve traffic on.<br/>__*Optional*__
 **allowedConnections**? | <code>Array<[IConnectable](#aws-cdk-aws-ec2-iconnectable)></code> | Allow others access to the traffic port.<br/>__*Optional*__
 **authBypassHeaderValue**? | <code>string</code> | Provide a value that can be used to bypass authentication with headers.<br/>__*Optional*__
 **authWithUserPool**? | <code>[CognitoAuthenticationConfig](#wheatstalk-cdk-ecs-website-cognitoauthenticationconfig)</code> | Instruct the service to authenticate with the cognito user pool.<br/>__*Optional*__
 **capacityType**? | <code>[EcsWorkloadCapacityType](#wheatstalk-cdk-ecs-website-ecsworkloadcapacitytype)</code> | Type of compute capacity.<br/>__*Default*__: EcsExtensionCapacityType.EC2
 **connectToPeers**? | <code>Array<[IConnectable](#aws-cdk-aws-ec2-iconnectable)></code> | Register the service as allowed in others' ingresses.<br/>__*Optional*__
 **desiredCount**? | <code>number</code> | Desired task count.<br/>__*Default*__: 1
+**redirects**? | <code>Array<[WebsiteHostRedirect](#wheatstalk-cdk-ecs-website-websitehostredirect)></code> | Redirect listener rules.<br/>__*Optional*__
 
 
 
@@ -403,6 +428,7 @@ Name | Type | Description
 **cluster** | <code>[ICluster](#aws-cdk-aws-ecs-icluster)</code> | The ECS cluster to add the service to.
 **containerImage** | <code>[ContainerImage](#aws-cdk-aws-ecs-containerimage)</code> | The main container image.
 **primaryHostName** | <code>string</code> | The primary host name that this service will serve from and redirect to.
+**additionalServingHosts**? | <code>Array<string></code> | Additional host names to serve traffic on.<br/>__*Optional*__
 **allowedConnections**? | <code>Array<[IConnectable](#aws-cdk-aws-ec2-iconnectable)></code> | Allow others access to the traffic port.<br/>__*Optional*__
 **authBypassHeaderValue**? | <code>string</code> | Provide a value that can be used to bypass authentication with headers.<br/>__*Optional*__
 **authWithUserPool**? | <code>[CognitoAuthenticationConfig](#wheatstalk-cdk-ecs-website-cognitoauthenticationconfig)</code> | Instruct the service to authenticate with the cognito user pool.<br/>__*Optional*__
@@ -412,6 +438,7 @@ Name | Type | Description
 **desiredCount**? | <code>number</code> | Desired task count.<br/>__*Default*__: 1
 **envSecrets**? | <code>Map<string, [Secret](#aws-cdk-aws-ecs-secret)></code> | Specify environment variables from secrets for the main container.<br/>__*Optional*__
 **envVars**? | <code>Map<string, string></code> | Specify environment variables for the main container.<br/>__*Optional*__
+**redirects**? | <code>Array<[WebsiteHostRedirect](#wheatstalk-cdk-ecs-website-websitehostredirect)></code> | Redirect listener rules.<br/>__*Optional*__
 
 
 
@@ -445,6 +472,7 @@ Name | Type | Description
 **databaseSecret** | <code>[ISecret](#aws-cdk-aws-secretsmanager-isecret)</code> | Credentials for accessing the database server.
 **fileSystem** | <code>[IFileSystem](#aws-cdk-aws-efs-ifilesystem)</code> | A filesystem in which to put the user uploads.
 **primaryHostName** | <code>string</code> | The primary host name that this service will serve from and redirect to.
+**additionalServingHosts**? | <code>Array<string></code> | Additional host names to serve traffic on.<br/>__*Optional*__
 **allowedConnections**? | <code>Array<[IConnectable](#aws-cdk-aws-ec2-iconnectable)></code> | Allow others access to the traffic port.<br/>__*Optional*__
 **authBypassHeaderValue**? | <code>string</code> | Provide a value that can be used to bypass authentication with headers.<br/>__*Optional*__
 **authWithUserPool**? | <code>[CognitoAuthenticationConfig](#wheatstalk-cdk-ecs-website-cognitoauthenticationconfig)</code> | Instruct the service to authenticate with the cognito user pool.<br/>__*Optional*__
@@ -454,6 +482,7 @@ Name | Type | Description
 **desiredCount**? | <code>number</code> | Desired task count.<br/>__*Default*__: 1
 **fileSystemConnection**? | <code>[IConnectable](#aws-cdk-aws-ec2-iconnectable)</code> | When provided, an ingress rule will be added to the filesystem's security group so that ECS can mount the file system.<br/>__*Optional*__
 **fileSystemRootDirectory**? | <code>string</code> | A location on the filesystem to mount as the data volume root.<br/>__*Default*__: '/'
+**redirects**? | <code>Array<[WebsiteHostRedirect](#wheatstalk-cdk-ecs-website-websitehostredirect)></code> | Redirect listener rules.<br/>__*Optional*__
 **wordpressDatabaseName**? | <code>string</code> | Name of the database containing the Wordpress site.<br/>__*Optional*__
 **wordpressImageOptions**? | <code>[WordpressImageOptions](#wheatstalk-cdk-ecs-website-wordpressimageoptions)</code> | Options building the Wordpress container.<br/>__*Optional*__
 
