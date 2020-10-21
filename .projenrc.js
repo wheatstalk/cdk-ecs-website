@@ -42,6 +42,6 @@ const project = new AwsCdkConstructLibrary({
   npmignore: ['node_modules']
 });
 
-// project.tsconfig.include.push('test/**/*.integ.ts');
+project.addTestCommand("./integ.sh all verify");
 
 project.synth();
