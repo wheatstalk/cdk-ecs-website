@@ -5,7 +5,6 @@ const project = new AwsCdkConstructLibrary({
   authorName: "Josh Kellendonk",
   license: "MIT",
   jsiiVersion: Semver.caret('1.13.0'),
-  cdkVersion: "1.68.0",
   name: "@wheatstalk/cdk-ecs-website",
   repository: "git@github.com:wheatstalk/cdk-ecs-website.git",
   releaseEveryCommit: false,
@@ -15,8 +14,11 @@ const project = new AwsCdkConstructLibrary({
     "cdk.out.*",
   ],
   devDependencies: {
-    "ts-node": "^9.0.0",
     "@types/fs-extra": "^8.1.0",
+    "@types/json-diff": "^0.5.0",
+    "json-diff": "^0.5.4",
+    "ts-node": "^9.0.0",
+    "yargs": "^16.1.0",
   },
   bundledDependencies: [
     "fs-extra",
@@ -24,7 +26,9 @@ const project = new AwsCdkConstructLibrary({
   dependencies: {
     "fs-extra": "^8.1.0",
   },
+  cdkVersion: "1.68.0",
   cdkTestDependencies: [
+    "aws-cdk",
     "@aws-cdk/assert",
     "@aws-cdk/aws-rds",
   ],
@@ -42,6 +46,6 @@ const project = new AwsCdkConstructLibrary({
   npmignore: ['node_modules']
 });
 
-// project.tsconfig.include.push('test/**/*.integ.ts');
+project.addTestCommand("./integ.sh all verify");
 
 project.synth();
