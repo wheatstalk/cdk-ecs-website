@@ -1,6 +1,7 @@
 import { expect as expectCDK, haveResourceLike } from '@aws-cdk/assert';
 import { UserPool } from '@aws-cdk/aws-cognito';
-import { ContainerImage } from '@aws-cdk/aws-ecs';
+import * as ecs from '@aws-cdk/aws-ecs';
+import * as secretsmanager from '@aws-cdk/aws-secretsmanager';
 import { App } from '@aws-cdk/core';
 
 import { WebsiteService } from '../src';
@@ -14,7 +15,7 @@ describe('WebsiteService', () => {
     // WHEN
     const service = new WebsiteService(given, 'Test', {
       cluster: given.cluster,
-      containerImage: ContainerImage.fromRegistry('nginx'),
+      containerImage: ecs.ContainerImage.fromRegistry('nginx'),
       albBasePriority: 20000,
       albListener: given.albListener,
       primaryHostName: 'www.example.com',
@@ -103,7 +104,7 @@ describe('WebsiteService', () => {
       albBasePriority: 1,
       albListener: given.albListener,
       cluster: given.cluster,
-      containerImage: ContainerImage.fromRegistry('nginx'),
+      containerImage: ecs.ContainerImage.fromRegistry('nginx'),
       primaryHostName: 'www.example.com',
       authWithUserPool: {
         userPool: userPool,
@@ -148,7 +149,7 @@ describe('WebsiteService', () => {
       albBasePriority: 1,
       albListener: given.albListener,
       cluster: given.cluster,
-      containerImage: ContainerImage.fromRegistry('nginx'),
+      containerImage: ecs.ContainerImage.fromRegistry('nginx'),
       primaryHostName: 'www.example.com',
       authBypassHeaderValue: 'bypassvalue',
       authWithUserPool: {
@@ -222,7 +223,7 @@ it('adds listener rules', () => {
     albBasePriority: 2000,
     albListener: stack.albListener,
     cluster: stack.cluster,
-    containerImage: ContainerImage.fromRegistry('nginx'),
+    containerImage: ecs.ContainerImage.fromRegistry('nginx'),
     containerPort: 80,
     primaryHostName: 'www.example.com',
   });
@@ -241,7 +242,7 @@ it('works on port 3000', () => {
     albBasePriority: 2000,
     albListener: stack.albListener,
     cluster: stack.cluster,
-    containerImage: ContainerImage.fromRegistry('nginx'),
+    containerImage: ecs.ContainerImage.fromRegistry('nginx'),
     containerPort: 3000,
     primaryHostName: stack.alb.loadBalancerDnsName,
   });
@@ -257,7 +258,7 @@ it('adds serving hosts from the constructor', () => {
     albBasePriority: 2000,
     albListener: stack.albListener,
     cluster: stack.cluster,
-    containerImage: ContainerImage.fromRegistry('nginx'),
+    containerImage: ecs.ContainerImage.fromRegistry('nginx'),
     containerPort: 3000,
     primaryHostName: stack.alb.loadBalancerDnsName,
     additionalServingHosts: ['foobar.baz'],
@@ -289,7 +290,7 @@ it('adds redirects from the constructor', () => {
     albBasePriority: 2000,
     albListener: stack.albListener,
     cluster: stack.cluster,
-    containerImage: ContainerImage.fromRegistry('nginx'),
+    containerImage: ecs.ContainerImage.fromRegistry('nginx'),
     containerPort: 3000,
     primaryHostName: 'primary-domain.com',
     redirects: [
@@ -333,4 +334,60 @@ it('adds redirects from the constructor', () => {
       },
     ],
   }));
+});
+
+it('allows environment variables', () => {
+  const app = new App();
+  const testingClusterStack = new TestingClusterStack(app, 'test');
+
+  new WebsiteService(testingClusterStack, 'service', {
+    ...testingClusterStack,
+    albBasePriority: 1,
+    containerImage: ecs.ContainerImage.fromRegistry('nginx'),
+    primaryHostName: 'www.foo.com',
+    desiredCount: 5,
+    envVars: {
+      FOO: 'BAR',
+    },
+  });
+
+  expectCDK(testingClusterStack).to(
+    haveResourceLike('AWS::ECS::TaskDefinition', {
+      ContainerDefinitions: [
+        {
+          Environment: [{ Name: 'FOO', Value: 'BAR' }],
+        },
+      ],
+    }),
+  );
+});
+
+it('allows secret environment variables', () => {
+  const app = new App();
+  const testingClusterStack = new TestingClusterStack(app, 'test');
+
+  const databaseSecret = new secretsmanager.Secret(testingClusterStack, 'secret');
+
+  new WebsiteService(testingClusterStack, 'service', {
+    ...testingClusterStack,
+    albBasePriority: 1,
+    containerImage: ecs.ContainerImage.fromRegistry('nginx'),
+    primaryHostName: 'www.foo.com',
+    desiredCount: 5,
+    envSecrets: {
+      FOO: ecs.Secret.fromSecretsManager(databaseSecret),
+    },
+  });
+
+  expectCDK(testingClusterStack).to(
+    haveResourceLike('AWS::ECS::TaskDefinition', {
+      ContainerDefinitions: [
+        {
+          Secrets: [
+            { Name: 'FOO' },
+          ],
+        },
+      ],
+    }),
+  );
 });

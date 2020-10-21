@@ -71,8 +71,8 @@ new WebsiteService(scope: Construct, id: string, props: WebsiteServiceProps)
   * **connectToPeers** (<code>Array<[IConnectable](#aws-cdk-aws-ec2-iconnectable)></code>)  Register the service as allowed in others' ingresses. __*Optional*__
   * **desiredCount** (<code>number</code>)  Desired task count. __*Default*__: 1
   * **redirects** (<code>Array<[WebsiteHostRedirect](#wheatstalk-cdk-ecs-website-websitehostredirect)></code>)  Redirect listener rules. __*Optional*__
-  * **containerImage** (<code>[ContainerImage](#aws-cdk-aws-ecs-containerimage)</code>)  The main container image. 
-  * **containerPort** (<code>number</code>)  The the main container port to expose by load balancer. __*Default*__: 80
+  * **containerImage** (<code>[ContainerImage](#aws-cdk-aws-ecs-containerimage)</code>)  The container image. 
+  * **containerPort** (<code>number</code>)  The port that serves traffic. __*Default*__: 80
   * **envSecrets** (<code>Map<string, [Secret](#aws-cdk-aws-ecs-secret)></code>)  Specify environment variables from secrets for the main container. __*Optional*__
   * **envVars** (<code>Map<string, string></code>)  Specify environment variables for the main container. __*Optional*__
 
@@ -198,6 +198,8 @@ new WordpressService(scope: Construct, id: string, props: WordpressServiceProps)
   * **databaseSecret** (<code>[ISecret](#aws-cdk-aws-secretsmanager-isecret)</code>)  Credentials for accessing the database server. 
   * **fileSystem** (<code>[IFileSystem](#aws-cdk-aws-efs-ifilesystem)</code>)  A filesystem in which to put the user uploads. 
   * **databaseConnection** (<code>[IConnectable](#aws-cdk-aws-ec2-iconnectable)</code>)  When provided, an ingress rule will be added to the database's security group so that ECS can connect to the database. __*Optional*__
+  * **envSecrets** (<code>Map<string, [Secret](#aws-cdk-aws-ecs-secret)></code>)  Specify environment variables from secrets for the main container. __*Optional*__
+  * **envVars** (<code>Map<string, string></code>)  Specify environment variables for the main container. __*Optional*__
   * **fileSystemConnection** (<code>[IConnectable](#aws-cdk-aws-ec2-iconnectable)</code>)  When provided, an ingress rule will be added to the filesystem's security group so that ECS can mount the file system. __*Optional*__
   * **fileSystemRootDirectory** (<code>string</code>)  A location on the filesystem to mount as the data volume root. __*Default*__: '/'
   * **wordpressDatabaseName** (<code>string</code>)  Name of the database containing the Wordpress site. __*Optional*__
@@ -426,7 +428,7 @@ Name | Type | Description
 **albBasePriority** | <code>number</code> | The base priority from which to increment rule priorities.
 **albListener** | <code>[IApplicationListener](#aws-cdk-aws-elasticloadbalancingv2-iapplicationlistener)</code> | The load balancer listener to attach the service to.
 **cluster** | <code>[ICluster](#aws-cdk-aws-ecs-icluster)</code> | The ECS cluster to add the service to.
-**containerImage** | <code>[ContainerImage](#aws-cdk-aws-ecs-containerimage)</code> | The main container image.
+**containerImage** | <code>[ContainerImage](#aws-cdk-aws-ecs-containerimage)</code> | The container image.
 **primaryHostName** | <code>string</code> | The primary host name that this service will serve from and redirect to.
 **additionalServingHosts**? | <code>Array<string></code> | Additional host names to serve traffic on.<br/>__*Optional*__
 **allowedConnections**? | <code>Array<[IConnectable](#aws-cdk-aws-ec2-iconnectable)></code> | Allow others access to the traffic port.<br/>__*Optional*__
@@ -434,7 +436,7 @@ Name | Type | Description
 **authWithUserPool**? | <code>[CognitoAuthenticationConfig](#wheatstalk-cdk-ecs-website-cognitoauthenticationconfig)</code> | Instruct the service to authenticate with the cognito user pool.<br/>__*Optional*__
 **capacityType**? | <code>[EcsWorkloadCapacityType](#wheatstalk-cdk-ecs-website-ecsworkloadcapacitytype)</code> | Type of compute capacity.<br/>__*Default*__: EcsExtensionCapacityType.EC2
 **connectToPeers**? | <code>Array<[IConnectable](#aws-cdk-aws-ec2-iconnectable)></code> | Register the service as allowed in others' ingresses.<br/>__*Optional*__
-**containerPort**? | <code>number</code> | The the main container port to expose by load balancer.<br/>__*Default*__: 80
+**containerPort**? | <code>number</code> | The port that serves traffic.<br/>__*Default*__: 80
 **desiredCount**? | <code>number</code> | Desired task count.<br/>__*Default*__: 1
 **envSecrets**? | <code>Map<string, [Secret](#aws-cdk-aws-ecs-secret)></code> | Specify environment variables from secrets for the main container.<br/>__*Optional*__
 **envVars**? | <code>Map<string, string></code> | Specify environment variables for the main container.<br/>__*Optional*__
@@ -480,6 +482,8 @@ Name | Type | Description
 **connectToPeers**? | <code>Array<[IConnectable](#aws-cdk-aws-ec2-iconnectable)></code> | Register the service as allowed in others' ingresses.<br/>__*Optional*__
 **databaseConnection**? | <code>[IConnectable](#aws-cdk-aws-ec2-iconnectable)</code> | When provided, an ingress rule will be added to the database's security group so that ECS can connect to the database.<br/>__*Optional*__
 **desiredCount**? | <code>number</code> | Desired task count.<br/>__*Default*__: 1
+**envSecrets**? | <code>Map<string, [Secret](#aws-cdk-aws-ecs-secret)></code> | Specify environment variables from secrets for the main container.<br/>__*Optional*__
+**envVars**? | <code>Map<string, string></code> | Specify environment variables for the main container.<br/>__*Optional*__
 **fileSystemConnection**? | <code>[IConnectable](#aws-cdk-aws-ec2-iconnectable)</code> | When provided, an ingress rule will be added to the filesystem's security group so that ECS can mount the file system.<br/>__*Optional*__
 **fileSystemRootDirectory**? | <code>string</code> | A location on the filesystem to mount as the data volume root.<br/>__*Default*__: '/'
 **redirects**? | <code>Array<[WebsiteHostRedirect](#wheatstalk-cdk-ecs-website-websitehostredirect)></code> | Redirect listener rules.<br/>__*Optional*__

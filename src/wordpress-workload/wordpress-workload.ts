@@ -81,6 +81,16 @@ export interface WordpressWorkloadOptions {
    * it is disabled by default for security reasons.
    */
   readonly databaseConnection?: IConnectable;
+
+  /**
+   * Specify environment variables for the main container
+   */
+  readonly envVars?: Record<string, string>;
+
+  /**
+   * Specify environment variables from secrets for the main container
+   */
+  readonly envSecrets?: Record<string, Secret>;
 }
 
 /**
@@ -108,7 +118,9 @@ export class WordpressWorkload implements IEcsWorkload {
       },
     });
 
-    const environment: Record<string, string> = {};
+    const environment: Record<string, string> = {
+      ...props.envVars,
+    };
 
     if (props.wordpressDatabaseName) {
       environment.WORDPRESS_DB_NAME = props.wordpressDatabaseName;
@@ -125,6 +137,7 @@ export class WordpressWorkload implements IEcsWorkload {
       environment: environment,
       secrets: {
         WORDPRESS_DB_SECRET: Secret.fromSecretsManager(props.databaseSecret),
+        ...props.envSecrets,
       },
     });
 
