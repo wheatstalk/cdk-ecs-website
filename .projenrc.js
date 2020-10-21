@@ -5,7 +5,6 @@ const project = new AwsCdkConstructLibrary({
   authorName: "Josh Kellendonk",
   license: "MIT",
   jsiiVersion: Semver.caret('1.13.0'),
-  cdkVersion: "1.68.0",
   name: "@wheatstalk/cdk-ecs-website",
   repository: "git@github.com:wheatstalk/cdk-ecs-website.git",
   releaseEveryCommit: false,
@@ -24,7 +23,9 @@ const project = new AwsCdkConstructLibrary({
   dependencies: {
     "fs-extra": "^8.1.0",
   },
+  cdkVersion: "1.68.0",
   cdkTestDependencies: [
+    "aws-cdk",
     "@aws-cdk/assert",
     "@aws-cdk/aws-rds",
   ],
