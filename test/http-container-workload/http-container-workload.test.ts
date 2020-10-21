@@ -18,7 +18,7 @@ it('sets all properties', () => {
   // WHEN
   const binding = new HttpContainerWorkload({
     containerImage: ecs.ContainerImage.fromRegistry('nginx'),
-    trafficPort: 3000,
+    containerPort: 3000,
     envVars: {
       Env1: 'Env1Value',
     },

@@ -17,7 +17,7 @@ export interface HttpContainerWorkloadProps {
    * The port that serves traffic
    * @default 80
    */
-  readonly trafficPort?: number;
+  readonly containerPort?: number;
 
   /**
    * Specify environment variables for the main container.
@@ -39,7 +39,7 @@ export class HttpContainerWorkload implements IEcsWorkload {
   public readonly trafficPort: number;
 
   constructor(private readonly props: HttpContainerWorkloadProps) {
-    this.trafficPort = props.trafficPort ?? 80;
+    this.trafficPort = props.containerPort ?? 80;
   }
 
   useTaskDefinition(taskDefinitionInfo: EcsWorkloadTaskInfo): void {

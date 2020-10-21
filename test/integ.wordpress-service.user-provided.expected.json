@@ -1515,7 +1515,7 @@
                 "awslogs-group": {
                   "Ref": "SiteServiceTaskwebLogGroup1A4B98D6"
                 },
-                "awslogs-stream-prefix": "WordpressExtension",
+                "awslogs-stream-prefix": "WordpressWorkload",
                 "awslogs-region": {
                   "Ref": "AWS::Region"
                 }

@@ -34,6 +34,13 @@ function approve() {
   cleanup
 }
 
+function destroy() {
+  log "Destroying $INTEG"
+  cdk --output "$ASSEMBLY" --app "yarn ts-node --project tsconfig.jest.json $INTEG_FILE" destroy
+
+  cleanup
+}
+
 function verify() {
   synth
 
@@ -55,6 +62,7 @@ case "$COMMAND" in
   synth) synth;;
   deploy) deploy;;
   approve) approve;;
+  destroy) destroy;;
   verify) verify;;
   *) die "Unknown command $COMMAND"
 esac

@@ -1240,7 +1240,7 @@
                 "awslogs-group": {
                   "Ref": "WebsiteServiceTaskwebLogGroupEFC263A9"
                 },
-                "awslogs-stream-prefix": "HttpContainerExtension",
+                "awslogs-stream-prefix": "HttpContainerWorkload",
                 "awslogs-region": {
                   "Ref": "AWS::Region"
                 }
