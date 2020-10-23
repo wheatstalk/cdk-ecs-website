@@ -113,7 +113,6 @@ export class WebsiteServiceBase extends Construct implements IWebsiteService {
 
     const extensionService = new EcsWorkloadService(this, 'Service', {
       ...props,
-      capacityType: EcsWorkloadCapacityType.EC2,
       serviceExtension: props.ecsExtension,
     });
 

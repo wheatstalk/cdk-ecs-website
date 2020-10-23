@@ -37,7 +37,7 @@ new WordpressService(stack, 'Site', {
   albListener: albListener,
   primaryHostName: alb.loadBalancerDnsName,
 
-  capacityType: EcsWorkloadCapacityType.FARGATE,
+  capacityType: EcsWorkloadCapacityType.EC2,
   desiredCount: 4,
 
   databaseSecret: db.secret,
