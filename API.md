@@ -22,6 +22,7 @@ Name|Description
 [WebsiteServiceProps](#wheatstalk-cdk-ecs-website-websiteserviceprops)|Props for `WebsiteService`.
 [WordpressImageOptions](#wheatstalk-cdk-ecs-website-wordpressimageoptions)|Configuration options for building the WordPress container image.
 [WordpressServiceProps](#wheatstalk-cdk-ecs-website-wordpressserviceprops)|Props for `WordpressService`.
+[WordpressWorkloadOptions](#wheatstalk-cdk-ecs-website-wordpressworkloadoptions)|Props for `WordpressWorkload`.
 
 
 **Interfaces**
@@ -487,6 +488,27 @@ Name | Type | Description
 **fileSystemConnection**? | <code>[IConnectable](#aws-cdk-aws-ec2-iconnectable)</code> | When provided, an ingress rule will be added to the filesystem's security group so that ECS can mount the file system.<br/>__*Optional*__
 **fileSystemRootDirectory**? | <code>string</code> | A location on the filesystem to mount as the data volume root.<br/>__*Default*__: '/'
 **redirects**? | <code>Array<[WebsiteHostRedirect](#wheatstalk-cdk-ecs-website-websitehostredirect)></code> | Redirect listener rules.<br/>__*Optional*__
+**wordpressDatabaseName**? | <code>string</code> | Name of the database containing the Wordpress site.<br/>__*Optional*__
+**wordpressImageOptions**? | <code>[WordpressImageOptions](#wheatstalk-cdk-ecs-website-wordpressimageoptions)</code> | Options building the Wordpress container.<br/>__*Optional*__
+
+
+
+## struct WordpressWorkloadOptions  <a id="wheatstalk-cdk-ecs-website-wordpressworkloadoptions"></a>
+
+
+Props for `WordpressWorkload`.
+
+
+
+Name | Type | Description 
+-----|------|-------------
+**databaseSecret** | <code>[ISecret](#aws-cdk-aws-secretsmanager-isecret)</code> | Credentials for accessing the database server.
+**fileSystem** | <code>[IFileSystem](#aws-cdk-aws-efs-ifilesystem)</code> | A filesystem in which to put the user uploads.
+**databaseConnection**? | <code>[IConnectable](#aws-cdk-aws-ec2-iconnectable)</code> | When provided, an ingress rule will be added to the database's security group so that ECS can connect to the database.<br/>__*Optional*__
+**envSecrets**? | <code>Map<string, [Secret](#aws-cdk-aws-ecs-secret)></code> | Specify environment variables from secrets for the main container.<br/>__*Optional*__
+**envVars**? | <code>Map<string, string></code> | Specify environment variables for the main container.<br/>__*Optional*__
+**fileSystemConnection**? | <code>[IConnectable](#aws-cdk-aws-ec2-iconnectable)</code> | When provided, an ingress rule will be added to the filesystem's security group so that ECS can mount the file system.<br/>__*Optional*__
+**fileSystemRootDirectory**? | <code>string</code> | A location on the filesystem to mount as the data volume root.<br/>__*Default*__: '/'
 **wordpressDatabaseName**? | <code>string</code> | Name of the database containing the Wordpress site.<br/>__*Optional*__
 **wordpressImageOptions**? | <code>[WordpressImageOptions](#wheatstalk-cdk-ecs-website-wordpressimageoptions)</code> | Options building the Wordpress container.<br/>__*Optional*__
 
