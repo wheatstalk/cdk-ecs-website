@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 0.4.3 (2020-10-23)
+
+
+### Bug Fixes
+
+* WordpressWorkloadOptions was internal ([8ef93ea](https://github.com/wheatstalk/cdk-ecs-website/commit/8ef93ea1ad6791f7845806f37ce344270cb97cc8))
+
 ### 0.4.2 (2020-10-21)
 
 ### 0.4.1 (2020-10-21)
