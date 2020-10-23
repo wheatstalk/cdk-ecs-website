@@ -507,54 +507,6 @@
         "aws:cdk:path": "wordpress-service-integ/cluster/capacity/InstanceSecurityGroup/from wordpressserviceintegalbSecurityGroup3C5E7D63:ALL PORTS"
       }
     },
-    "clustercapacityInstanceSecurityGroupfromwordpressserviceintegalbSecurityGroup3C5E7D6380D3B34C00": {
-      "Type": "AWS::EC2::SecurityGroupIngress",
-      "Properties": {
-        "IpProtocol": "tcp",
-        "Description": "from wordpressserviceintegalbSecurityGroup3C5E7D63:80",
-        "FromPort": 80,
-        "GroupId": {
-          "Fn::GetAtt": [
-            "clustercapacityInstanceSecurityGroup8AD6E10E",
-            "GroupId"
-          ]
-        },
-        "SourceSecurityGroupId": {
-          "Fn::GetAtt": [
-            "albSecurityGroup49866104",
-            "GroupId"
-          ]
-        },
-        "ToPort": 80
-      },
-      "Metadata": {
-        "aws:cdk:path": "wordpress-service-integ/cluster/capacity/InstanceSecurityGroup/from wordpressserviceintegalbSecurityGroup3C5E7D63:80"
-      }
-    },
-    "clustercapacityInstanceSecurityGroupfromwordpressserviceintegalbSecurityGroup3C5E7D6332768655352B7E201E": {
-      "Type": "AWS::EC2::SecurityGroupIngress",
-      "Properties": {
-        "IpProtocol": "tcp",
-        "Description": "Load balancer to target",
-        "FromPort": 32768,
-        "GroupId": {
-          "Fn::GetAtt": [
-            "clustercapacityInstanceSecurityGroup8AD6E10E",
-            "GroupId"
-          ]
-        },
-        "SourceSecurityGroupId": {
-          "Fn::GetAtt": [
-            "albSecurityGroup49866104",
-            "GroupId"
-          ]
-        },
-        "ToPort": 65535
-      },
-      "Metadata": {
-        "aws:cdk:path": "wordpress-service-integ/cluster/capacity/InstanceSecurityGroup/from wordpressserviceintegalbSecurityGroup3C5E7D63:32768-65535"
-      }
-    },
     "clustercapacityInstanceRole4828E066": {
       "Type": "AWS::IAM::Role",
       "Properties": {
@@ -1136,7 +1088,7 @@
         "aws:cdk:path": "wordpress-service-integ/alb/SecurityGroup/to wordpressserviceintegclustercapacityInstanceSecurityGroup72C0D8D2:ALL PORTS"
       }
     },
-    "albSecurityGrouptowordpressserviceintegclustercapacityInstanceSecurityGroup72C0D8D280FCBB6F6E": {
+    "albSecurityGrouptowordpressserviceintegSiteServiceSecurityGroupDC92076D8062BAB496": {
       "Type": "AWS::EC2::SecurityGroupEgress",
       "Properties": {
         "GroupId": {
@@ -1146,10 +1098,10 @@
           ]
         },
         "IpProtocol": "tcp",
-        "Description": "to wordpressserviceintegclustercapacityInstanceSecurityGroup72C0D8D2:80",
+        "Description": "to wordpressserviceintegSiteServiceSecurityGroupDC92076D:80",
         "DestinationSecurityGroupId": {
           "Fn::GetAtt": [
-            "clustercapacityInstanceSecurityGroup8AD6E10E",
+            "SiteServiceSecurityGroupA077DFA6",
             "GroupId"
           ]
         },
@@ -1157,31 +1109,7 @@
         "ToPort": 80
       },
       "Metadata": {
-        "aws:cdk:path": "wordpress-service-integ/alb/SecurityGroup/to wordpressserviceintegclustercapacityInstanceSecurityGroup72C0D8D2:80"
-      }
-    },
-    "albSecurityGrouptowordpressserviceintegclustercapacityInstanceSecurityGroup72C0D8D232768655351DC47F4E": {
-      "Type": "AWS::EC2::SecurityGroupEgress",
-      "Properties": {
-        "GroupId": {
-          "Fn::GetAtt": [
-            "albSecurityGroup49866104",
-            "GroupId"
-          ]
-        },
-        "IpProtocol": "tcp",
-        "Description": "Load balancer to target",
-        "DestinationSecurityGroupId": {
-          "Fn::GetAtt": [
-            "clustercapacityInstanceSecurityGroup8AD6E10E",
-            "GroupId"
-          ]
-        },
-        "FromPort": 32768,
-        "ToPort": 65535
-      },
-      "Metadata": {
-        "aws:cdk:path": "wordpress-service-integ/alb/SecurityGroup/to wordpressserviceintegclustercapacityInstanceSecurityGroup72C0D8D2:32768-65535"
+        "aws:cdk:path": "wordpress-service-integ/alb/SecurityGroup/to wordpressserviceintegSiteServiceSecurityGroupDC92076D:80"
       }
     },
     "albhttpF1B39DBC": {
@@ -1243,11 +1171,11 @@
         "aws:cdk:path": "wordpress-service-integ/database/SecurityGroup/Resource"
       }
     },
-    "databaseSecurityGroupfromwordpressserviceintegclustercapacityInstanceSecurityGroup72C0D8D2ALLTRAFFIC55DD2D75": {
+    "databaseSecurityGroupfromwordpressserviceintegSiteServiceSecurityGroupDC92076DALLTRAFFIC8FD705DA": {
       "Type": "AWS::EC2::SecurityGroupIngress",
       "Properties": {
         "IpProtocol": "-1",
-        "Description": "from wordpressserviceintegclustercapacityInstanceSecurityGroup72C0D8D2:ALL TRAFFIC",
+        "Description": "from wordpressserviceintegSiteServiceSecurityGroupDC92076D:ALL TRAFFIC",
         "GroupId": {
           "Fn::GetAtt": [
             "databaseSecurityGroup984F86C4",
@@ -1256,13 +1184,13 @@
         },
         "SourceSecurityGroupId": {
           "Fn::GetAtt": [
-            "clustercapacityInstanceSecurityGroup8AD6E10E",
+            "SiteServiceSecurityGroupA077DFA6",
             "GroupId"
           ]
         }
       },
       "Metadata": {
-        "aws:cdk:path": "wordpress-service-integ/database/SecurityGroup/from wordpressserviceintegclustercapacityInstanceSecurityGroup72C0D8D2:ALL TRAFFIC"
+        "aws:cdk:path": "wordpress-service-integ/database/SecurityGroup/from wordpressserviceintegSiteServiceSecurityGroupDC92076D:ALL TRAFFIC"
       }
     },
     "databaseSecret87F1207C": {
@@ -1397,11 +1325,11 @@
         "aws:cdk:path": "wordpress-service-integ/files/EfsSecurityGroup/Resource"
       }
     },
-    "filesEfsSecurityGroupfromwordpressserviceintegclustercapacityInstanceSecurityGroup72C0D8D2ALLTRAFFICA03177E4": {
+    "filesEfsSecurityGroupfromwordpressserviceintegSiteServiceSecurityGroupDC92076DALLTRAFFIC0A74B245": {
       "Type": "AWS::EC2::SecurityGroupIngress",
       "Properties": {
         "IpProtocol": "-1",
-        "Description": "from wordpressserviceintegclustercapacityInstanceSecurityGroup72C0D8D2:ALL TRAFFIC",
+        "Description": "from wordpressserviceintegSiteServiceSecurityGroupDC92076D:ALL TRAFFIC",
         "GroupId": {
           "Fn::GetAtt": [
             "filesEfsSecurityGroupD12994BF",
@@ -1410,13 +1338,13 @@
         },
         "SourceSecurityGroupId": {
           "Fn::GetAtt": [
-            "clustercapacityInstanceSecurityGroup8AD6E10E",
+            "SiteServiceSecurityGroupA077DFA6",
             "GroupId"
           ]
         }
       },
       "Metadata": {
-        "aws:cdk:path": "wordpress-service-integ/files/EfsSecurityGroup/from wordpressserviceintegclustercapacityInstanceSecurityGroup72C0D8D2:ALL TRAFFIC"
+        "aws:cdk:path": "wordpress-service-integ/files/EfsSecurityGroup/from wordpressserviceintegSiteServiceSecurityGroupDC92076D:ALL TRAFFIC"
       }
     },
     "filesEfsMountTarget1BBCBA392": {
@@ -1522,7 +1450,7 @@
               }
             },
             "Memory": 512,
-            "MemoryReservation": 64,
+            "MemoryReservation": 512,
             "MountPoints": [
               {
                 "ContainerPath": "/data",
@@ -1534,7 +1462,6 @@
             "PortMappings": [
               {
                 "ContainerPort": 80,
-                "HostPort": 0,
                 "Protocol": "tcp"
               }
             ],
@@ -1548,6 +1475,7 @@
             ]
           }
         ],
+        "Cpu": "256",
         "ExecutionRoleArn": {
           "Fn::GetAtt": [
             "SiteServiceTaskExecutionRoleB0147D69",
@@ -1555,9 +1483,10 @@
           ]
         },
         "Family": "wordpressserviceintegSiteServiceTask2C4503C6",
-        "NetworkMode": "bridge",
+        "Memory": "512",
+        "NetworkMode": "awsvpc",
         "RequiresCompatibilities": [
-          "EC2"
+          "FARGATE"
         ],
         "TaskRoleArn": {
           "Fn::GetAtt": [
@@ -1699,7 +1628,7 @@
         "DesiredCount": 4,
         "EnableECSManagedTags": false,
         "HealthCheckGracePeriodSeconds": 60,
-        "LaunchType": "EC2",
+        "LaunchType": "FARGATE",
         "LoadBalancers": [
           {
             "ContainerName": "web",
@@ -1709,7 +1638,28 @@
             }
           }
         ],
-        "SchedulingStrategy": "REPLICA",
+        "NetworkConfiguration": {
+          "AwsvpcConfiguration": {
+            "AssignPublicIp": "DISABLED",
+            "SecurityGroups": [
+              {
+                "Fn::GetAtt": [
+                  "SiteServiceSecurityGroupA077DFA6",
+                  "GroupId"
+                ]
+              }
+            ],
+            "Subnets": [
+              {
+                "Ref": "clusterVpcPrivateSubnet1Subnet4D445D11"
+              },
+              {
+                "Ref": "clusterVpcPrivateSubnet2Subnet6DFF6572"
+              }
+            ]
+          }
+        },
+        "PlatformVersion": "1.4.0",
         "TaskDefinition": {
           "Ref": "SiteServiceTaskBA453B60"
         }
@@ -1719,6 +1669,49 @@
       ],
       "Metadata": {
         "aws:cdk:path": "wordpress-service-integ/Site/Service/Service/Service"
+      }
+    },
+    "SiteServiceSecurityGroupA077DFA6": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "wordpress-service-integ/Site/Service/Service/SecurityGroup",
+        "SecurityGroupEgress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1"
+          }
+        ],
+        "VpcId": {
+          "Ref": "clusterVpc91107A71"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "wordpress-service-integ/Site/Service/Service/SecurityGroup/Resource"
+      }
+    },
+    "SiteServiceSecurityGroupfromwordpressserviceintegalbSecurityGroup3C5E7D63806E6ACF24": {
+      "Type": "AWS::EC2::SecurityGroupIngress",
+      "Properties": {
+        "IpProtocol": "tcp",
+        "Description": "from wordpressserviceintegalbSecurityGroup3C5E7D63:80",
+        "FromPort": 80,
+        "GroupId": {
+          "Fn::GetAtt": [
+            "SiteServiceSecurityGroupA077DFA6",
+            "GroupId"
+          ]
+        },
+        "SourceSecurityGroupId": {
+          "Fn::GetAtt": [
+            "albSecurityGroup49866104",
+            "GroupId"
+          ]
+        },
+        "ToPort": 80
+      },
+      "Metadata": {
+        "aws:cdk:path": "wordpress-service-integ/Site/Service/Service/SecurityGroup/from wordpressserviceintegalbSecurityGroup3C5E7D63:80"
       }
     },
     "SiteRulesBuilderTargetGroup7E6AA8B8": {
@@ -1737,7 +1730,7 @@
             "Value": "15"
           }
         ],
-        "TargetType": "instance",
+        "TargetType": "ip",
         "UnhealthyThresholdCount": 2,
         "VpcId": {
           "Ref": "clusterVpc91107A71"
@@ -1785,7 +1778,7 @@
     "CDKMetadata": {
       "Type": "AWS::CDK::Metadata",
       "Properties": {
-        "Modules": "aws-cdk=1.68.0,@aws-cdk/assets=1.69.0,@aws-cdk/aws-applicationautoscaling=1.69.0,@aws-cdk/aws-autoscaling=1.69.0,@aws-cdk/aws-autoscaling-common=1.69.0,@aws-cdk/aws-autoscaling-hooktargets=1.69.0,@aws-cdk/aws-cloudwatch=1.69.0,@aws-cdk/aws-codeguruprofiler=1.69.0,@aws-cdk/aws-cognito=1.69.0,@aws-cdk/aws-ec2=1.69.0,@aws-cdk/aws-ecr=1.69.0,@aws-cdk/aws-ecr-assets=1.69.0,@aws-cdk/aws-ecs=1.69.0,@aws-cdk/aws-efs=1.69.0,@aws-cdk/aws-elasticloadbalancingv2=1.69.0,@aws-cdk/aws-events=1.69.0,@aws-cdk/aws-iam=1.69.0,@aws-cdk/aws-kms=1.69.0,@aws-cdk/aws-lambda=1.69.0,@aws-cdk/aws-logs=1.69.0,@aws-cdk/aws-rds=1.69.0,@aws-cdk/aws-s3=1.69.0,@aws-cdk/aws-s3-assets=1.69.0,@aws-cdk/aws-sam=1.69.0,@aws-cdk/aws-secretsmanager=1.69.0,@aws-cdk/aws-servicediscovery=1.69.0,@aws-cdk/aws-sns=1.69.0,@aws-cdk/aws-sns-subscriptions=1.69.0,@aws-cdk/aws-sqs=1.69.0,@aws-cdk/aws-ssm=1.69.0,@aws-cdk/cloud-assembly-schema=1.69.0,@aws-cdk/core=1.69.0,@aws-cdk/custom-resources=1.69.0,@aws-cdk/cx-api=1.69.0,@aws-cdk/region-info=1.69.0,jsii-runtime=node.js/v12.18.1"
+        "Modules": "aws-cdk=1.69.0,@aws-cdk/assets=1.69.0,@aws-cdk/aws-applicationautoscaling=1.69.0,@aws-cdk/aws-autoscaling=1.69.0,@aws-cdk/aws-autoscaling-common=1.69.0,@aws-cdk/aws-autoscaling-hooktargets=1.69.0,@aws-cdk/aws-cloudwatch=1.69.0,@aws-cdk/aws-codeguruprofiler=1.69.0,@aws-cdk/aws-cognito=1.69.0,@aws-cdk/aws-ec2=1.69.0,@aws-cdk/aws-ecr=1.69.0,@aws-cdk/aws-ecr-assets=1.69.0,@aws-cdk/aws-ecs=1.69.0,@aws-cdk/aws-efs=1.69.0,@aws-cdk/aws-elasticloadbalancingv2=1.69.0,@aws-cdk/aws-events=1.69.0,@aws-cdk/aws-iam=1.69.0,@aws-cdk/aws-kms=1.69.0,@aws-cdk/aws-lambda=1.69.0,@aws-cdk/aws-logs=1.69.0,@aws-cdk/aws-rds=1.69.0,@aws-cdk/aws-s3=1.69.0,@aws-cdk/aws-s3-assets=1.69.0,@aws-cdk/aws-sam=1.69.0,@aws-cdk/aws-secretsmanager=1.69.0,@aws-cdk/aws-servicediscovery=1.69.0,@aws-cdk/aws-sns=1.69.0,@aws-cdk/aws-sns-subscriptions=1.69.0,@aws-cdk/aws-sqs=1.69.0,@aws-cdk/aws-ssm=1.69.0,@aws-cdk/cloud-assembly-schema=1.69.0,@aws-cdk/core=1.69.0,@aws-cdk/custom-resources=1.69.0,@aws-cdk/cx-api=1.69.0,@aws-cdk/region-info=1.69.0,jsii-runtime=node.js/v12.18.1"
       },
       "Metadata": {
         "aws:cdk:path": "wordpress-service-integ/CDKMetadata/Default"
