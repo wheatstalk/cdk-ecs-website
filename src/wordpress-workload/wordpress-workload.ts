@@ -36,7 +36,6 @@ export interface WordpressImageOptions {
 
 /**
  * Props for `WordpressWorkload`
- * @internal
  */
 export interface WordpressWorkloadOptions {
   /**
