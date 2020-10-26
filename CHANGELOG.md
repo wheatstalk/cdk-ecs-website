@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 0.5.2 (2020-10-26)
+
+
+### Bug Fixes
+
+* yarn fought with projen ([815f078](https://github.com/wheatstalk/cdk-ecs-website/commit/815f078ce7b945808833f650d93264f549dc0046))
+
 ### 0.5.1 (2020-10-24)
 
 ### 0.4.3 (2020-10-23)
