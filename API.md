@@ -16,6 +16,7 @@ Name|Description
 [CognitoAuthenticationConfig](#wheatstalk-cdk-ecs-website-cognitoauthenticationconfig)|Configuration for authentication through a Cognito user pool.
 [EcsWorkloadServiceInfo](#wheatstalk-cdk-ecs-website-ecsworkloadserviceinfo)|Provides information to `IEcsWorkload.useService` about the service.
 [EcsWorkloadTaskInfo](#wheatstalk-cdk-ecs-website-ecsworkloadtaskinfo)|Provides information to `IEcsWorkload.useTaskDefinition` about the task definition.
+[HttpContainerWorkloadOptions](#wheatstalk-cdk-ecs-website-httpcontainerworkloadoptions)|Props for `HttpContainerWorkload`.
 [WebsiteHostRedirect](#wheatstalk-cdk-ecs-website-websitehostredirect)|A redirect.
 [WebsiteServiceBaseProps](#wheatstalk-cdk-ecs-website-websiteservicebaseprops)|Props for `WebsiteServiceBase`.
 [WebsiteServiceOptions](#wheatstalk-cdk-ecs-website-websiteserviceoptions)|Non-workload options for `WebsiteServiceBase`.
@@ -248,6 +249,22 @@ Name | Type | Description
 **taskDefinition** | <code>[TaskDefinition](#aws-cdk-aws-ecs-taskdefinition)</code> | The task definition.
 **taskMemoryLimit** | <code>number</code> | The memory limit of the task definition.
 **taskMemoryReserved** | <code>number</code> | The memory reservation of the task definition.
+
+
+
+## struct HttpContainerWorkloadOptions  <a id="wheatstalk-cdk-ecs-website-httpcontainerworkloadoptions"></a>
+
+
+Props for `HttpContainerWorkload`.
+
+
+
+Name | Type | Description 
+-----|------|-------------
+**containerImage** | <code>[ContainerImage](#aws-cdk-aws-ecs-containerimage)</code> | The container image.
+**containerPort**? | <code>number</code> | The port that serves traffic.<br/>__*Default*__: 80
+**envSecrets**? | <code>Map<string, [Secret](#aws-cdk-aws-ecs-secret)></code> | Specify environment variables from secrets for the main container.<br/>__*Optional*__
+**envVars**? | <code>Map<string, string></code> | Specify environment variables for the main container.<br/>__*Optional*__
 
 
 
