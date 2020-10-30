@@ -21,6 +21,7 @@ Name|Description
 [WebsiteServiceBaseProps](#wheatstalk-cdk-ecs-website-websiteservicebaseprops)|Props for `WebsiteServiceBase`.
 [WebsiteServiceOptions](#wheatstalk-cdk-ecs-website-websiteserviceoptions)|Non-workload options for `WebsiteServiceBase`.
 [WebsiteServiceProps](#wheatstalk-cdk-ecs-website-websiteserviceprops)|Props for `WebsiteService`.
+[WebsiteServicePropsAuthWithUserPoolProps](#wheatstalk-cdk-ecs-website-websiteservicepropsauthwithuserpoolprops)|*No description*
 [WordpressImageOptions](#wheatstalk-cdk-ecs-website-wordpressimageoptions)|Configuration options for building the WordPress container image.
 [WordpressServiceProps](#wheatstalk-cdk-ecs-website-wordpressserviceprops)|Props for `WordpressService`.
 [WordpressWorkloadOptions](#wheatstalk-cdk-ecs-website-wordpressworkloadoptions)|Props for `WordpressWorkload`.
@@ -121,8 +122,8 @@ new WebsiteServiceBase(scope: Construct, id: string, props: WebsiteServiceBasePr
 
 Name | Type | Description 
 -----|------|-------------
-**service** | <code>[Ec2Service](#aws-cdk-aws-ecs-ec2service) &#124; [FargateService](#aws-cdk-aws-ecs-fargateservice)</code> | <span></span>
-**taskDefinition** | <code>[TaskDefinition](#aws-cdk-aws-ecs-taskdefinition)</code> | <span></span>
+**service** | <code>[Ec2Service](#aws-cdk-aws-ecs-ec2service) &#124; [FargateService](#aws-cdk-aws-ecs-fargateservice)</code> | The service instance.
+**taskDefinition** | <code>[TaskDefinition](#aws-cdk-aws-ecs-taskdefinition)</code> | The task definition of the service.
 
 ### Methods
 
@@ -468,6 +469,20 @@ Name | Type | Description
 **envSecrets**? | <code>Map<string, [Secret](#aws-cdk-aws-ecs-secret)></code> | Specify environment variables from secrets for the main container.<br/>__*Optional*__
 **envVars**? | <code>Map<string, string></code> | Specify environment variables for the main container.<br/>__*Optional*__
 **redirects**? | <code>Array<[WebsiteHostRedirect](#wheatstalk-cdk-ecs-website-websitehostredirect)></code> | Redirect listener rules.<br/>__*Optional*__
+
+
+
+## struct WebsiteServicePropsAuthWithUserPoolProps ⚠️ <a id="wheatstalk-cdk-ecs-website-websiteservicepropsauthwithuserpoolprops"></a>
+
+
+
+
+
+
+Name | Type | Description 
+-----|------|-------------
+**domain**⚠️ | <code>string</code> | <span></span>
+**userPool**⚠️ | <code>[IUserPool](#aws-cdk-aws-cognito-iuserpool)</code> | <span></span>
 
 
 

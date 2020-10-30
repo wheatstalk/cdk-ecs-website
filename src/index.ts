@@ -1,4 +1,12 @@
 // Folders
+import { CognitoAuthenticationConfig } from './listener-rules-builder';
+
+/**
+ * @deprecated Use CognitoAuthenticationConfig instead.
+ */
+export interface WebsiteServicePropsAuthWithUserPoolProps extends CognitoAuthenticationConfig {
+}
+
 export * from './ecs-workloads';
 export * from './http-container-workload';
 export * from './listener-rules-builder';
