@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 0.5.4 (2020-10-30)
+
+
+### Features
+
+* listener rule ids are based on priority to reduce rule replacements ([#39](https://github.com/wheatstalk/cdk-ecs-website/issues/39)) ([caa42b6](https://github.com/wheatstalk/cdk-ecs-website/commit/caa42b64dd251b793d249f4a43c39c5a812eb16e))
+
 ### 0.5.3 (2020-10-30)
 
 
