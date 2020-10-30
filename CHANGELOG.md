@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 0.5.3 (2020-10-30)
+
+
+### Bug Fixes
+
+* v0.2.0 compatibility round 1 ([#38](https://github.com/wheatstalk/cdk-ecs-website/issues/38)) ([31e4925](https://github.com/wheatstalk/cdk-ecs-website/commit/31e4925094351088701c3695919631ed3dfa095b))
+
 ### 0.5.2 (2020-10-26)
 
 
