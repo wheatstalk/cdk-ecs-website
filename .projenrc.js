@@ -43,7 +43,8 @@ const project = new AwsCdkConstructLibrary({
     "@aws-cdk/aws-logs",
     "@aws-cdk/core",
   ],
-  npmignore: ['node_modules']
+  npmignore: ['node_modules'],
+  compat: true,
 });
 
 project.addTestCommand("./integ.sh all verify");

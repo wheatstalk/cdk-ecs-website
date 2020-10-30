@@ -1,12 +1,12 @@
 import { Construct } from '@aws-cdk/core';
 
-import { HttpContainerWorkload, HttpContainerWorkloadProps } from './http-container-workload';
+import { HttpContainerWorkload, HttpContainerWorkloadOptions } from './http-container-workload';
 import { WebsiteServiceBase, WebsiteServiceOptions } from './website-service-base';
 
 /**
  * Props for `WebsiteService`
  */
-export interface WebsiteServiceProps extends WebsiteServiceOptions, HttpContainerWorkloadProps {
+export interface WebsiteServiceProps extends WebsiteServiceOptions, HttpContainerWorkloadOptions {
 }
 
 /**

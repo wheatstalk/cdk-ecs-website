@@ -16,10 +16,12 @@ Name|Description
 [CognitoAuthenticationConfig](#wheatstalk-cdk-ecs-website-cognitoauthenticationconfig)|Configuration for authentication through a Cognito user pool.
 [EcsWorkloadServiceInfo](#wheatstalk-cdk-ecs-website-ecsworkloadserviceinfo)|Provides information to `IEcsWorkload.useService` about the service.
 [EcsWorkloadTaskInfo](#wheatstalk-cdk-ecs-website-ecsworkloadtaskinfo)|Provides information to `IEcsWorkload.useTaskDefinition` about the task definition.
+[HttpContainerWorkloadOptions](#wheatstalk-cdk-ecs-website-httpcontainerworkloadoptions)|Props for `HttpContainerWorkload`.
 [WebsiteHostRedirect](#wheatstalk-cdk-ecs-website-websitehostredirect)|A redirect.
 [WebsiteServiceBaseProps](#wheatstalk-cdk-ecs-website-websiteservicebaseprops)|Props for `WebsiteServiceBase`.
 [WebsiteServiceOptions](#wheatstalk-cdk-ecs-website-websiteserviceoptions)|Non-workload options for `WebsiteServiceBase`.
 [WebsiteServiceProps](#wheatstalk-cdk-ecs-website-websiteserviceprops)|Props for `WebsiteService`.
+[WebsiteServicePropsAuthWithUserPoolProps](#wheatstalk-cdk-ecs-website-websiteservicepropsauthwithuserpoolprops)|*No description*
 [WordpressImageOptions](#wheatstalk-cdk-ecs-website-wordpressimageoptions)|Configuration options for building the WordPress container image.
 [WordpressServiceProps](#wheatstalk-cdk-ecs-website-wordpressserviceprops)|Props for `WordpressService`.
 [WordpressWorkloadOptions](#wheatstalk-cdk-ecs-website-wordpressworkloadoptions)|Props for `WordpressWorkload`.
@@ -113,6 +115,15 @@ new WebsiteServiceBase(scope: Construct, id: string, props: WebsiteServiceBasePr
   * **redirects** (<code>Array<[WebsiteHostRedirect](#wheatstalk-cdk-ecs-website-websitehostredirect)></code>)  Redirect listener rules. __*Optional*__
   * **ecsExtension** (<code>[IEcsWorkload](#wheatstalk-cdk-ecs-website-iecsworkload)</code>)  Workload extension. 
 
+
+
+### Properties
+
+
+Name | Type | Description 
+-----|------|-------------
+**service** | <code>[Ec2Service](#aws-cdk-aws-ecs-ec2service) &#124; [FargateService](#aws-cdk-aws-ecs-fargateservice)</code> | The service instance.
+**taskDefinition** | <code>[TaskDefinition](#aws-cdk-aws-ecs-taskdefinition)</code> | The task definition of the service.
 
 ### Methods
 
@@ -248,6 +259,22 @@ Name | Type | Description
 **taskDefinition** | <code>[TaskDefinition](#aws-cdk-aws-ecs-taskdefinition)</code> | The task definition.
 **taskMemoryLimit** | <code>number</code> | The memory limit of the task definition.
 **taskMemoryReserved** | <code>number</code> | The memory reservation of the task definition.
+
+
+
+## struct HttpContainerWorkloadOptions  <a id="wheatstalk-cdk-ecs-website-httpcontainerworkloadoptions"></a>
+
+
+Props for `HttpContainerWorkload`.
+
+
+
+Name | Type | Description 
+-----|------|-------------
+**containerImage** | <code>[ContainerImage](#aws-cdk-aws-ecs-containerimage)</code> | The container image.
+**containerPort**? | <code>number</code> | The port that serves traffic.<br/>__*Default*__: 80
+**envSecrets**? | <code>Map<string, [Secret](#aws-cdk-aws-ecs-secret)></code> | Specify environment variables from secrets for the main container.<br/>__*Optional*__
+**envVars**? | <code>Map<string, string></code> | Specify environment variables for the main container.<br/>__*Optional*__
 
 
 
@@ -442,6 +469,20 @@ Name | Type | Description
 **envSecrets**? | <code>Map<string, [Secret](#aws-cdk-aws-ecs-secret)></code> | Specify environment variables from secrets for the main container.<br/>__*Optional*__
 **envVars**? | <code>Map<string, string></code> | Specify environment variables for the main container.<br/>__*Optional*__
 **redirects**? | <code>Array<[WebsiteHostRedirect](#wheatstalk-cdk-ecs-website-websitehostredirect)></code> | Redirect listener rules.<br/>__*Optional*__
+
+
+
+## struct WebsiteServicePropsAuthWithUserPoolProps ⚠️ <a id="wheatstalk-cdk-ecs-website-websiteservicepropsauthwithuserpoolprops"></a>
+
+
+
+
+
+
+Name | Type | Description 
+-----|------|-------------
+**domain**⚠️ | <code>string</code> | <span></span>
+**userPool**⚠️ | <code>[IUserPool](#aws-cdk-aws-cognito-iuserpool)</code> | <span></span>
 
 
 

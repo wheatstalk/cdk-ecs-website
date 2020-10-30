@@ -5,9 +5,8 @@ import { IEcsWorkload, EcsWorkloadTaskInfo } from '../ecs-workloads';
 
 /**
  * Props for `HttpContainerWorkload`
- * @internal
  */
-export interface HttpContainerWorkloadProps {
+export interface HttpContainerWorkloadOptions {
   /**
    * The container image.
    */
@@ -38,7 +37,7 @@ export class HttpContainerWorkload implements IEcsWorkload {
   public readonly trafficContainer = 'web';
   public readonly trafficPort: number;
 
-  constructor(private readonly props: HttpContainerWorkloadProps) {
+  constructor(private readonly props: HttpContainerWorkloadOptions) {
     this.trafficPort = props.containerPort ?? 80;
   }
 

@@ -1,5 +1,5 @@
 import { IConnectable, Port } from '@aws-cdk/aws-ec2';
-import { ICluster } from '@aws-cdk/aws-ecs';
+import { Ec2Service, FargateService, ICluster, TaskDefinition } from '@aws-cdk/aws-ecs';
 import { IApplicationListener, RedirectOptions } from '@aws-cdk/aws-elasticloadbalancingv2';
 import { Construct } from '@aws-cdk/core';
 
@@ -108,6 +108,16 @@ export interface WebsiteServiceBaseProps extends WebsiteServiceOptions {
 export class WebsiteServiceBase extends Construct implements IWebsiteService {
   private listenerRuleBuilder: ListenerRulesBuilder;
 
+  /**
+   * The task definition of the service.
+   */
+  public readonly taskDefinition: TaskDefinition;
+
+  /**
+   * The service instance.
+   */
+  public readonly service: Ec2Service | FargateService;
+
   constructor(scope: Construct, id: string, props: WebsiteServiceBaseProps) {
     super(scope, id);
 
@@ -116,7 +126,7 @@ export class WebsiteServiceBase extends Construct implements IWebsiteService {
       serviceExtension: props.ecsExtension,
     });
 
-    const { service, containerName, trafficPort } = extensionService;
+    const { taskDefinition, service, containerName, trafficPort } = extensionService;
 
     // Allow the ALB to access the traffic port.
     service.connections.allowFrom(props.albListener, Port.tcp(trafficPort));
@@ -171,6 +181,9 @@ export class WebsiteServiceBase extends Construct implements IWebsiteService {
         this.addRedirectToPrimaryHostName(redirect.hostHeader);
       }
     }
+
+    this.taskDefinition = taskDefinition;
+    this.service = service;
   }
 
   addRedirectResponse(hostHeader: string, redirectResponse: RedirectOptions): void {
