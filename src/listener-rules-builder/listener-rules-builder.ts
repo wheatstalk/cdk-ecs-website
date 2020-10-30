@@ -132,6 +132,7 @@ export class ListenerRulesBuilder extends Construct {
 
   private obtainTargetGroup(): IApplicationTargetGroup {
     const existingTargetGroup = this.node.tryFindChild('TargetGroup') as ApplicationTargetGroup;
+
     return (
       existingTargetGroup ??
       new ApplicationTargetGroup(this, 'TargetGroup', {
@@ -158,7 +159,7 @@ export class ListenerRulesBuilder extends Construct {
 
   public addServingHost(hostHeader: string): void {
     const priority = this.albPriority.getNextAndIncrement();
-    const id = 'Target-' + mapHostToConstructName(hostHeader);
+    const id = getListenerRuleId(priority);
 
     new ApplicationListenerRule(this, id, {
       listener: this.albListener,
@@ -172,8 +173,9 @@ export class ListenerRulesBuilder extends Construct {
     const targetGroup = this.obtainTargetGroup();
     const userPoolInfo = this.obtainUserPoolInfo(authConfig);
     const priority = this.albPriority.getNextAndIncrement();
+    const id = getListenerRuleId(priority);
 
-    new ApplicationListenerRule(this, 'AuthedTarget-' + mapHostToConstructName(hostHeader), {
+    new ApplicationListenerRule(this, id, {
       listener: this.albListener,
       conditions: [ListenerCondition.hostHeaders([hostHeader])],
       action: new CognitoAuthenticateAction(userPoolInfo, ListenerAction.forward([targetGroup])),
@@ -183,8 +185,9 @@ export class ListenerRulesBuilder extends Construct {
 
   public addAuthBypassServingHost(hostHeader: string, authBypassValue: string): void {
     const priority = this.albPriority.getNextAndIncrement();
+    const id = getListenerRuleId(priority);
 
-    new ApplicationListenerRule(this, 'TargetAuthBypass-' + mapHostToConstructName(hostHeader), {
+    new ApplicationListenerRule(this, id, {
       listener: this.albListener,
       conditions: [
         ListenerCondition.httpHeader('AccessBypass', [authBypassValue]),
@@ -197,8 +200,9 @@ export class ListenerRulesBuilder extends Construct {
 
   public addRedirectResponse(hostHeader: string, redirectResponse: RedirectOptions): void {
     const priority = this.albPriority.getNextAndIncrement();
+    const id = getListenerRuleId(priority);
 
-    new ApplicationListenerRule(this, 'Target-' + mapHostToConstructName(hostHeader), {
+    new ApplicationListenerRule(this, id, {
       hostHeader: hostHeader,
       listener: this.albListener,
       priority: priority,
@@ -229,4 +233,8 @@ function mapHostToConstructName(hostHeader: string): string {
     .toLowerCase()
     .replace('*', 'wildcard')
     .replace(/[^a-z0-9-]/g, '');
+}
+
+function getListenerRuleId(priority: number) {
+  return `listener-rule-${priority}`;
 }
