@@ -115,6 +115,15 @@ new WebsiteServiceBase(scope: Construct, id: string, props: WebsiteServiceBasePr
   * **ecsExtension** (<code>[IEcsWorkload](#wheatstalk-cdk-ecs-website-iecsworkload)</code>)  Workload extension. 
 
 
+
+### Properties
+
+
+Name | Type | Description 
+-----|------|-------------
+**service** | <code>[Ec2Service](#aws-cdk-aws-ecs-ec2service) &#124; [FargateService](#aws-cdk-aws-ecs-fargateservice)</code> | <span></span>
+**taskDefinition** | <code>[TaskDefinition](#aws-cdk-aws-ecs-taskdefinition)</code> | <span></span>
+
 ### Methods
 
 

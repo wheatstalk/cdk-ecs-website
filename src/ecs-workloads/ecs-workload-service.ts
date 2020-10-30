@@ -1,4 +1,4 @@
-import { Ec2Service, FargateService, ICluster } from '@aws-cdk/aws-ecs';
+import { Ec2Service, FargateService, ICluster, TaskDefinition } from '@aws-cdk/aws-ecs';
 import { Construct } from '@aws-cdk/core';
 
 import { IEcsWorkload } from './ecs-workload';
@@ -32,9 +32,25 @@ export interface EcsWorkloadServiceProps extends EcsWorkloadPatternBaseProps {
  * @internal
  */
 export class EcsWorkloadService extends Construct {
-  public service: Ec2Service | FargateService;
-  public containerName: string;
-  public trafficPort: number;
+  /**
+   * The instance of the created service.
+   */
+  public readonly service: Ec2Service | FargateService;
+
+  /**
+   * The instance of the created task definition.
+   */
+  public readonly taskDefinition: TaskDefinition;
+
+  /**
+   * Name of the main container.
+   */
+  public readonly containerName: string;
+
+  /**
+   * Traffic port of the main container.
+   */
+  public readonly trafficPort: number;
 
   constructor(scope: Construct, id: string, props: EcsWorkloadServiceProps) {
     super(scope, id);
@@ -50,6 +66,7 @@ export class EcsWorkloadService extends Construct {
 
     serviceExtension.useService(service);
 
+    this.taskDefinition = taskDefinitionInfo.taskDefinition;
     this.containerName = serviceExtension.trafficContainer;
     this.trafficPort = serviceExtension.trafficPort;
     this.service = service;
