@@ -4,7 +4,7 @@ const project = new AwsCdkConstructLibrary({
   authorAddress: "joshkellendonk@gmail.com",
   authorName: "Josh Kellendonk",
   license: "MIT",
-  jsiiVersion: Semver.caret('1.13.0'),
+  jsiiVersion: '^1.13.0',
   name: "@wheatstalk/cdk-ecs-website",
   repository: "git@github.com:wheatstalk/cdk-ecs-website.git",
   releaseEveryCommit: false,
@@ -13,19 +13,19 @@ const project = new AwsCdkConstructLibrary({
     "*.iml",
     "cdk.out.*",
   ],
-  devDependencies: {
-    "@types/fs-extra": "^8.1.0",
-    "@types/json-diff": "^0.5.0",
-    "json-diff": "^0.5.4",
-    "ts-node": "^9.0.0",
-    "yargs": "^16.1.0",
-  },
-  bundledDependencies: [
+  devDeps: [
+    "@types/fs-extra@^8.1.0",
+    "@types/json-diff@^0.5.0",
+    "json-diff@^0.5.4",
+    "ts-node@^9.0.0",
+    "yargs@^16.1.0",
+  ],
+  bundledDeps: [
     "fs-extra",
   ],
-  dependencies: {
-    "fs-extra": "^8.1.0",
-  },
+  deps: [
+    "fs-extra@^8.1.0",
+  ],
   cdkVersion: "1.68.0",
   cdkTestDependencies: [
     "aws-cdk",
