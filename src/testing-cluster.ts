@@ -8,17 +8,13 @@ import {
 } from '@aws-cdk/aws-elasticloadbalancingv2';
 import { CfnOutput, Construct, Stack, StackProps } from '@aws-cdk/core';
 
-/**
- * A stack for integration testing.
- * @internal
- */
-export class TestingClusterStack extends Stack {
+export class TestingCluster extends Construct {
   public readonly cluster: Cluster;
   public readonly alb: ApplicationLoadBalancer;
   public readonly albListener: ApplicationListener;
 
-  constructor(scope: Construct, id: string, props?: StackProps) {
-    super(scope, id, props);
+  constructor(scope: Construct, id: string) {
+    super(scope, id);
 
     this.cluster = new Cluster(this, 'cluster');
     this.cluster.addCapacity('capacity', {
@@ -43,5 +39,24 @@ export class TestingClusterStack extends Stack {
     new CfnOutput(this, 'AlbDnsName', {
       value: this.alb.loadBalancerDnsName,
     });
+  }
+}
+
+/**
+ * A stack for integration testing.
+ * @internal
+ */
+export class TestingClusterStack extends Stack {
+  public readonly cluster: Cluster;
+  public readonly alb: ApplicationLoadBalancer;
+  public readonly albListener: ApplicationListener;
+
+  constructor(scope: Construct, id: string, props?: StackProps) {
+    super(scope, id, props);
+
+    const testingCluster = new TestingCluster(this, 'Cluster');
+    this.cluster = testingCluster.cluster;
+    this.alb = testingCluster.alb;
+    this.albListener = testingCluster.albListener;
   }
 }

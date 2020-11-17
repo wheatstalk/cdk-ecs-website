@@ -1,0 +1,1690 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`website-service 1`] = `
+Object {
+  "Outputs": Object {
+    "ClusterAlbDnsNameB05649F1": Object {
+      "Value": Object {
+        "Fn::GetAtt": Array [
+          "ClusteralbE6B98E10",
+          "DNSName",
+        ],
+      },
+    },
+    "ClusterSiteUrl1DF0380A": Object {
+      "Value": Object {
+        "Fn::Sub": Array [
+          "http://\${Domain}/",
+          Object {
+            "Domain": Object {
+              "Fn::GetAtt": Array [
+                "ClusteralbE6B98E10",
+                "DNSName",
+              ],
+            },
+          },
+        ],
+      },
+    },
+  },
+  "Parameters": Object {
+    "SsmParameterValueawsserviceecsoptimizedamiamazonlinux2recommendedimageidC96584B6F00A464EAD1953AFF4B05118Parameter": Object {
+      "Default": "/aws/service/ecs/optimized-ami/amazon-linux-2/recommended/image_id",
+      "Type": "AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>",
+    },
+  },
+  "Resources": Object {
+    "ClusterSiteRulesBuilderTargetGroupCD870E12": Object {
+      "Properties": Object {
+        "HealthCheckEnabled": true,
+        "HealthCheckIntervalSeconds": 15,
+        "HealthCheckProtocol": "HTTP",
+        "HealthCheckTimeoutSeconds": 5,
+        "HealthyThresholdCount": 5,
+        "Port": 80,
+        "Protocol": "HTTP",
+        "TargetGroupAttributes": Array [
+          Object {
+            "Key": "deregistration_delay.timeout_seconds",
+            "Value": "15",
+          },
+        ],
+        "TargetType": "ip",
+        "UnhealthyThresholdCount": 2,
+        "VpcId": Object {
+          "Ref": "ClusterclusterVpc25D93497",
+        },
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
+    },
+    "ClusterSiteRulesBuilderlistenerrule19213A710": Object {
+      "Properties": Object {
+        "Actions": Array [
+          Object {
+            "TargetGroupArn": Object {
+              "Ref": "ClusterSiteRulesBuilderTargetGroupCD870E12",
+            },
+            "Type": "forward",
+          },
+        ],
+        "Conditions": Array [
+          Object {
+            "Field": "host-header",
+            "HostHeaderConfig": Object {
+              "Values": Array [
+                Object {
+                  "Fn::GetAtt": Array [
+                    "ClusteralbE6B98E10",
+                    "DNSName",
+                  ],
+                },
+              ],
+            },
+          },
+        ],
+        "ListenerArn": Object {
+          "Ref": "Clusteralbhttp20AA20A5",
+        },
+        "Priority": 1,
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::ListenerRule",
+    },
+    "ClusterSiteService62D842F7": Object {
+      "DependsOn": Array [
+        "ClusterSiteRulesBuilderlistenerrule19213A710",
+      ],
+      "Properties": Object {
+        "Cluster": Object {
+          "Ref": "ClusterclusterD8ACBEA5",
+        },
+        "DeploymentConfiguration": Object {
+          "MaximumPercent": 200,
+          "MinimumHealthyPercent": 50,
+        },
+        "DesiredCount": 4,
+        "EnableECSManagedTags": false,
+        "HealthCheckGracePeriodSeconds": 60,
+        "LaunchType": "FARGATE",
+        "LoadBalancers": Array [
+          Object {
+            "ContainerName": "web",
+            "ContainerPort": 80,
+            "TargetGroupArn": Object {
+              "Ref": "ClusterSiteRulesBuilderTargetGroupCD870E12",
+            },
+          },
+        ],
+        "NetworkConfiguration": Object {
+          "AwsvpcConfiguration": Object {
+            "AssignPublicIp": "DISABLED",
+            "SecurityGroups": Array [
+              Object {
+                "Fn::GetAtt": Array [
+                  "ClusterSiteServiceSecurityGroup3DCA52D8",
+                  "GroupId",
+                ],
+              },
+            ],
+            "Subnets": Array [
+              Object {
+                "Ref": "ClusterclusterVpcPrivateSubnet1Subnet048DFDB3",
+              },
+              Object {
+                "Ref": "ClusterclusterVpcPrivateSubnet2Subnet603AA288",
+              },
+            ],
+          },
+        },
+        "PlatformVersion": "1.4.0",
+        "TaskDefinition": Object {
+          "Ref": "ClusterSiteServiceTaskFCBF2330",
+        },
+      },
+      "Type": "AWS::ECS::Service",
+    },
+    "ClusterSiteServiceSecurityGroup3DCA52D8": Object {
+      "Properties": Object {
+        "GroupDescription": "wordpress-service-integ/Cluster/Site/Service/Service/SecurityGroup",
+        "SecurityGroupEgress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "ClusterclusterVpc25D93497",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "ClusterSiteServiceSecurityGroupfromwordpressserviceintegClusteralbSecurityGroupAF6661DC801D17A2C8": Object {
+      "Properties": Object {
+        "Description": "from wordpressserviceintegClusteralbSecurityGroupAF6661DC:80",
+        "FromPort": 80,
+        "GroupId": Object {
+          "Fn::GetAtt": Array [
+            "ClusterSiteServiceSecurityGroup3DCA52D8",
+            "GroupId",
+          ],
+        },
+        "IpProtocol": "tcp",
+        "SourceSecurityGroupId": Object {
+          "Fn::GetAtt": Array [
+            "ClusteralbSecurityGroup4F8544AA",
+            "GroupId",
+          ],
+        },
+        "ToPort": 80,
+      },
+      "Type": "AWS::EC2::SecurityGroupIngress",
+    },
+    "ClusterSiteServiceTaskExecutionRole78CEA10C": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "ecs-tasks.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "ClusterSiteServiceTaskExecutionRoleDefaultPolicyC8800C9A": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "ecr:BatchCheckLayerAvailability",
+                "ecr:GetDownloadUrlForLayer",
+                "ecr:BatchGetImage",
+              ],
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::Join": Array [
+                  "",
+                  Array [
+                    "arn:",
+                    Object {
+                      "Ref": "AWS::Partition",
+                    },
+                    ":ecr:",
+                    Object {
+                      "Ref": "AWS::Region",
+                    },
+                    ":",
+                    Object {
+                      "Ref": "AWS::AccountId",
+                    },
+                    ":repository/aws-cdk/assets",
+                  ],
+                ],
+              },
+            },
+            Object {
+              "Action": "ecr:GetAuthorizationToken",
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+            Object {
+              "Action": Array [
+                "logs:CreateLogStream",
+                "logs:PutLogEvents",
+              ],
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::GetAtt": Array [
+                  "ClusterSiteServiceTaskwebLogGroupBB07950B",
+                  "Arn",
+                ],
+              },
+            },
+            Object {
+              "Action": Array [
+                "secretsmanager:GetSecretValue",
+                "secretsmanager:DescribeSecret",
+              ],
+              "Effect": "Allow",
+              "Resource": Object {
+                "Ref": "ClusterdatabaseSecretAttachmentFD70C965",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "ClusterSiteServiceTaskExecutionRoleDefaultPolicyC8800C9A",
+        "Roles": Array [
+          Object {
+            "Ref": "ClusterSiteServiceTaskExecutionRole78CEA10C",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "ClusterSiteServiceTaskFCBF2330": Object {
+      "Properties": Object {
+        "ContainerDefinitions": Array [
+          Object {
+            "Environment": Array [],
+            "Essential": true,
+            "Image": Object {
+              "Fn::Join": Array [
+                "",
+                Array [
+                  Object {
+                    "Ref": "AWS::AccountId",
+                  },
+                  ".dkr.ecr.",
+                  Object {
+                    "Ref": "AWS::Region",
+                  },
+                  ".",
+                  Object {
+                    "Ref": "AWS::URLSuffix",
+                  },
+                  "/aws-cdk/assets:8a0872f680d305f28d2fe8334b9ece276882e834595b01780a4f8d5ac8e2633f",
+                ],
+              ],
+            },
+            "LogConfiguration": Object {
+              "LogDriver": "awslogs",
+              "Options": Object {
+                "awslogs-group": Object {
+                  "Ref": "ClusterSiteServiceTaskwebLogGroupBB07950B",
+                },
+                "awslogs-region": Object {
+                  "Ref": "AWS::Region",
+                },
+                "awslogs-stream-prefix": "WordpressWorkload",
+              },
+            },
+            "Memory": 512,
+            "MemoryReservation": 512,
+            "MountPoints": Array [
+              Object {
+                "ContainerPath": "/data",
+                "ReadOnly": false,
+                "SourceVolume": "files",
+              },
+            ],
+            "Name": "web",
+            "PortMappings": Array [
+              Object {
+                "ContainerPort": 80,
+                "Protocol": "tcp",
+              },
+            ],
+            "Secrets": Array [
+              Object {
+                "Name": "WORDPRESS_DB_SECRET",
+                "ValueFrom": Object {
+                  "Ref": "ClusterdatabaseSecretAttachmentFD70C965",
+                },
+              },
+            ],
+          },
+        ],
+        "Cpu": "256",
+        "ExecutionRoleArn": Object {
+          "Fn::GetAtt": Array [
+            "ClusterSiteServiceTaskExecutionRole78CEA10C",
+            "Arn",
+          ],
+        },
+        "Family": "wordpressserviceintegClusterSiteServiceTask89190D3C",
+        "Memory": "512",
+        "NetworkMode": "awsvpc",
+        "RequiresCompatibilities": Array [
+          "FARGATE",
+        ],
+        "TaskRoleArn": Object {
+          "Fn::GetAtt": Array [
+            "ClusterSiteServiceTaskTaskRoleA167CEA5",
+            "Arn",
+          ],
+        },
+        "Volumes": Array [
+          Object {
+            "EfsVolumeConfiguration": Object {
+              "FileSystemId": Object {
+                "Ref": "Clusterfiles83C5AA95",
+              },
+            },
+            "Name": "files",
+          },
+        ],
+      },
+      "Type": "AWS::ECS::TaskDefinition",
+    },
+    "ClusterSiteServiceTaskTaskRoleA167CEA5": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "ecs-tasks.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "ClusterSiteServiceTaskwebLogGroupBB07950B": Object {
+      "DeletionPolicy": "Retain",
+      "Properties": Object {
+        "RetentionInDays": 30,
+      },
+      "Type": "AWS::Logs::LogGroup",
+      "UpdateReplacePolicy": "Retain",
+    },
+    "ClusteralbE6B98E10": Object {
+      "DependsOn": Array [
+        "ClusterclusterVpcPublicSubnet1DefaultRouteFBD86669",
+        "ClusterclusterVpcPublicSubnet2DefaultRoute8F5B9614",
+      ],
+      "Properties": Object {
+        "LoadBalancerAttributes": Array [
+          Object {
+            "Key": "deletion_protection.enabled",
+            "Value": "false",
+          },
+        ],
+        "Scheme": "internet-facing",
+        "SecurityGroups": Array [
+          Object {
+            "Fn::GetAtt": Array [
+              "ClusteralbSecurityGroup4F8544AA",
+              "GroupId",
+            ],
+          },
+        ],
+        "Subnets": Array [
+          Object {
+            "Ref": "ClusterclusterVpcPublicSubnet1SubnetBE829648",
+          },
+          Object {
+            "Ref": "ClusterclusterVpcPublicSubnet2Subnet84B29286",
+          },
+        ],
+        "Type": "application",
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
+    },
+    "ClusteralbSecurityGroup4F8544AA": Object {
+      "Properties": Object {
+        "GroupDescription": "Automatically created Security Group for ELB wordpressserviceintegClusteralb8E4F45E8",
+        "SecurityGroupIngress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow from anyone on port 80",
+            "FromPort": 80,
+            "IpProtocol": "tcp",
+            "ToPort": 80,
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "ClusterclusterVpc25D93497",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "ClusteralbSecurityGrouptowordpressserviceintegClusterSiteServiceSecurityGroupDB1FA80F8072B24535": Object {
+      "Properties": Object {
+        "Description": "to wordpressserviceintegClusterSiteServiceSecurityGroupDB1FA80F:80",
+        "DestinationSecurityGroupId": Object {
+          "Fn::GetAtt": Array [
+            "ClusterSiteServiceSecurityGroup3DCA52D8",
+            "GroupId",
+          ],
+        },
+        "FromPort": 80,
+        "GroupId": Object {
+          "Fn::GetAtt": Array [
+            "ClusteralbSecurityGroup4F8544AA",
+            "GroupId",
+          ],
+        },
+        "IpProtocol": "tcp",
+        "ToPort": 80,
+      },
+      "Type": "AWS::EC2::SecurityGroupEgress",
+    },
+    "ClusteralbSecurityGrouptowordpressserviceintegClusterclustercapacityInstanceSecurityGroup48EC5100ALLPORTS1F0C8EE9": Object {
+      "Properties": Object {
+        "Description": "to wordpressserviceintegClusterclustercapacityInstanceSecurityGroup48EC5100:ALL PORTS",
+        "DestinationSecurityGroupId": Object {
+          "Fn::GetAtt": Array [
+            "ClusterclustercapacityInstanceSecurityGroup3B2519D2",
+            "GroupId",
+          ],
+        },
+        "FromPort": 0,
+        "GroupId": Object {
+          "Fn::GetAtt": Array [
+            "ClusteralbSecurityGroup4F8544AA",
+            "GroupId",
+          ],
+        },
+        "IpProtocol": "tcp",
+        "ToPort": 65535,
+      },
+      "Type": "AWS::EC2::SecurityGroupEgress",
+    },
+    "Clusteralbhttp20AA20A5": Object {
+      "Properties": Object {
+        "DefaultActions": Array [
+          Object {
+            "FixedResponseConfig": Object {
+              "ContentType": "text/plain",
+              "MessageBody": "404 not found",
+              "StatusCode": "404",
+            },
+            "Type": "fixed-response",
+          },
+        ],
+        "LoadBalancerArn": Object {
+          "Ref": "ClusteralbE6B98E10",
+        },
+        "Port": 80,
+        "Protocol": "HTTP",
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::Listener",
+    },
+    "ClusterclusterD8ACBEA5": Object {
+      "Type": "AWS::ECS::Cluster",
+    },
+    "ClusterclusterVpc25D93497": Object {
+      "Properties": Object {
+        "CidrBlock": "10.0.0.0/16",
+        "EnableDnsHostnames": true,
+        "EnableDnsSupport": true,
+        "InstanceTenancy": "default",
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "wordpress-service-integ/Cluster/cluster/Vpc",
+          },
+        ],
+      },
+      "Type": "AWS::EC2::VPC",
+    },
+    "ClusterclusterVpcIGW1C5B6F99": Object {
+      "Properties": Object {
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "wordpress-service-integ/Cluster/cluster/Vpc",
+          },
+        ],
+      },
+      "Type": "AWS::EC2::InternetGateway",
+    },
+    "ClusterclusterVpcPrivateSubnet1DefaultRoute7EA103A0": Object {
+      "Properties": Object {
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "NatGatewayId": Object {
+          "Ref": "ClusterclusterVpcPublicSubnet1NATGatewayE5A0D3A2",
+        },
+        "RouteTableId": Object {
+          "Ref": "ClusterclusterVpcPrivateSubnet1RouteTable7CAF8DDA",
+        },
+      },
+      "Type": "AWS::EC2::Route",
+    },
+    "ClusterclusterVpcPrivateSubnet1RouteTable7CAF8DDA": Object {
+      "Properties": Object {
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "wordpress-service-integ/Cluster/cluster/Vpc/PrivateSubnet1",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "ClusterclusterVpc25D93497",
+        },
+      },
+      "Type": "AWS::EC2::RouteTable",
+    },
+    "ClusterclusterVpcPrivateSubnet1RouteTableAssociation2D4E409D": Object {
+      "Properties": Object {
+        "RouteTableId": Object {
+          "Ref": "ClusterclusterVpcPrivateSubnet1RouteTable7CAF8DDA",
+        },
+        "SubnetId": Object {
+          "Ref": "ClusterclusterVpcPrivateSubnet1Subnet048DFDB3",
+        },
+      },
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+    },
+    "ClusterclusterVpcPrivateSubnet1Subnet048DFDB3": Object {
+      "Properties": Object {
+        "AvailabilityZone": Object {
+          "Fn::Select": Array [
+            0,
+            Object {
+              "Fn::GetAZs": "",
+            },
+          ],
+        },
+        "CidrBlock": "10.0.128.0/18",
+        "MapPublicIpOnLaunch": false,
+        "Tags": Array [
+          Object {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "Private",
+          },
+          Object {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Private",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "wordpress-service-integ/Cluster/cluster/Vpc/PrivateSubnet1",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "ClusterclusterVpc25D93497",
+        },
+      },
+      "Type": "AWS::EC2::Subnet",
+    },
+    "ClusterclusterVpcPrivateSubnet2DefaultRouteCB0C4CFA": Object {
+      "Properties": Object {
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "NatGatewayId": Object {
+          "Ref": "ClusterclusterVpcPublicSubnet2NATGateway8C255481",
+        },
+        "RouteTableId": Object {
+          "Ref": "ClusterclusterVpcPrivateSubnet2RouteTableFDD4C01B",
+        },
+      },
+      "Type": "AWS::EC2::Route",
+    },
+    "ClusterclusterVpcPrivateSubnet2RouteTableAssociation6B617938": Object {
+      "Properties": Object {
+        "RouteTableId": Object {
+          "Ref": "ClusterclusterVpcPrivateSubnet2RouteTableFDD4C01B",
+        },
+        "SubnetId": Object {
+          "Ref": "ClusterclusterVpcPrivateSubnet2Subnet603AA288",
+        },
+      },
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+    },
+    "ClusterclusterVpcPrivateSubnet2RouteTableFDD4C01B": Object {
+      "Properties": Object {
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "wordpress-service-integ/Cluster/cluster/Vpc/PrivateSubnet2",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "ClusterclusterVpc25D93497",
+        },
+      },
+      "Type": "AWS::EC2::RouteTable",
+    },
+    "ClusterclusterVpcPrivateSubnet2Subnet603AA288": Object {
+      "Properties": Object {
+        "AvailabilityZone": Object {
+          "Fn::Select": Array [
+            1,
+            Object {
+              "Fn::GetAZs": "",
+            },
+          ],
+        },
+        "CidrBlock": "10.0.192.0/18",
+        "MapPublicIpOnLaunch": false,
+        "Tags": Array [
+          Object {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "Private",
+          },
+          Object {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Private",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "wordpress-service-integ/Cluster/cluster/Vpc/PrivateSubnet2",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "ClusterclusterVpc25D93497",
+        },
+      },
+      "Type": "AWS::EC2::Subnet",
+    },
+    "ClusterclusterVpcPublicSubnet1DefaultRouteFBD86669": Object {
+      "DependsOn": Array [
+        "ClusterclusterVpcVPCGWDA291603",
+      ],
+      "Properties": Object {
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "GatewayId": Object {
+          "Ref": "ClusterclusterVpcIGW1C5B6F99",
+        },
+        "RouteTableId": Object {
+          "Ref": "ClusterclusterVpcPublicSubnet1RouteTable882C94C4",
+        },
+      },
+      "Type": "AWS::EC2::Route",
+    },
+    "ClusterclusterVpcPublicSubnet1EIP27CB6834": Object {
+      "Properties": Object {
+        "Domain": "vpc",
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "wordpress-service-integ/Cluster/cluster/Vpc/PublicSubnet1",
+          },
+        ],
+      },
+      "Type": "AWS::EC2::EIP",
+    },
+    "ClusterclusterVpcPublicSubnet1NATGatewayE5A0D3A2": Object {
+      "Properties": Object {
+        "AllocationId": Object {
+          "Fn::GetAtt": Array [
+            "ClusterclusterVpcPublicSubnet1EIP27CB6834",
+            "AllocationId",
+          ],
+        },
+        "SubnetId": Object {
+          "Ref": "ClusterclusterVpcPublicSubnet1SubnetBE829648",
+        },
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "wordpress-service-integ/Cluster/cluster/Vpc/PublicSubnet1",
+          },
+        ],
+      },
+      "Type": "AWS::EC2::NatGateway",
+    },
+    "ClusterclusterVpcPublicSubnet1RouteTable882C94C4": Object {
+      "Properties": Object {
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "wordpress-service-integ/Cluster/cluster/Vpc/PublicSubnet1",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "ClusterclusterVpc25D93497",
+        },
+      },
+      "Type": "AWS::EC2::RouteTable",
+    },
+    "ClusterclusterVpcPublicSubnet1RouteTableAssociation5604553D": Object {
+      "Properties": Object {
+        "RouteTableId": Object {
+          "Ref": "ClusterclusterVpcPublicSubnet1RouteTable882C94C4",
+        },
+        "SubnetId": Object {
+          "Ref": "ClusterclusterVpcPublicSubnet1SubnetBE829648",
+        },
+      },
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+    },
+    "ClusterclusterVpcPublicSubnet1SubnetBE829648": Object {
+      "Properties": Object {
+        "AvailabilityZone": Object {
+          "Fn::Select": Array [
+            0,
+            Object {
+              "Fn::GetAZs": "",
+            },
+          ],
+        },
+        "CidrBlock": "10.0.0.0/18",
+        "MapPublicIpOnLaunch": true,
+        "Tags": Array [
+          Object {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "Public",
+          },
+          Object {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Public",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "wordpress-service-integ/Cluster/cluster/Vpc/PublicSubnet1",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "ClusterclusterVpc25D93497",
+        },
+      },
+      "Type": "AWS::EC2::Subnet",
+    },
+    "ClusterclusterVpcPublicSubnet2DefaultRoute8F5B9614": Object {
+      "DependsOn": Array [
+        "ClusterclusterVpcVPCGWDA291603",
+      ],
+      "Properties": Object {
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "GatewayId": Object {
+          "Ref": "ClusterclusterVpcIGW1C5B6F99",
+        },
+        "RouteTableId": Object {
+          "Ref": "ClusterclusterVpcPublicSubnet2RouteTable6639D4B7",
+        },
+      },
+      "Type": "AWS::EC2::Route",
+    },
+    "ClusterclusterVpcPublicSubnet2EIPAEA81832": Object {
+      "Properties": Object {
+        "Domain": "vpc",
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "wordpress-service-integ/Cluster/cluster/Vpc/PublicSubnet2",
+          },
+        ],
+      },
+      "Type": "AWS::EC2::EIP",
+    },
+    "ClusterclusterVpcPublicSubnet2NATGateway8C255481": Object {
+      "Properties": Object {
+        "AllocationId": Object {
+          "Fn::GetAtt": Array [
+            "ClusterclusterVpcPublicSubnet2EIPAEA81832",
+            "AllocationId",
+          ],
+        },
+        "SubnetId": Object {
+          "Ref": "ClusterclusterVpcPublicSubnet2Subnet84B29286",
+        },
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "wordpress-service-integ/Cluster/cluster/Vpc/PublicSubnet2",
+          },
+        ],
+      },
+      "Type": "AWS::EC2::NatGateway",
+    },
+    "ClusterclusterVpcPublicSubnet2RouteTable6639D4B7": Object {
+      "Properties": Object {
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "wordpress-service-integ/Cluster/cluster/Vpc/PublicSubnet2",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "ClusterclusterVpc25D93497",
+        },
+      },
+      "Type": "AWS::EC2::RouteTable",
+    },
+    "ClusterclusterVpcPublicSubnet2RouteTableAssociationCD102181": Object {
+      "Properties": Object {
+        "RouteTableId": Object {
+          "Ref": "ClusterclusterVpcPublicSubnet2RouteTable6639D4B7",
+        },
+        "SubnetId": Object {
+          "Ref": "ClusterclusterVpcPublicSubnet2Subnet84B29286",
+        },
+      },
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+    },
+    "ClusterclusterVpcPublicSubnet2Subnet84B29286": Object {
+      "Properties": Object {
+        "AvailabilityZone": Object {
+          "Fn::Select": Array [
+            1,
+            Object {
+              "Fn::GetAZs": "",
+            },
+          ],
+        },
+        "CidrBlock": "10.0.64.0/18",
+        "MapPublicIpOnLaunch": true,
+        "Tags": Array [
+          Object {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "Public",
+          },
+          Object {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Public",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "wordpress-service-integ/Cluster/cluster/Vpc/PublicSubnet2",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "ClusterclusterVpc25D93497",
+        },
+      },
+      "Type": "AWS::EC2::Subnet",
+    },
+    "ClusterclusterVpcVPCGWDA291603": Object {
+      "Properties": Object {
+        "InternetGatewayId": Object {
+          "Ref": "ClusterclusterVpcIGW1C5B6F99",
+        },
+        "VpcId": Object {
+          "Ref": "ClusterclusterVpc25D93497",
+        },
+      },
+      "Type": "AWS::EC2::VPCGatewayAttachment",
+    },
+    "ClusterclustercapacityASG15D7D5C9": Object {
+      "Properties": Object {
+        "LaunchConfigurationName": Object {
+          "Ref": "ClusterclustercapacityLaunchConfigD08E45B5",
+        },
+        "MaxSize": "1",
+        "MinSize": "1",
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "PropagateAtLaunch": true,
+            "Value": "wordpress-service-integ/Cluster/cluster/capacity",
+          },
+        ],
+        "VPCZoneIdentifier": Array [
+          Object {
+            "Ref": "ClusterclusterVpcPrivateSubnet1Subnet048DFDB3",
+          },
+          Object {
+            "Ref": "ClusterclusterVpcPrivateSubnet2Subnet603AA288",
+          },
+        ],
+      },
+      "Type": "AWS::AutoScaling::AutoScalingGroup",
+      "UpdatePolicy": Object {
+        "AutoScalingReplacingUpdate": Object {
+          "WillReplace": true,
+        },
+        "AutoScalingScheduledAction": Object {
+          "IgnoreUnmodifiedGroupSizeProperties": true,
+        },
+      },
+    },
+    "ClusterclustercapacityDrainECSHookFunction487C7FA2": Object {
+      "DependsOn": Array [
+        "ClusterclustercapacityDrainECSHookFunctionServiceRoleDefaultPolicyDFB81A45",
+        "ClusterclustercapacityDrainECSHookFunctionServiceRole1FA34EEA",
+      ],
+      "Properties": Object {
+        "Code": Object {
+          "ZipFile": "import boto3, json, os, time
+
+ecs = boto3.client('ecs')
+autoscaling = boto3.client('autoscaling')
+
+
+def lambda_handler(event, context):
+  print(json.dumps(event))
+  cluster = os.environ['CLUSTER']
+  snsTopicArn = event['Records'][0]['Sns']['TopicArn']
+  lifecycle_event = json.loads(event['Records'][0]['Sns']['Message'])
+  instance_id = lifecycle_event.get('EC2InstanceId')
+  if not instance_id:
+    print('Got event without EC2InstanceId: %s', json.dumps(event))
+    return
+
+  instance_arn = container_instance_arn(cluster, instance_id)
+  print('Instance %s has container instance ARN %s' % (lifecycle_event['EC2InstanceId'], instance_arn))
+
+  if not instance_arn:
+    return
+
+  while has_tasks(cluster, instance_arn):
+    time.sleep(10)
+
+  try:
+    print('Terminating instance %s' % instance_id)
+    autoscaling.complete_lifecycle_action(
+        LifecycleActionResult='CONTINUE',
+        **pick(lifecycle_event, 'LifecycleHookName', 'LifecycleActionToken', 'AutoScalingGroupName'))
+  except Exception as e:
+    # Lifecycle action may have already completed.
+    print(str(e))
+
+
+def container_instance_arn(cluster, instance_id):
+  \\"\\"\\"Turn an instance ID into a container instance ARN.\\"\\"\\"
+  arns = ecs.list_container_instances(cluster=cluster, filter='ec2InstanceId==' + instance_id)['containerInstanceArns']
+  if not arns:
+    return None
+  return arns[0]
+
+
+def has_tasks(cluster, instance_arn):
+  \\"\\"\\"Return True if the instance is running tasks for the given cluster.\\"\\"\\"
+  instances = ecs.describe_container_instances(cluster=cluster, containerInstances=[instance_arn])['containerInstances']
+  if not instances:
+    return False
+  instance = instances[0]
+
+  if instance['status'] == 'ACTIVE':
+    # Start draining, then try again later
+    set_container_instance_to_draining(cluster, instance_arn)
+    return True
+
+  tasks = instance['runningTasksCount'] + instance['pendingTasksCount']
+  print('Instance %s has %s tasks' % (instance_arn, tasks))
+
+  return tasks > 0
+
+
+def set_container_instance_to_draining(cluster, instance_arn):
+  ecs.update_container_instances_state(
+      cluster=cluster,
+      containerInstances=[instance_arn], status='DRAINING')
+
+
+def pick(dct, *keys):
+  \\"\\"\\"Pick a subset of a dict.\\"\\"\\"
+  return {k: v for k, v in dct.items() if k in keys}
+",
+        },
+        "Environment": Object {
+          "Variables": Object {
+            "CLUSTER": Object {
+              "Ref": "ClusterclusterD8ACBEA5",
+            },
+          },
+        },
+        "Handler": "index.lambda_handler",
+        "Role": Object {
+          "Fn::GetAtt": Array [
+            "ClusterclustercapacityDrainECSHookFunctionServiceRole1FA34EEA",
+            "Arn",
+          ],
+        },
+        "Runtime": "python3.6",
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "wordpress-service-integ/Cluster/cluster/capacity",
+          },
+        ],
+        "Timeout": 310,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "ClusterclustercapacityDrainECSHookFunctionAllowInvokewordpressserviceintegClusterclustercapacityLifecycleHookDrainHookTopic7B0514730201BCA7": Object {
+      "Properties": Object {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": Object {
+          "Fn::GetAtt": Array [
+            "ClusterclustercapacityDrainECSHookFunction487C7FA2",
+            "Arn",
+          ],
+        },
+        "Principal": "sns.amazonaws.com",
+        "SourceArn": Object {
+          "Ref": "ClusterclustercapacityLifecycleHookDrainHookTopic16BC3AE6",
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
+    },
+    "ClusterclustercapacityDrainECSHookFunctionServiceRole1FA34EEA": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": Array [
+          Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "arn:",
+                Object {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "wordpress-service-integ/Cluster/cluster/capacity",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "ClusterclustercapacityDrainECSHookFunctionServiceRoleDefaultPolicyDFB81A45": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "ec2:DescribeInstances",
+                "ec2:DescribeInstanceAttribute",
+                "ec2:DescribeInstanceStatus",
+                "ec2:DescribeHosts",
+              ],
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+            Object {
+              "Action": "autoscaling:CompleteLifecycleAction",
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::Join": Array [
+                  "",
+                  Array [
+                    "arn:",
+                    Object {
+                      "Ref": "AWS::Partition",
+                    },
+                    ":autoscaling:",
+                    Object {
+                      "Ref": "AWS::Region",
+                    },
+                    ":",
+                    Object {
+                      "Ref": "AWS::AccountId",
+                    },
+                    ":autoScalingGroup:*:autoScalingGroupName/",
+                    Object {
+                      "Ref": "ClusterclustercapacityASG15D7D5C9",
+                    },
+                  ],
+                ],
+              },
+            },
+            Object {
+              "Action": Array [
+                "ecs:DescribeContainerInstances",
+                "ecs:DescribeTasks",
+              ],
+              "Condition": Object {
+                "ArnEquals": Object {
+                  "ecs:cluster": Object {
+                    "Fn::GetAtt": Array [
+                      "ClusterclusterD8ACBEA5",
+                      "Arn",
+                    ],
+                  },
+                },
+              },
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+            Object {
+              "Action": Array [
+                "ecs:ListContainerInstances",
+                "ecs:SubmitContainerStateChange",
+                "ecs:SubmitTaskStateChange",
+              ],
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::GetAtt": Array [
+                  "ClusterclusterD8ACBEA5",
+                  "Arn",
+                ],
+              },
+            },
+            Object {
+              "Action": Array [
+                "ecs:UpdateContainerInstancesState",
+                "ecs:ListTasks",
+              ],
+              "Condition": Object {
+                "ArnEquals": Object {
+                  "ecs:cluster": Object {
+                    "Fn::GetAtt": Array [
+                      "ClusterclusterD8ACBEA5",
+                      "Arn",
+                    ],
+                  },
+                },
+              },
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "ClusterclustercapacityDrainECSHookFunctionServiceRoleDefaultPolicyDFB81A45",
+        "Roles": Array [
+          Object {
+            "Ref": "ClusterclustercapacityDrainECSHookFunctionServiceRole1FA34EEA",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "ClusterclustercapacityDrainECSHookFunctionTopicF5F1CDCA": Object {
+      "Properties": Object {
+        "Endpoint": Object {
+          "Fn::GetAtt": Array [
+            "ClusterclustercapacityDrainECSHookFunction487C7FA2",
+            "Arn",
+          ],
+        },
+        "Protocol": "lambda",
+        "TopicArn": Object {
+          "Ref": "ClusterclustercapacityLifecycleHookDrainHookTopic16BC3AE6",
+        },
+      },
+      "Type": "AWS::SNS::Subscription",
+    },
+    "ClusterclustercapacityInstanceProfileE4D0F070": Object {
+      "Properties": Object {
+        "Roles": Array [
+          Object {
+            "Ref": "ClusterclustercapacityInstanceRoleE9C2822C",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::InstanceProfile",
+    },
+    "ClusterclustercapacityInstanceRoleDefaultPolicy83011BB0": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "ecs:DeregisterContainerInstance",
+                "ecs:RegisterContainerInstance",
+                "ecs:Submit*",
+              ],
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::GetAtt": Array [
+                  "ClusterclusterD8ACBEA5",
+                  "Arn",
+                ],
+              },
+            },
+            Object {
+              "Action": Array [
+                "ecs:Poll",
+                "ecs:StartTelemetrySession",
+              ],
+              "Condition": Object {
+                "ArnEquals": Object {
+                  "ecs:cluster": Object {
+                    "Fn::GetAtt": Array [
+                      "ClusterclusterD8ACBEA5",
+                      "Arn",
+                    ],
+                  },
+                },
+              },
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+            Object {
+              "Action": Array [
+                "ecs:DiscoverPollEndpoint",
+                "ecr:GetAuthorizationToken",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents",
+              ],
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "ClusterclustercapacityInstanceRoleDefaultPolicy83011BB0",
+        "Roles": Array [
+          Object {
+            "Ref": "ClusterclustercapacityInstanceRoleE9C2822C",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "ClusterclustercapacityInstanceRoleE9C2822C": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "ec2.",
+                      Object {
+                        "Ref": "AWS::URLSuffix",
+                      },
+                    ],
+                  ],
+                },
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "wordpress-service-integ/Cluster/cluster/capacity",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "ClusterclustercapacityInstanceSecurityGroup3B2519D2": Object {
+      "Properties": Object {
+        "GroupDescription": "wordpress-service-integ/Cluster/cluster/capacity/InstanceSecurityGroup",
+        "SecurityGroupEgress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1",
+          },
+        ],
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "wordpress-service-integ/Cluster/cluster/capacity",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "ClusterclusterVpc25D93497",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "ClusterclustercapacityInstanceSecurityGroupfromwordpressserviceintegClusteralbSecurityGroupAF6661DCALLPORTS0CF152C3": Object {
+      "Properties": Object {
+        "Description": "from wordpressserviceintegClusteralbSecurityGroupAF6661DC:ALL PORTS",
+        "FromPort": 0,
+        "GroupId": Object {
+          "Fn::GetAtt": Array [
+            "ClusterclustercapacityInstanceSecurityGroup3B2519D2",
+            "GroupId",
+          ],
+        },
+        "IpProtocol": "tcp",
+        "SourceSecurityGroupId": Object {
+          "Fn::GetAtt": Array [
+            "ClusteralbSecurityGroup4F8544AA",
+            "GroupId",
+          ],
+        },
+        "ToPort": 65535,
+      },
+      "Type": "AWS::EC2::SecurityGroupIngress",
+    },
+    "ClusterclustercapacityLaunchConfigD08E45B5": Object {
+      "DependsOn": Array [
+        "ClusterclustercapacityInstanceRoleDefaultPolicy83011BB0",
+        "ClusterclustercapacityInstanceRoleE9C2822C",
+      ],
+      "Properties": Object {
+        "IamInstanceProfile": Object {
+          "Ref": "ClusterclustercapacityInstanceProfileE4D0F070",
+        },
+        "ImageId": Object {
+          "Ref": "SsmParameterValueawsserviceecsoptimizedamiamazonlinux2recommendedimageidC96584B6F00A464EAD1953AFF4B05118Parameter",
+        },
+        "InstanceType": "t3.micro",
+        "SecurityGroups": Array [
+          Object {
+            "Fn::GetAtt": Array [
+              "ClusterclustercapacityInstanceSecurityGroup3B2519D2",
+              "GroupId",
+            ],
+          },
+        ],
+        "UserData": Object {
+          "Fn::Base64": Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "#!/bin/bash
+echo ECS_CLUSTER=",
+                Object {
+                  "Ref": "ClusterclusterD8ACBEA5",
+                },
+                " >> /etc/ecs/ecs.config
+sudo iptables --insert FORWARD 1 --in-interface docker+ --destination 169.254.169.254/32 --jump DROP
+sudo service iptables save
+echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
+              ],
+            ],
+          },
+        },
+      },
+      "Type": "AWS::AutoScaling::LaunchConfiguration",
+    },
+    "ClusterclustercapacityLifecycleHookDrainHook1ADA1B1B": Object {
+      "DependsOn": Array [
+        "ClusterclustercapacityLifecycleHookDrainHookRoleDefaultPolicyCDFD1021",
+        "ClusterclustercapacityLifecycleHookDrainHookRole65F99933",
+      ],
+      "Properties": Object {
+        "AutoScalingGroupName": Object {
+          "Ref": "ClusterclustercapacityASG15D7D5C9",
+        },
+        "DefaultResult": "CONTINUE",
+        "HeartbeatTimeout": 300,
+        "LifecycleTransition": "autoscaling:EC2_INSTANCE_TERMINATING",
+        "NotificationTargetARN": Object {
+          "Ref": "ClusterclustercapacityLifecycleHookDrainHookTopic16BC3AE6",
+        },
+        "RoleARN": Object {
+          "Fn::GetAtt": Array [
+            "ClusterclustercapacityLifecycleHookDrainHookRole65F99933",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "AWS::AutoScaling::LifecycleHook",
+    },
+    "ClusterclustercapacityLifecycleHookDrainHookRole65F99933": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "autoscaling.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "wordpress-service-integ/Cluster/cluster/capacity",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "ClusterclustercapacityLifecycleHookDrainHookRoleDefaultPolicyCDFD1021": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sns:Publish",
+              "Effect": "Allow",
+              "Resource": Object {
+                "Ref": "ClusterclustercapacityLifecycleHookDrainHookTopic16BC3AE6",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "ClusterclustercapacityLifecycleHookDrainHookRoleDefaultPolicyCDFD1021",
+        "Roles": Array [
+          Object {
+            "Ref": "ClusterclustercapacityLifecycleHookDrainHookRole65F99933",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "ClusterclustercapacityLifecycleHookDrainHookTopic16BC3AE6": Object {
+      "Properties": Object {
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "wordpress-service-integ/Cluster/cluster/capacity",
+          },
+        ],
+      },
+      "Type": "AWS::SNS::Topic",
+    },
+    "Clusterdatabase157C6AB8": Object {
+      "Properties": Object {
+        "AllocatedStorage": "100",
+        "CopyTagsToSnapshot": true,
+        "DBInstanceClass": "db.t3.micro",
+        "DBName": "wordpress",
+        "DBSubnetGroupName": Object {
+          "Ref": "ClusterdatabaseSubnetGroupE7C5CCDE",
+        },
+        "Engine": "mysql",
+        "EngineVersion": "8.0",
+        "MasterUserPassword": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "{{resolve:secretsmanager:",
+              Object {
+                "Ref": "ClusterdatabaseSecretB9C6A406",
+              },
+              ":SecretString:password::}}",
+            ],
+          ],
+        },
+        "MasterUsername": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "{{resolve:secretsmanager:",
+              Object {
+                "Ref": "ClusterdatabaseSecretB9C6A406",
+              },
+              ":SecretString:username::}}",
+            ],
+          ],
+        },
+        "StorageType": "gp2",
+        "VPCSecurityGroups": Array [
+          Object {
+            "Fn::GetAtt": Array [
+              "ClusterdatabaseSecurityGroupC208FFA3",
+              "GroupId",
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::RDS::DBInstance",
+      "UpdateReplacePolicy": "Snapshot",
+    },
+    "ClusterdatabaseSecretAttachmentFD70C965": Object {
+      "Properties": Object {
+        "SecretId": Object {
+          "Ref": "ClusterdatabaseSecretB9C6A406",
+        },
+        "TargetId": Object {
+          "Ref": "Clusterdatabase157C6AB8",
+        },
+        "TargetType": "AWS::RDS::DBInstance",
+      },
+      "Type": "AWS::SecretsManager::SecretTargetAttachment",
+    },
+    "ClusterdatabaseSecretB9C6A406": Object {
+      "Properties": Object {
+        "Description": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "Generated by the CDK for stack: ",
+              Object {
+                "Ref": "AWS::StackName",
+              },
+            ],
+          ],
+        },
+        "GenerateSecretString": Object {
+          "ExcludeCharacters": " %+~\`#$&*()|[]{}:;<>?!'/@\\"\\\\",
+          "GenerateStringKey": "password",
+          "PasswordLength": 30,
+          "SecretStringTemplate": "{\\"username\\":\\"admin\\"}",
+        },
+      },
+      "Type": "AWS::SecretsManager::Secret",
+    },
+    "ClusterdatabaseSecurityGroupC208FFA3": Object {
+      "Properties": Object {
+        "GroupDescription": "Security group for database database",
+        "SecurityGroupEgress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "ClusterclusterVpc25D93497",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "ClusterdatabaseSecurityGroupfromwordpressserviceintegClusterSiteServiceSecurityGroupDB1FA80FALLTRAFFIC8C85FF90": Object {
+      "Properties": Object {
+        "Description": "from wordpressserviceintegClusterSiteServiceSecurityGroupDB1FA80F:ALL TRAFFIC",
+        "GroupId": Object {
+          "Fn::GetAtt": Array [
+            "ClusterdatabaseSecurityGroupC208FFA3",
+            "GroupId",
+          ],
+        },
+        "IpProtocol": "-1",
+        "SourceSecurityGroupId": Object {
+          "Fn::GetAtt": Array [
+            "ClusterSiteServiceSecurityGroup3DCA52D8",
+            "GroupId",
+          ],
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroupIngress",
+    },
+    "ClusterdatabaseSubnetGroupE7C5CCDE": Object {
+      "Properties": Object {
+        "DBSubnetGroupDescription": "Subnet group for database database",
+        "SubnetIds": Array [
+          Object {
+            "Ref": "ClusterclusterVpcPrivateSubnet1Subnet048DFDB3",
+          },
+          Object {
+            "Ref": "ClusterclusterVpcPrivateSubnet2Subnet603AA288",
+          },
+        ],
+      },
+      "Type": "AWS::RDS::DBSubnetGroup",
+    },
+    "Clusterfiles83C5AA95": Object {
+      "DeletionPolicy": "Delete",
+      "Properties": Object {
+        "FileSystemTags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "wordpress-service-integ/Cluster/files",
+          },
+        ],
+      },
+      "Type": "AWS::EFS::FileSystem",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "ClusterfilesEfsMountTarget1A443620B": Object {
+      "Properties": Object {
+        "FileSystemId": Object {
+          "Ref": "Clusterfiles83C5AA95",
+        },
+        "SecurityGroups": Array [
+          Object {
+            "Fn::GetAtt": Array [
+              "ClusterfilesEfsSecurityGroup65D3C0F1",
+              "GroupId",
+            ],
+          },
+        ],
+        "SubnetId": Object {
+          "Ref": "ClusterclusterVpcPrivateSubnet1Subnet048DFDB3",
+        },
+      },
+      "Type": "AWS::EFS::MountTarget",
+    },
+    "ClusterfilesEfsMountTarget2F48E6E44": Object {
+      "Properties": Object {
+        "FileSystemId": Object {
+          "Ref": "Clusterfiles83C5AA95",
+        },
+        "SecurityGroups": Array [
+          Object {
+            "Fn::GetAtt": Array [
+              "ClusterfilesEfsSecurityGroup65D3C0F1",
+              "GroupId",
+            ],
+          },
+        ],
+        "SubnetId": Object {
+          "Ref": "ClusterclusterVpcPrivateSubnet2Subnet603AA288",
+        },
+      },
+      "Type": "AWS::EFS::MountTarget",
+    },
+    "ClusterfilesEfsSecurityGroup65D3C0F1": Object {
+      "Properties": Object {
+        "GroupDescription": "wordpress-service-integ/Cluster/files/EfsSecurityGroup",
+        "SecurityGroupEgress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1",
+          },
+        ],
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "wordpress-service-integ/Cluster/files",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "ClusterclusterVpc25D93497",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "ClusterfilesEfsSecurityGroupfromwordpressserviceintegClusterSiteServiceSecurityGroupDB1FA80FALLTRAFFIC3467D326": Object {
+      "Properties": Object {
+        "Description": "from wordpressserviceintegClusterSiteServiceSecurityGroupDB1FA80F:ALL TRAFFIC",
+        "GroupId": Object {
+          "Fn::GetAtt": Array [
+            "ClusterfilesEfsSecurityGroup65D3C0F1",
+            "GroupId",
+          ],
+        },
+        "IpProtocol": "-1",
+        "SourceSecurityGroupId": Object {
+          "Fn::GetAtt": Array [
+            "ClusterSiteServiceSecurityGroup3DCA52D8",
+            "GroupId",
+          ],
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroupIngress",
+    },
+  },
+}
+`;
