@@ -47,8 +47,6 @@ const project = new AwsCdkConstructLibrary({
   compat: true,
 });
 
-project.addTestCommand("./integ.sh all verify");
-
 const yarnUp = new GithubWorkflow(project, 'yarn-upgrade');
 
 yarnUp.on({

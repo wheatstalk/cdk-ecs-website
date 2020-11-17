@@ -38,6 +38,9 @@ jspm_packages/
 .idea
 *.iml
 cdk.out.*
+# jest-junit artifacts
+/test-reports/
+junit.xml
 /coverage
 /lib
 /dist
