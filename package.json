@@ -52,7 +52,7 @@
     "jsii-release": "^0.1.6",
     "json-diff": "^0.5.4",
     "json-schema": "^0.2.3",
-    "projen": "^0.3.173",
+    "projen": "^0.3.178",
     "standard-version": "^9.0.0",
     "ts-jest": "^26.1.0",
     "ts-node": "^9.0.0",
