@@ -1193,14 +1193,14 @@
   integrity sha512-fZQQafSREFyuZcdWFAExYjBiCL7AUCdgsk80iO0q4yihYYdcIiH28CcuPTGFgLOCC8RlW49GSQxdHwZP+I7CNg==
 
 "@types/node@*":
-  version "14.14.9"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-14.14.9.tgz#04afc9a25c6ff93da14deabd65dc44485b53c8d6"
-  integrity sha512-JsoLXFppG62tWTklIoO4knA+oDTYsmqWxHRvd4lpmfQRNhX6osheUOWETP2jMoV/2bEHuMra8Pp3Dmo/stBFcw==
+  version "14.14.10"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-14.14.10.tgz#5958a82e41863cfc71f2307b3748e3491ba03785"
+  integrity sha512-J32dgx2hw8vXrSbu4ZlVhn1Nm3GbeCFNw2FWL8S5QKucHGY0cyNwjdQdO+KMBZ4wpmC7KhLCiNsdk1RFRIYUQQ==
 
 "@types/node@^10.17.0":
-  version "10.17.46"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-10.17.46.tgz#1cd867ebfe9957ab45951f2f715f8de5f3dab7a3"
-  integrity sha512-Tice8a+sJtlP9C1EUo0DYyjq52T37b3LexVu3p871+kfIBIN+OQ7PKPei1oF3MgF39olEpUfxaLtD+QFc1k69Q==
+  version "10.17.47"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-10.17.47.tgz#cc88a242a835789456cfcf374928400d9f4b291c"
+  integrity sha512-YZ1mMAdUPouBZCdeugjV8y1tqqr28OyL8DYbH5ePCfe9zcXtvbh1wDBy7uzlHkXo3Qi07kpzXfvycvrkby/jXw==
 
 "@types/normalize-package-data@^2.4.0":
   version "2.4.0"
@@ -2116,9 +2116,9 @@ concat-stream@^2.0.0:
     typedarray "^0.0.6"
 
 constructs@^3.2.0:
-  version "3.2.41"
-  resolved "https://registry.yarnpkg.com/constructs/-/constructs-3.2.41.tgz#09e11924da56e8e0e7afe7b09d05439c1c048952"
-  integrity sha512-45PTTbofjUNWtfiekFyz7nKNabW1Xbw8hjFLc7n1fXUw4ZiR0N+07IJVlwZySYm1agrSXhMct5PatdUpmv+NaA==
+  version "3.2.42"
+  resolved "https://registry.yarnpkg.com/constructs/-/constructs-3.2.42.tgz#0c40e97e22b93a7995484fbe8bee5eb775e532e6"
+  integrity sha512-kqIwmxzM1ekuuwgNqVAW0qkkU++ImrQo388UcXXEpo4iX+FMRsJv+iHykT3U5HdSALov2y/uFJW3pUNwNspKIw==
 
 contains-path@^0.1.0:
   version "0.1.0"
