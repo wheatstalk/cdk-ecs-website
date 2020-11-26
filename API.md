@@ -73,6 +73,7 @@ new WebsiteService(scope: Construct, id: string, props: WebsiteServiceProps)
   * **capacityType** (<code>[EcsWorkloadCapacityType](#wheatstalk-cdk-ecs-website-ecsworkloadcapacitytype)</code>)  Type of compute capacity. __*Default*__: EcsExtensionCapacityType.EC2
   * **connectToPeers** (<code>Array<[IConnectable](#aws-cdk-aws-ec2-iconnectable)></code>)  Register the service as allowed in others' ingresses. __*Optional*__
   * **desiredCount** (<code>number</code>)  Desired task count. __*Default*__: 1
+  * **nginxContainerConfig** (<code>string</code>)  Provides `default.conf` configuration for an nginx container that is added to the task as the default, traffic-serving container. You may use this feature to create a reverse proxy for your workload. __*Default*__: does not use a reverse proxy
   * **redirects** (<code>Array<[WebsiteHostRedirect](#wheatstalk-cdk-ecs-website-websitehostredirect)></code>)  Redirect listener rules. __*Optional*__
   * **containerImage** (<code>[ContainerImage](#aws-cdk-aws-ecs-containerimage)</code>)  The container image. 
   * **containerPort** (<code>number</code>)  The port that serves traffic. __*Default*__: 80
@@ -112,6 +113,7 @@ new WebsiteServiceBase(scope: Construct, id: string, props: WebsiteServiceBasePr
   * **capacityType** (<code>[EcsWorkloadCapacityType](#wheatstalk-cdk-ecs-website-ecsworkloadcapacitytype)</code>)  Type of compute capacity. __*Default*__: EcsExtensionCapacityType.EC2
   * **connectToPeers** (<code>Array<[IConnectable](#aws-cdk-aws-ec2-iconnectable)></code>)  Register the service as allowed in others' ingresses. __*Optional*__
   * **desiredCount** (<code>number</code>)  Desired task count. __*Default*__: 1
+  * **nginxContainerConfig** (<code>string</code>)  Provides `default.conf` configuration for an nginx container that is added to the task as the default, traffic-serving container. You may use this feature to create a reverse proxy for your workload. __*Default*__: does not use a reverse proxy
   * **redirects** (<code>Array<[WebsiteHostRedirect](#wheatstalk-cdk-ecs-website-websitehostredirect)></code>)  Redirect listener rules. __*Optional*__
   * **ecsExtension** (<code>[IEcsWorkload](#wheatstalk-cdk-ecs-website-iecsworkload)</code>)  Workload extension. 
 
@@ -206,6 +208,7 @@ new WordpressService(scope: Construct, id: string, props: WordpressServiceProps)
   * **capacityType** (<code>[EcsWorkloadCapacityType](#wheatstalk-cdk-ecs-website-ecsworkloadcapacitytype)</code>)  Type of compute capacity. __*Default*__: EcsExtensionCapacityType.EC2
   * **connectToPeers** (<code>Array<[IConnectable](#aws-cdk-aws-ec2-iconnectable)></code>)  Register the service as allowed in others' ingresses. __*Optional*__
   * **desiredCount** (<code>number</code>)  Desired task count. __*Default*__: 1
+  * **nginxContainerConfig** (<code>string</code>)  Provides `default.conf` configuration for an nginx container that is added to the task as the default, traffic-serving container. You may use this feature to create a reverse proxy for your workload. __*Default*__: does not use a reverse proxy
   * **redirects** (<code>Array<[WebsiteHostRedirect](#wheatstalk-cdk-ecs-website-websitehostredirect)></code>)  Redirect listener rules. __*Optional*__
   * **databaseSecret** (<code>[ISecret](#aws-cdk-aws-secretsmanager-isecret)</code>)  Credentials for accessing the database server. 
   * **fileSystem** (<code>[IFileSystem](#aws-cdk-aws-efs-ifilesystem)</code>)  A filesystem in which to put the user uploads. 
@@ -416,6 +419,7 @@ Name | Type | Description
 **capacityType**? | <code>[EcsWorkloadCapacityType](#wheatstalk-cdk-ecs-website-ecsworkloadcapacitytype)</code> | Type of compute capacity.<br/>__*Default*__: EcsExtensionCapacityType.EC2
 **connectToPeers**? | <code>Array<[IConnectable](#aws-cdk-aws-ec2-iconnectable)></code> | Register the service as allowed in others' ingresses.<br/>__*Optional*__
 **desiredCount**? | <code>number</code> | Desired task count.<br/>__*Default*__: 1
+**nginxContainerConfig**?🔹 | <code>string</code> | Provides `default.conf` configuration for an nginx container that is added to the task as the default, traffic-serving container. You may use this feature to create a reverse proxy for your workload.<br/>__*Default*__: does not use a reverse proxy
 **redirects**? | <code>Array<[WebsiteHostRedirect](#wheatstalk-cdk-ecs-website-websitehostredirect)></code> | Redirect listener rules.<br/>__*Optional*__
 
 
@@ -440,6 +444,7 @@ Name | Type | Description
 **capacityType**? | <code>[EcsWorkloadCapacityType](#wheatstalk-cdk-ecs-website-ecsworkloadcapacitytype)</code> | Type of compute capacity.<br/>__*Default*__: EcsExtensionCapacityType.EC2
 **connectToPeers**? | <code>Array<[IConnectable](#aws-cdk-aws-ec2-iconnectable)></code> | Register the service as allowed in others' ingresses.<br/>__*Optional*__
 **desiredCount**? | <code>number</code> | Desired task count.<br/>__*Default*__: 1
+**nginxContainerConfig**?🔹 | <code>string</code> | Provides `default.conf` configuration for an nginx container that is added to the task as the default, traffic-serving container. You may use this feature to create a reverse proxy for your workload.<br/>__*Default*__: does not use a reverse proxy
 **redirects**? | <code>Array<[WebsiteHostRedirect](#wheatstalk-cdk-ecs-website-websitehostredirect)></code> | Redirect listener rules.<br/>__*Optional*__
 
 
@@ -468,6 +473,7 @@ Name | Type | Description
 **desiredCount**? | <code>number</code> | Desired task count.<br/>__*Default*__: 1
 **envSecrets**? | <code>Map<string, [Secret](#aws-cdk-aws-ecs-secret)></code> | Specify environment variables from secrets for the main container.<br/>__*Optional*__
 **envVars**? | <code>Map<string, string></code> | Specify environment variables for the main container.<br/>__*Optional*__
+**nginxContainerConfig**?🔹 | <code>string</code> | Provides `default.conf` configuration for an nginx container that is added to the task as the default, traffic-serving container. You may use this feature to create a reverse proxy for your workload.<br/>__*Default*__: does not use a reverse proxy
 **redirects**? | <code>Array<[WebsiteHostRedirect](#wheatstalk-cdk-ecs-website-websitehostredirect)></code> | Redirect listener rules.<br/>__*Optional*__
 
 
@@ -528,6 +534,7 @@ Name | Type | Description
 **envVars**? | <code>Map<string, string></code> | Specify environment variables for the main container.<br/>__*Optional*__
 **fileSystemConnection**? | <code>[IConnectable](#aws-cdk-aws-ec2-iconnectable)</code> | When provided, an ingress rule will be added to the filesystem's security group so that ECS can mount the file system.<br/>__*Optional*__
 **fileSystemRootDirectory**? | <code>string</code> | A location on the filesystem to mount as the data volume root.<br/>__*Default*__: '/'
+**nginxContainerConfig**?🔹 | <code>string</code> | Provides `default.conf` configuration for an nginx container that is added to the task as the default, traffic-serving container. You may use this feature to create a reverse proxy for your workload.<br/>__*Default*__: does not use a reverse proxy
 **redirects**? | <code>Array<[WebsiteHostRedirect](#wheatstalk-cdk-ecs-website-websitehostredirect)></code> | Redirect listener rules.<br/>__*Optional*__
 **wordpressDatabaseName**? | <code>string</code> | Name of the database containing the Wordpress site.<br/>__*Optional*__
 **wordpressImageOptions**? | <code>[WordpressImageOptions](#wheatstalk-cdk-ecs-website-wordpressimageoptions)</code> | Options building the Wordpress container.<br/>__*Optional*__

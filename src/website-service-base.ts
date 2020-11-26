@@ -1,14 +1,19 @@
+import * as path from 'path';
 import { IConnectable, Port } from '@aws-cdk/aws-ec2';
-import { Ec2Service, FargateService, ICluster, TaskDefinition } from '@aws-cdk/aws-ecs';
+import {
+  ContainerImage,
+  Ec2Service,
+  FargateService,
+  ICluster,
+  LogDriver,
+  Protocol,
+  TaskDefinition,
+} from '@aws-cdk/aws-ecs';
 import { IApplicationListener, RedirectOptions } from '@aws-cdk/aws-elasticloadbalancingv2';
 import { Construct } from '@aws-cdk/core';
 
-import { IEcsWorkload, EcsWorkloadCapacityType, EcsWorkloadService } from './ecs-workloads';
-import {
-  CognitoAuthenticationConfig,
-  IWebsiteService,
-  ListenerRulesBuilder,
-} from './listener-rules-builder';
+import { EcsWorkloadCapacityType, EcsWorkloadService, IEcsWorkload } from './ecs-workloads';
+import { CognitoAuthenticationConfig, IWebsiteService, ListenerRulesBuilder } from './listener-rules-builder';
 
 /**
  * Non-workload options for `WebsiteServiceBase`
@@ -75,6 +80,15 @@ export interface WebsiteServiceOptions {
    * Redirect listener rules.
    */
   readonly redirects?: WebsiteHostRedirect[];
+
+  /**
+   * Provides `default.conf` configuration for an nginx container that is added
+   * to the task as the default, traffic-serving container. You may use this
+   * feature to create a reverse proxy for your workload.
+   * @default - does not use a reverse proxy
+   * @experimental
+   */
+  readonly nginxContainerConfig?: string;
 }
 
 /**
@@ -126,14 +140,44 @@ export class WebsiteServiceBase extends Construct implements IWebsiteService {
       serviceExtension: props.ecsExtension,
     });
 
-    const { taskDefinition, service, containerName, trafficPort } = extensionService;
+    const { taskDefinition, service } = extensionService;
+
+    // When reverse proxy configuration present, we add a reverse proxy container as the default
+    // container.
+    if (props.nginxContainerConfig) {
+      const workloadContainer = taskDefinition.defaultContainer!;
+
+      const proxyContainer = taskDefinition.addContainer('proxy', {
+        image: ContainerImage.fromAsset(path.join(__dirname, '..', 'files', 'nginx-proxy')),
+        memoryReservationMiB: 32,
+        memoryLimitMiB: 128,
+        logging: LogDriver.awsLogs({
+          streamPrefix: 'nginx-proxy',
+        }),
+        environment: {
+          CONFIG: props.nginxContainerConfig,
+        },
+      });
+
+      proxyContainer.addLink(workloadContainer);
+
+      proxyContainer.addPortMappings({
+        protocol: Protocol.TCP,
+        containerPort: 80,
+      });
+
+      taskDefinition.defaultContainer = proxyContainer;
+    }
+
+    const defaultContainerName = taskDefinition.defaultContainer!.containerName;
+    const defaultContainerPort = taskDefinition.defaultContainer!.containerPort;
 
     // Allow the ALB to access the traffic port.
-    service.connections.allowFrom(props.albListener, Port.tcp(trafficPort));
+    service.connections.allowFrom(props.albListener, Port.tcp(defaultContainerPort));
 
     const allowedConnections = props.allowedConnections ?? [];
     for (const connectable of allowedConnections) {
-      service.connections.allowFrom(connectable, Port.tcp(trafficPort));
+      service.connections.allowFrom(connectable, Port.tcp(defaultContainerPort));
     }
 
     const connectToPeers = props.connectToPeers ?? [];
@@ -145,8 +189,8 @@ export class WebsiteServiceBase extends Construct implements IWebsiteService {
       albBasePriority: props.albBasePriority,
       albListener: props.albListener,
       cluster: props.cluster,
-      containerName: containerName,
-      trafficPort: trafficPort,
+      containerName: defaultContainerName,
+      trafficPort: defaultContainerPort,
       primaryHostName: props.primaryHostName,
       service: service,
     });
