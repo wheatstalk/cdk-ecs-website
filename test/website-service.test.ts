@@ -391,3 +391,23 @@ it('allows secret environment variables', () => {
     }),
   );
 });
+
+it('can add a reverse proxy', () => {
+  const app = new App();
+  const testingClusterStack = new TestingClusterStack(app, 'test');
+
+  new WebsiteService(testingClusterStack, 'service', {
+    ...testingClusterStack,
+    albBasePriority: 1,
+    containerImage: ecs.ContainerImage.fromRegistry('nathanpeck/name'),
+    primaryHostName: 'www.foo.com',
+    nginxContainerConfig: 'CONFIG',
+  });
+
+  expectCDK(testingClusterStack).to(haveResourceLike('AWS::ECS::TaskDefinition', {
+    ContainerDefinitions: [
+      { Name: 'web' },
+      { Name: 'proxy' },
+    ],
+  }));
+});
