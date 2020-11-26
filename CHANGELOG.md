@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 0.5.7 (2020-11-26)
+
+
+### Features
+
+* allow customization of the base nginx image name ([#99](https://github.com/wheatstalk/cdk-ecs-website/issues/99)) ([c971748](https://github.com/wheatstalk/cdk-ecs-website/commit/c9717488bd2e51535db8648f9aaff2e4b60d2c13))
+
 ### 0.5.6 (2020-11-26)
 
 
