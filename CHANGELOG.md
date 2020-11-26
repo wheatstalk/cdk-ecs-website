@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 0.5.6 (2020-11-26)
+
+
+### Features
+
+* add nginx container config ([#98](https://github.com/wheatstalk/cdk-ecs-website/issues/98)) ([b71f521](https://github.com/wheatstalk/cdk-ecs-website/commit/b71f521b007ad6232368f36420110971a2068421))
+
 ### 0.5.5 (2020-11-07)
 
 ### 0.5.4 (2020-10-30)
