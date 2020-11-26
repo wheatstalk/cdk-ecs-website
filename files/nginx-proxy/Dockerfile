@@ -1,3 +1,5 @@
-FROM nginx:1.19
+ARG FROM=nginx:1
+
+FROM ${FROM}
 
 COPY default.conf.template /etc/nginx/templates/
