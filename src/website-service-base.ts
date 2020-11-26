@@ -89,6 +89,15 @@ export interface WebsiteServiceOptions {
    * @experimental
    */
   readonly nginxContainerConfig?: string;
+
+  /**
+   * Provides an image name to build the nginx container from. You may change
+   * this base image name to 'nginx:1-perl', for instance, if you want perl
+   * support in the nginx container config.
+   * @default 'nginx:1'
+   * @experimental
+   */
+  readonly nginxContainerImageFrom?: string;
 }
 
 /**
@@ -148,7 +157,11 @@ export class WebsiteServiceBase extends Construct implements IWebsiteService {
       const workloadContainer = taskDefinition.defaultContainer!;
 
       const proxyContainer = taskDefinition.addContainer('proxy', {
-        image: ContainerImage.fromAsset(path.join(__dirname, '..', 'files', 'nginx-proxy')),
+        image: ContainerImage.fromAsset(path.join(__dirname, '..', 'files', 'nginx-proxy'), {
+          buildArgs: {
+            FROM: props.nginxContainerImageFrom ?? 'nginx:1',
+          },
+        }),
         memoryReservationMiB: 32,
         memoryLimitMiB: 128,
         logging: LogDriver.awsLogs({
