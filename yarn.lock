@@ -2135,9 +2135,9 @@ concat-stream@^2.0.0:
     typedarray "^0.0.6"
 
 constructs@^3.2.0:
-  version "3.2.98"
-  resolved "https://registry.yarnpkg.com/constructs/-/constructs-3.2.98.tgz#58c0c3b1cc16efd6c662dfc3f2dac25492b67864"
-  integrity sha512-7xCkvPl4TARfZgnwONm0jBkYZRWnbG5MdST6EKN219b0v/Ssly5RPee+VC24nYivABZL6yc4e1uygVhKgSdigA==
+  version "3.2.99"
+  resolved "https://registry.yarnpkg.com/constructs/-/constructs-3.2.99.tgz#bb4ddbad4598cdead4368ebae1c9d76e7e050b1d"
+  integrity sha512-Ab2++N4zl+mYWIFQZaqC7Hmi1bZFD92yOjsXdmxQyGgeDIAxLJTaKhuQcdE2XNH64WETeogCtPHi+NETcyI+gw==
 
 contains-path@^0.1.0:
   version "0.1.0"
@@ -4567,9 +4567,9 @@ jsii-diff@^1.13.0:
     yargs "^16.1.1"
 
 jsii-docgen@^1.3.2:
-  version "1.8.16"
-  resolved "https://registry.yarnpkg.com/jsii-docgen/-/jsii-docgen-1.8.16.tgz#cc8ca4fce15e293ba8131e1adcfa3297a0a60147"
-  integrity sha512-fzUXaf22XFa+XWP8fkwv5Opcoo9fFWmjqmhyHmwksjWrRc4dUbawl8YOzCiR7kTnpJqUAE5eAScNpm2xn9hROg==
+  version "1.8.17"
+  resolved "https://registry.yarnpkg.com/jsii-docgen/-/jsii-docgen-1.8.17.tgz#a52d90ddadb73848c36462eb563b29cae76e5339"
+  integrity sha512-skaqNNNQHbYU4JthmlOLhisuX1Wv4J1WfCCQN+kfAZWGjoGlsSPoxGnbjkal4CNVcWploEf/bVH0tqfc9kJtvQ==
   dependencies:
     "@jsii/spec" "^1.16.0"
     fs-extra "^9.0.1"
