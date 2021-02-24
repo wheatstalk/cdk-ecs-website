@@ -1467,6 +1467,7 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
       "Type": "AWS::SNS::Topic",
     },
     "Clusterdatabase157C6AB8": Object {
+      "DeletionPolicy": "Snapshot",
       "Properties": Object {
         "AllocatedStorage": "100",
         "CopyTagsToSnapshot": true,
