@@ -27,12 +27,6 @@ Object {
       },
     },
   },
-  "Parameters": Object {
-    "SsmParameterValueawsserviceecsoptimizedamiamazonlinux2recommendedimageidC96584B6F00A464EAD1953AFF4B05118Parameter": Object {
-      "Default": "/aws/service/ecs/optimized-ami/amazon-linux-2/recommended/image_id",
-      "Type": "AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>",
-    },
-  },
   "Resources": Object {
     "ClusterSiteRulesBuilderTargetGroupCD870E12": Object {
       "Properties": Object {
@@ -1372,9 +1366,7 @@ def pick(dct, *keys):
         "IamInstanceProfile": Object {
           "Ref": "ClusterclustercapacityInstanceProfileE4D0F070",
         },
-        "ImageId": Object {
-          "Ref": "SsmParameterValueawsserviceecsoptimizedamiamazonlinux2recommendedimageidC96584B6F00A464EAD1953AFF4B05118Parameter",
-        },
+        "ImageId": "{{resolve:ssm:/aws/service/ecs/optimized-ami/amazon-linux-2/recommended/image_id}}",
         "InstanceType": "t3.micro",
         "SecurityGroups": Array [
           Object {
