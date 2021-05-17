@@ -1,13 +1,13 @@
 import { Ec2Service, FargateService, ICluster, TaskDefinition } from '@aws-cdk/aws-ecs';
 import { Construct } from '@aws-cdk/core';
 
+import { IEcsWorkload } from './ecs-workload';
 import {
   Ec2WorkloadPattern,
   EcsWorkloadPatternBaseProps,
   FargateWorkloadPattern,
   IEcsWorkloadPattern,
 } from './ecs-workload-pattern';
-import { IEcsWorkload } from './ecs-workload';
 
 /**
  * Type of capacity to use.
