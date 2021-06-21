@@ -1,4 +1,7 @@
-const { AwsCdkConstructLibrary, GithubWorkflow, DependenciesUpgradeMechanism, Semver } = require('projen');
+const {
+  AwsCdkConstructLibrary,
+  DependenciesUpgradeMechanism, Semver,
+} = require('projen');
 
 const project = new AwsCdkConstructLibrary({
   name: '@wheatstalk/cdk-ecs-website',
@@ -36,6 +39,7 @@ const project = new AwsCdkConstructLibrary({
   ],
 
   cdkVersion: '1.68.0',
+  cdkDependenciesAsDeps: false, // https://dev.to/aws-builders/correctly-defining-dependencies-in-l3-cdk-constructs-45p#update-20210417
   cdkTestDependencies: [
     'aws-cdk',
     '@aws-cdk/assert',
