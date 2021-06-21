@@ -172,8 +172,8 @@ export class WebsiteServiceBase extends Construct implements IWebsiteService {
     // container.
     if (props.nginxContainerConfig) {
       taskDefinition.addExtension(new NginxProxyContainerExtension({
-        nginxContainerImageFrom: props.nginxContainerImageFrom,
-        nginxContainerConfig: props.nginxContainerConfig,
+        imageFrom: props.nginxContainerImageFrom,
+        defaultConf: props.nginxContainerConfig,
       }));
     }
 

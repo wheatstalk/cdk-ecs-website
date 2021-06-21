@@ -203,7 +203,7 @@ addServingHost(hostHeader: string): void
 
 
 
-## class NginxProxyContainerExtension 🔹 <a id="wheatstalk-cdk-ecs-website-nginxproxycontainerextension"></a>
+## class NginxProxyContainerExtension  <a id="wheatstalk-cdk-ecs-website-nginxproxycontainerextension"></a>
 
 Extends a TaskDefinition by adding an nginx proxy before the workload container.
 
@@ -219,8 +219,10 @@ new NginxProxyContainerExtension(options: NginxProxyContainerExtensionOptions)
 ```
 
 * **options** (<code>[NginxProxyContainerExtensionOptions](#wheatstalk-cdk-ecs-website-nginxproxycontainerextensionoptions)</code>)  *No description*
-  * **nginxContainerConfig** (<code>string</code>)  Provides an image name to build the nginx container from. 
-  * **nginxContainerImageFrom** (<code>string</code>)  Provides `default.conf` configuration for an nginx container that is added to the task as the default, traffic-serving container. You may use this feature to create a reverse proxy for your workload. __*Default*__: does not use a reverse proxy
+  * **defaultConf** (<code>string</code>)  Provides `default.conf` configuration for an nginx container that is added to the task as the default, traffic-serving container. You may use this feature to create a reverse proxy for your workload. 
+  * **containerName** (<code>string</code>)  Name of the proxy container. __*Default*__: 'proxy'
+  * **imageFrom** (<code>string</code>)  Provides an image name to build the nginx container from. __*Default*__: 'nginx:1'
+  * **trafficPort** (<code>number</code>)  Traffic port for the proxy. __*Default*__: 80
 
 
 
@@ -229,12 +231,12 @@ new NginxProxyContainerExtension(options: NginxProxyContainerExtensionOptions)
 
 Name | Type | Description 
 -----|------|-------------
-**options**🔹 | <code>[NginxProxyContainerExtensionOptions](#wheatstalk-cdk-ecs-website-nginxproxycontainerextensionoptions)</code> | <span></span>
+**options** | <code>[NginxProxyContainerExtensionOptions](#wheatstalk-cdk-ecs-website-nginxproxycontainerextensionoptions)</code> | <span></span>
 
 ### Methods
 
 
-#### extend(taskDefinition)🔹 <a id="wheatstalk-cdk-ecs-website-nginxproxycontainerextension-extend"></a>
+#### extend(taskDefinition) <a id="wheatstalk-cdk-ecs-website-nginxproxycontainerextension-extend"></a>
 
 Apply the extension to the given TaskDefinition.
 
@@ -620,8 +622,10 @@ Options for `NginxProxyContainerExtension`.
 
 Name | Type | Description 
 -----|------|-------------
-**nginxContainerConfig**🔹 | <code>string</code> | Provides an image name to build the nginx container from.
-**nginxContainerImageFrom**?🔹 | <code>string</code> | Provides `default.conf` configuration for an nginx container that is added to the task as the default, traffic-serving container. You may use this feature to create a reverse proxy for your workload.<br/>__*Default*__: does not use a reverse proxy
+**defaultConf**🔹 | <code>string</code> | Provides `default.conf` configuration for an nginx container that is added to the task as the default, traffic-serving container. You may use this feature to create a reverse proxy for your workload.
+**containerName**?🔹 | <code>string</code> | Name of the proxy container.<br/>__*Default*__: 'proxy'
+**imageFrom**?🔹 | <code>string</code> | Provides an image name to build the nginx container from.<br/>__*Default*__: 'nginx:1'
+**trafficPort**?🔹 | <code>number</code> | Traffic port for the proxy.<br/>__*Default*__: 80
 
 
 
