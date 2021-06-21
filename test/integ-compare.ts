@@ -8,8 +8,8 @@ async function main(): Promise<void> {
 
   const [outputPath, expectedPath] = argv._;
 
-  const outputJson = await fs.readJSON(outputPath);
-  const expectedJson = await fs.readJSON(expectedPath);
+  const outputJson = await fs.readJSON(outputPath.toString());
+  const expectedJson = await fs.readJSON(expectedPath.toString());
 
   // Clean out unimportant things.
   delete outputJson.Resources.CDKMetadata;
