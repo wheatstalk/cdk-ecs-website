@@ -5,7 +5,7 @@ import {
   LogDriver,
   NetworkMode,
   Protocol,
-  TaskDefinition
+  TaskDefinition,
 } from '@aws-cdk/aws-ecs';
 
 /**
@@ -33,8 +33,7 @@ export interface NginxProxyContainerExtensionOptions {
 }
 
 /**
- * Extends a TaskDefinition by adding an nginx proxy before the workload
- * container.
+ * Extends a TaskDefinition by adding an nginx proxy before the workload container.
  * @experimental
  */
 export class NginxProxyContainerExtension implements ITaskDefinitionExtension {

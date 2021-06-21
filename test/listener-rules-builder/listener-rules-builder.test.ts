@@ -5,7 +5,7 @@ import { ContainerImage, Ec2Service, Ec2TaskDefinition } from '@aws-cdk/aws-ecs'
 import { ApplicationListener } from '@aws-cdk/aws-elasticloadbalancingv2';
 import { App } from '@aws-cdk/core';
 
-import { ListenerRulesBuilder } from '../../src/listener-rules-builder';
+import { ListenerRulesBuilder, ListenerRulePriorities } from '../../src';
 import { TestingClusterStack } from '../../src/testing-cluster';
 
 test('add all rules', () => {
@@ -29,8 +29,8 @@ test('add all rules', () => {
 
   const lrb = new ListenerRulesBuilder(testCluster, 'lrb', {
     ...testCluster,
-    albBasePriority: 40000,
-    containerName: 'main',
+    albPriority: ListenerRulePriorities.incremental(40000),
+    trafficContainerName: 'main',
     trafficPort: 80,
     primaryHostName: 'www.example.com',
     service: service,
@@ -179,10 +179,9 @@ test('add rules to an imported listener', () => {
   });
 
   const lrb = new ListenerRulesBuilder(testCluster, 'lrb', {
-    cluster: testCluster.cluster,
     albListener: albListener,
-    albBasePriority: 40000,
-    containerName: 'main',
+    albPriority: ListenerRulePriorities.incremental(40000),
+    trafficContainerName: 'main',
     trafficPort: 80,
     primaryHostName: 'www.example.com',
     service: service,

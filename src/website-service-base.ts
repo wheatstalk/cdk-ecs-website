@@ -4,8 +4,33 @@ import { IApplicationListener, RedirectOptions } from '@aws-cdk/aws-elasticloadb
 import { Construct } from '@aws-cdk/core';
 
 import { EcsWorkloadCapacityType, EcsWorkloadService, IEcsWorkload } from './ecs-workloads';
-import { CognitoAuthenticationConfig, IWebsiteService, ListenerRulesBuilder } from './listener-rules-builder';
+import { CognitoAuthenticationConfig, ListenerRulesBuilder } from './listener-rules-builder';
+import { ListenerRulePriorities } from './listener-rules-builder/listener-rule-priorities';
 import { NginxProxyContainerExtension } from './nginx-proxy-container-extension-options';
+
+/**
+ * A builder-pattern website service.
+ */
+export interface IWebsiteService {
+  /**
+   * Add a host name on which traffic will be served.
+   */
+  addServingHost(hostHeader: string): void;
+
+  /**
+   * Add a host name from which traffic will be redirected to another URL.
+   */
+  addRedirectResponse(hostHeader: string, redirectResponse: RedirectOptions): void;
+
+  /**
+   * Add a host name from which traffic will be directed to the primary
+   * host name of the `IWebsiteService`.
+   */
+  addRedirectToPrimaryHostName(hostHeader: string): void;
+
+  // addAuthenticatedServingHost(hostHeader: string, authConfig: AuthWithUserPoolProps): void;
+  // addAuthBypassServingHost(hostHeader: string, authBypassValue: string): void;
+}
 
 /**
  * Non-workload options for `WebsiteServiceBase`
@@ -169,10 +194,9 @@ export class WebsiteServiceBase extends Construct implements IWebsiteService {
     }
 
     this.listenerRuleBuilder = new ListenerRulesBuilder(this, 'RulesBuilder', {
-      albBasePriority: props.albBasePriority,
+      albPriority: ListenerRulePriorities.incremental(props.albBasePriority),
       albListener: props.albListener,
-      cluster: props.cluster,
-      containerName: defaultContainerName,
+      trafficContainerName: defaultContainerName,
       trafficPort: defaultContainerPort,
       primaryHostName: props.primaryHostName,
       service: service,
