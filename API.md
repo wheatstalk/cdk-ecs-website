@@ -81,14 +81,14 @@ __Returns__:
 
 #### *static* incremental(start, step?) <a id="wheatstalk-cdk-ecs-website-listenerrulepriorities-incremental"></a>
 
-
+Incremental listener rule priorities.
 
 ```ts
 static incremental(start: number, step?: number): ListenerRulePriorities
 ```
 
-* **start** (<code>number</code>)  *No description*
-* **step** (<code>number</code>)  *No description*
+* **start** (<code>number</code>)  Priority to start at.
+* **step** (<code>number</code>)  Step size for every new priority.
 
 __Returns__:
 * <code>[ListenerRulePriorities](#wheatstalk-cdk-ecs-website-listenerrulepriorities)</code>
@@ -127,7 +127,7 @@ new ListenerRulesBuilder(scope: Construct, id: string, props: ListenerRulesBuild
 
 #### addAuthBypassServingHost(hostHeader, authBypassValue) <a id="wheatstalk-cdk-ecs-website-listenerrulesbuilder-addauthbypassservinghost"></a>
 
-
+Add a host name on which the service should serve traffic when the `AccessBypass` header is provided in the requiest.
 
 ```ts
 addAuthBypassServingHost(hostHeader: string, authBypassValue: string): void
@@ -141,7 +141,7 @@ addAuthBypassServingHost(hostHeader: string, authBypassValue: string): void
 
 #### addAuthenticatedServingHost(hostHeader, authConfig) <a id="wheatstalk-cdk-ecs-website-listenerrulesbuilder-addauthenticatedservinghost"></a>
 
-
+Adds a host name on which the service should serve traffic after authenticating with AWS Cognito.
 
 ```ts
 addAuthenticatedServingHost(hostHeader: string, authConfig: CognitoAuthenticationConfig): void
@@ -157,7 +157,7 @@ addAuthenticatedServingHost(hostHeader: string, authConfig: CognitoAuthenticatio
 
 #### addRedirectResponse(hostHeader, redirectResponse) <a id="wheatstalk-cdk-ecs-website-listenerrulesbuilder-addredirectresponse"></a>
 
-
+Adds a redirect for a given host name to another location.
 
 ```ts
 addRedirectResponse(hostHeader: string, redirectResponse: RedirectOptions): void
@@ -177,7 +177,7 @@ addRedirectResponse(hostHeader: string, redirectResponse: RedirectOptions): void
 
 #### addRedirectToPrimaryHostName(hostHeader) <a id="wheatstalk-cdk-ecs-website-listenerrulesbuilder-addredirecttoprimaryhostname"></a>
 
-
+Adds a redirect for a given host name to the primary host name.
 
 ```ts
 addRedirectToPrimaryHostName(hostHeader: string): void
@@ -190,7 +190,7 @@ addRedirectToPrimaryHostName(hostHeader: string): void
 
 #### addServingHost(hostHeader) <a id="wheatstalk-cdk-ecs-website-listenerrulesbuilder-addservinghost"></a>
 
-
+Adds a host name on which the service should serve traffic.
 
 ```ts
 addServingHost(hostHeader: string): void

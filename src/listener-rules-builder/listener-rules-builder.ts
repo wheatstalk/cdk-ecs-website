@@ -158,6 +158,9 @@ export class ListenerRulesBuilder extends Construct {
     );
   }
 
+  /**
+   * Adds a host name on which the service should serve traffic.
+   */
   public addServingHost(hostHeader: string): void {
     const priority = this.albPriority.produce();
     const id = getListenerRuleId(priority);
@@ -170,6 +173,10 @@ export class ListenerRulesBuilder extends Construct {
     });
   }
 
+  /**
+   * Adds a host name on which the service should serve traffic after
+   * authenticating with AWS Cognito.
+   */
   public addAuthenticatedServingHost(hostHeader: string, authConfig: CognitoAuthenticationConfig): void {
     const targetGroup = this.obtainTargetGroup();
     const userPoolInfo = this.obtainUserPoolInfo(authConfig);
@@ -184,6 +191,10 @@ export class ListenerRulesBuilder extends Construct {
     });
   }
 
+  /**
+   * Add a host name on which the service should serve traffic when the
+   * `AccessBypass` header is provided in the requiest.
+   */
   public addAuthBypassServingHost(hostHeader: string, authBypassValue: string): void {
     const priority = this.albPriority.produce();
     const id = getListenerRuleId(priority);
@@ -199,6 +210,9 @@ export class ListenerRulesBuilder extends Construct {
     });
   }
 
+  /**
+   * Adds a redirect for a given host name to another location.
+   */
   public addRedirectResponse(hostHeader: string, redirectResponse: RedirectOptions): void {
     const priority = this.albPriority.produce();
     const id = getListenerRuleId(priority);
@@ -218,6 +232,9 @@ export class ListenerRulesBuilder extends Construct {
     });
   }
 
+  /**
+   * Adds a redirect for a given host name to the primary host name.
+   */
   public addRedirectToPrimaryHostName(hostHeader: string): void {
     this.addRedirectResponse(hostHeader, {
       host: this.primaryHostName,

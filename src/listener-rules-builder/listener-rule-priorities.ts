@@ -2,6 +2,11 @@
  * Listener rule priorities
  */
 export abstract class ListenerRulePriorities {
+  /**
+   * Incremental listener rule priorities
+   * @param start Priority to start at
+   * @param step Step size for every new priority
+   */
   static incremental(start: number, step: number = 1): ListenerRulePriorities {
     return new Incremental(start, step);
   }
