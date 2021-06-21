@@ -1,4 +1,4 @@
-const { AwsCdkConstructLibrary, Semver, GithubWorkflow } = require('projen');
+const { AwsCdkConstructLibrary, GithubWorkflow } = require('projen');
 
 const project = new AwsCdkConstructLibrary({
   authorAddress: "joshkellendonk@gmail.com",
@@ -13,6 +13,7 @@ const project = new AwsCdkConstructLibrary({
     "*.iml",
     "cdk.out.*",
   ],
+  dependabot: false,
   devDeps: [
     "@types/fs-extra@^8.1.0",
     "@types/json-diff@^0.5.0",
