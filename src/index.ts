@@ -14,3 +14,4 @@ export * from './website-service';
 export * from './website-service-base';
 export * from './wordpress-workload';
 export * from './wordpress-service';
+export * from './nginx-proxy-container-extension-options';

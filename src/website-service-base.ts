@@ -1,19 +1,11 @@
-import * as path from 'path';
 import { IConnectable, Port } from '@aws-cdk/aws-ec2';
-import {
-  ContainerImage,
-  Ec2Service,
-  FargateService,
-  ICluster,
-  LogDriver,
-  Protocol,
-  TaskDefinition,
-} from '@aws-cdk/aws-ecs';
+import { Ec2Service, FargateService, ICluster, TaskDefinition } from '@aws-cdk/aws-ecs';
 import { IApplicationListener, RedirectOptions } from '@aws-cdk/aws-elasticloadbalancingv2';
 import { Construct } from '@aws-cdk/core';
 
 import { EcsWorkloadCapacityType, EcsWorkloadService, IEcsWorkload } from './ecs-workloads';
 import { CognitoAuthenticationConfig, IWebsiteService, ListenerRulesBuilder } from './listener-rules-builder';
+import { NginxProxyContainerExtension } from './nginx-proxy-container-extension-options';
 
 /**
  * Non-workload options for `WebsiteServiceBase`
@@ -154,32 +146,10 @@ export class WebsiteServiceBase extends Construct implements IWebsiteService {
     // When reverse proxy configuration present, we add a reverse proxy container as the default
     // container.
     if (props.nginxContainerConfig) {
-      const workloadContainer = taskDefinition.defaultContainer!;
-
-      const proxyContainer = taskDefinition.addContainer('proxy', {
-        image: ContainerImage.fromAsset(path.join(__dirname, '..', 'files', 'nginx-proxy'), {
-          buildArgs: {
-            FROM: props.nginxContainerImageFrom ?? 'nginx:1',
-          },
-        }),
-        memoryReservationMiB: 32,
-        memoryLimitMiB: 128,
-        logging: LogDriver.awsLogs({
-          streamPrefix: 'nginx-proxy',
-        }),
-        environment: {
-          CONFIG: props.nginxContainerConfig,
-        },
-      });
-
-      proxyContainer.addLink(workloadContainer);
-
-      proxyContainer.addPortMappings({
-        protocol: Protocol.TCP,
-        containerPort: 80,
-      });
-
-      taskDefinition.defaultContainer = proxyContainer;
+      taskDefinition.addExtension(new NginxProxyContainerExtension({
+        nginxContainerImageFrom: props.nginxContainerImageFrom,
+        nginxContainerConfig: props.nginxContainerConfig,
+      }));
     }
 
     const defaultContainerName = taskDefinition.defaultContainer!.containerName;
@@ -255,3 +225,4 @@ export class WebsiteServiceBase extends Construct implements IWebsiteService {
     return this.listenerRuleBuilder.addServingHost(hostHeader);
   }
 }
+
