@@ -1,6 +1,6 @@
 import { CfnUserPoolClient, IUserPool, OAuthScope, UserPoolClient } from '@aws-cdk/aws-cognito';
 import { IVpc } from '@aws-cdk/aws-ec2';
-import { Ec2Service, FargateService, ICluster } from '@aws-cdk/aws-ecs';
+import { Ec2Service, FargateService } from '@aws-cdk/aws-ecs';
 import {
   ApplicationListenerRule,
   ApplicationProtocol,
@@ -15,68 +15,69 @@ import {
 import { Construct, Duration } from '@aws-cdk/core';
 
 import { CognitoAuthenticateAction, CognitoAuthenticateOptions } from './cognito-authenticate-action';
-import { NumberSequence } from './number-sequence';
+import { ListenerRulePriorities } from './listener-rule-priorities';
 
 /**
  * Configuration for authentication through a Cognito user pool.
  */
 export interface CognitoAuthenticationConfig {
+  /**
+   * Domain name of the Cognito user pool IdP
+   */
   readonly domain: string;
+
+  /**
+   * The Cognito user pool to identify against.
+   */
   readonly userPool: IUserPool;
 }
 
 /**
- * A builder-pattern website service.
- */
-export interface IWebsiteService {
-  /**
-   * Add a host name on which traffic will be served.
-   */
-  addServingHost(hostHeader: string): void;
-
-  /**
-   * Add a host name from which traffic will be redirected to another URL.
-   */
-  addRedirectResponse(hostHeader: string, redirectResponse: RedirectOptions): void;
-
-  /**
-   * Add a host name from which traffic will be directed to the primary
-   * host name of the `IWebsiteService`.
-   */
-  addRedirectToPrimaryHostName(hostHeader: string): void;
-
-  // addAuthenticatedServingHost(hostHeader: string, authConfig: AuthWithUserPoolProps): void;
-  // addAuthBypassServingHost(hostHeader: string, authBypassValue: string): void;
-}
-
-/**
- * @internal
+ * Props for `ListenerRulesBuilder`
  */
 export interface ListenerRulesBuilderProps {
+  /**
+   * ECS service serving traffic.
+   */
   readonly service: Ec2Service | FargateService;
-  readonly cluster: ICluster;
-  readonly albBasePriority: number;
+
+  /**
+   * The ALB listener to add listener rules to.
+   */
   readonly albListener: IApplicationListener;
-  readonly containerName: string;
-  readonly trafficPort: number;
+
+  /**
+   * The strategy for allocating alb listener rule priorities.
+   */
+  readonly albPriority: ListenerRulePriorities;
+
+  /**
+   * The primary host name to redirect to.
+   */
   readonly primaryHostName: string;
-  readonly authWithUserPool?: CognitoAuthenticationConfig;
+
+  /**
+   * Container to direct traffic to.
+   */
+  readonly trafficContainerName: string;
+
+  /**
+   * Port that the container listens on.
+   */
+  readonly trafficPort: number;
 }
 
 /**
  * Creates listener rules.
- * @internal
  */
 export class ListenerRulesBuilder extends Construct {
-  private readonly albPriority: NumberSequence;
+  private readonly albPriority: ListenerRulePriorities;
   private readonly albListener: IApplicationListener;
   private readonly clusterVpc: IVpc;
 
-  private readonly containerName: string;
-  private readonly containerPort: number;
   private readonly primaryHostName: string;
-
-  private readonly cluster: ICluster;
+  private readonly trafficContainerName: string;
+  private readonly trafficPort: number;
 
   private readonly service: Ec2Service | FargateService;
   private readonly deregistrationDelay: Duration;
@@ -84,15 +85,15 @@ export class ListenerRulesBuilder extends Construct {
   constructor(scope: Construct, id: string, props: ListenerRulesBuilderProps) {
     super(scope, id);
 
-    this.containerName = props.containerName;
-    this.containerPort = props.trafficPort;
-    this.albListener = props.albListener;
-    this.cluster = props.cluster;
-    this.primaryHostName = props.primaryHostName;
-    this.clusterVpc = this.cluster.vpc;
-    this.albPriority = new NumberSequence(props.albBasePriority);
     this.service = props.service;
+    this.clusterVpc = props.service.cluster.vpc;
     this.deregistrationDelay = Duration.seconds(15);
+
+    this.primaryHostName = props.primaryHostName;
+    this.trafficContainerName = props.trafficContainerName;
+    this.trafficPort = props.trafficPort;
+    this.albListener = props.albListener;
+    this.albPriority = props.albPriority;
   }
 
   private obtainUserPoolInfo(config: CognitoAuthenticationConfig): CognitoAuthenticateOptions {
@@ -141,8 +142,8 @@ export class ListenerRulesBuilder extends Construct {
         vpc: this.clusterVpc,
         targets: [
           this.service.loadBalancerTarget({
-            containerName: this.containerName,
-            containerPort: this.containerPort,
+            containerName: this.trafficContainerName,
+            containerPort: this.trafficPort,
           }),
         ],
         healthCheck: {
@@ -157,8 +158,11 @@ export class ListenerRulesBuilder extends Construct {
     );
   }
 
+  /**
+   * Adds a host name on which the service should serve traffic.
+   */
   public addServingHost(hostHeader: string): void {
-    const priority = this.albPriority.getNextAndIncrement();
+    const priority = this.albPriority.produce();
     const id = getListenerRuleId(priority);
 
     new ApplicationListenerRule(this, id, {
@@ -169,10 +173,14 @@ export class ListenerRulesBuilder extends Construct {
     });
   }
 
+  /**
+   * Adds a host name on which the service should serve traffic after
+   * authenticating with AWS Cognito.
+   */
   public addAuthenticatedServingHost(hostHeader: string, authConfig: CognitoAuthenticationConfig): void {
     const targetGroup = this.obtainTargetGroup();
     const userPoolInfo = this.obtainUserPoolInfo(authConfig);
-    const priority = this.albPriority.getNextAndIncrement();
+    const priority = this.albPriority.produce();
     const id = getListenerRuleId(priority);
 
     new ApplicationListenerRule(this, id, {
@@ -183,8 +191,12 @@ export class ListenerRulesBuilder extends Construct {
     });
   }
 
+  /**
+   * Add a host name on which the service should serve traffic when the
+   * `AccessBypass` header is provided in the requiest.
+   */
   public addAuthBypassServingHost(hostHeader: string, authBypassValue: string): void {
-    const priority = this.albPriority.getNextAndIncrement();
+    const priority = this.albPriority.produce();
     const id = getListenerRuleId(priority);
 
     new ApplicationListenerRule(this, id, {
@@ -198,8 +210,11 @@ export class ListenerRulesBuilder extends Construct {
     });
   }
 
+  /**
+   * Adds a redirect for a given host name to another location.
+   */
   public addRedirectResponse(hostHeader: string, redirectResponse: RedirectOptions): void {
-    const priority = this.albPriority.getNextAndIncrement();
+    const priority = this.albPriority.produce();
     const id = getListenerRuleId(priority);
 
     new ApplicationListenerRule(this, id, {
@@ -217,6 +232,9 @@ export class ListenerRulesBuilder extends Construct {
     });
   }
 
+  /**
+   * Adds a redirect for a given host name to the primary host name.
+   */
   public addRedirectToPrimaryHostName(hostHeader: string): void {
     this.addRedirectResponse(hostHeader, {
       host: this.primaryHostName,

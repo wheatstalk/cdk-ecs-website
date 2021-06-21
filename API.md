@@ -4,6 +4,9 @@
 
 Name|Description
 ----|-----------
+[ListenerRulePriorities](#wheatstalk-cdk-ecs-website-listenerrulepriorities)|Listener rule priorities.
+[ListenerRulesBuilder](#wheatstalk-cdk-ecs-website-listenerrulesbuilder)|Creates listener rules.
+[NginxProxyContainerExtension](#wheatstalk-cdk-ecs-website-nginxproxycontainerextension)|Extends a TaskDefinition by adding an nginx proxy before the workload container.
 [WebsiteService](#wheatstalk-cdk-ecs-website-websiteservice)|Create a website from an http-serving container.
 [WebsiteServiceBase](#wheatstalk-cdk-ecs-website-websiteservicebase)|Base class for the builder-style website service classes.
 [WordpressService](#wheatstalk-cdk-ecs-website-wordpressservice)|Create a wordpress website.
@@ -17,6 +20,8 @@ Name|Description
 [EcsWorkloadServiceInfo](#wheatstalk-cdk-ecs-website-ecsworkloadserviceinfo)|Provides information to `IEcsWorkload.useService` about the service.
 [EcsWorkloadTaskInfo](#wheatstalk-cdk-ecs-website-ecsworkloadtaskinfo)|Provides information to `IEcsWorkload.useTaskDefinition` about the task definition.
 [HttpContainerWorkloadOptions](#wheatstalk-cdk-ecs-website-httpcontainerworkloadoptions)|Props for `HttpContainerWorkload`.
+[ListenerRulesBuilderProps](#wheatstalk-cdk-ecs-website-listenerrulesbuilderprops)|Props for `ListenerRulesBuilder`.
+[NginxProxyContainerExtensionOptions](#wheatstalk-cdk-ecs-website-nginxproxycontainerextensionoptions)|Options for `NginxProxyContainerExtension`.
 [WebsiteHostRedirect](#wheatstalk-cdk-ecs-website-websitehostredirect)|A redirect.
 [WebsiteServiceBaseProps](#wheatstalk-cdk-ecs-website-websiteservicebaseprops)|Props for `WebsiteServiceBase`.
 [WebsiteServiceOptions](#wheatstalk-cdk-ecs-website-websiteserviceoptions)|Non-workload options for `WebsiteServiceBase`.
@@ -40,6 +45,209 @@ Name|Description
 Name|Description
 ----|-----------
 [EcsWorkloadCapacityType](#wheatstalk-cdk-ecs-website-ecsworkloadcapacitytype)|Type of capacity to use.
+
+
+
+## class ListenerRulePriorities  <a id="wheatstalk-cdk-ecs-website-listenerrulepriorities"></a>
+
+Listener rule priorities.
+
+
+### Initializer
+
+
+
+
+```ts
+new ListenerRulePriorities()
+```
+
+
+
+### Methods
+
+
+#### produce() <a id="wheatstalk-cdk-ecs-website-listenerrulepriorities-produce"></a>
+
+Produce a listener rule priority.
+
+```ts
+produce(): number
+```
+
+
+__Returns__:
+* <code>number</code>
+
+#### *static* incremental(start, step?) <a id="wheatstalk-cdk-ecs-website-listenerrulepriorities-incremental"></a>
+
+Incremental listener rule priorities.
+
+```ts
+static incremental(start: number, step?: number): ListenerRulePriorities
+```
+
+* **start** (<code>number</code>)  Priority to start at.
+* **step** (<code>number</code>)  Step size for every new priority.
+
+__Returns__:
+* <code>[ListenerRulePriorities](#wheatstalk-cdk-ecs-website-listenerrulepriorities)</code>
+
+
+
+## class ListenerRulesBuilder  <a id="wheatstalk-cdk-ecs-website-listenerrulesbuilder"></a>
+
+Creates listener rules.
+
+__Implements__: [IConstruct](#constructs-iconstruct), [IConstruct](#aws-cdk-core-iconstruct), [IConstruct](#constructs-iconstruct), [IDependable](#aws-cdk-core-idependable)
+__Extends__: [Construct](#aws-cdk-core-construct)
+
+### Initializer
+
+
+
+
+```ts
+new ListenerRulesBuilder(scope: Construct, id: string, props: ListenerRulesBuilderProps)
+```
+
+* **scope** (<code>[Construct](#aws-cdk-core-construct)</code>)  *No description*
+* **id** (<code>string</code>)  *No description*
+* **props** (<code>[ListenerRulesBuilderProps](#wheatstalk-cdk-ecs-website-listenerrulesbuilderprops)</code>)  *No description*
+  * **albListener** (<code>[IApplicationListener](#aws-cdk-aws-elasticloadbalancingv2-iapplicationlistener)</code>)  The ALB listener to add listener rules to. 
+  * **albPriority** (<code>[ListenerRulePriorities](#wheatstalk-cdk-ecs-website-listenerrulepriorities)</code>)  The strategy for allocating alb listener rule priorities. 
+  * **primaryHostName** (<code>string</code>)  The primary host name to redirect to. 
+  * **service** (<code>[Ec2Service](#aws-cdk-aws-ecs-ec2service) &#124; [FargateService](#aws-cdk-aws-ecs-fargateservice)</code>)  ECS service serving traffic. 
+  * **trafficContainerName** (<code>string</code>)  Container to direct traffic to. 
+  * **trafficPort** (<code>number</code>)  Port that the container listens on. 
+
+
+### Methods
+
+
+#### addAuthBypassServingHost(hostHeader, authBypassValue) <a id="wheatstalk-cdk-ecs-website-listenerrulesbuilder-addauthbypassservinghost"></a>
+
+Add a host name on which the service should serve traffic when the `AccessBypass` header is provided in the requiest.
+
+```ts
+addAuthBypassServingHost(hostHeader: string, authBypassValue: string): void
+```
+
+* **hostHeader** (<code>string</code>)  *No description*
+* **authBypassValue** (<code>string</code>)  *No description*
+
+
+
+
+#### addAuthenticatedServingHost(hostHeader, authConfig) <a id="wheatstalk-cdk-ecs-website-listenerrulesbuilder-addauthenticatedservinghost"></a>
+
+Adds a host name on which the service should serve traffic after authenticating with AWS Cognito.
+
+```ts
+addAuthenticatedServingHost(hostHeader: string, authConfig: CognitoAuthenticationConfig): void
+```
+
+* **hostHeader** (<code>string</code>)  *No description*
+* **authConfig** (<code>[CognitoAuthenticationConfig](#wheatstalk-cdk-ecs-website-cognitoauthenticationconfig)</code>)  *No description*
+  * **domain** (<code>string</code>)  Domain name of the Cognito user pool IdP. 
+  * **userPool** (<code>[IUserPool](#aws-cdk-aws-cognito-iuserpool)</code>)  The Cognito user pool to identify against. 
+
+
+
+
+#### addRedirectResponse(hostHeader, redirectResponse) <a id="wheatstalk-cdk-ecs-website-listenerrulesbuilder-addredirectresponse"></a>
+
+Adds a redirect for a given host name to another location.
+
+```ts
+addRedirectResponse(hostHeader: string, redirectResponse: RedirectOptions): void
+```
+
+* **hostHeader** (<code>string</code>)  *No description*
+* **redirectResponse** (<code>[RedirectOptions](#aws-cdk-aws-elasticloadbalancingv2-redirectoptions)</code>)  *No description*
+  * **host** (<code>string</code>)  The hostname. __*Default*__: No change
+  * **path** (<code>string</code>)  The absolute path, starting with the leading "/". __*Default*__: No change
+  * **permanent** (<code>boolean</code>)  The HTTP redirect code. __*Default*__: false
+  * **port** (<code>string</code>)  The port. __*Default*__: No change
+  * **protocol** (<code>string</code>)  The protocol. __*Default*__: No change
+  * **query** (<code>string</code>)  The query parameters, URL-encoded when necessary, but not percent-encoded. __*Default*__: No change
+
+
+
+
+#### addRedirectToPrimaryHostName(hostHeader) <a id="wheatstalk-cdk-ecs-website-listenerrulesbuilder-addredirecttoprimaryhostname"></a>
+
+Adds a redirect for a given host name to the primary host name.
+
+```ts
+addRedirectToPrimaryHostName(hostHeader: string): void
+```
+
+* **hostHeader** (<code>string</code>)  *No description*
+
+
+
+
+#### addServingHost(hostHeader) <a id="wheatstalk-cdk-ecs-website-listenerrulesbuilder-addservinghost"></a>
+
+Adds a host name on which the service should serve traffic.
+
+```ts
+addServingHost(hostHeader: string): void
+```
+
+* **hostHeader** (<code>string</code>)  *No description*
+
+
+
+
+
+
+## class NginxProxyContainerExtension  <a id="wheatstalk-cdk-ecs-website-nginxproxycontainerextension"></a>
+
+Extends a TaskDefinition by adding an nginx proxy before the workload container.
+
+__Implements__: [ITaskDefinitionExtension](#aws-cdk-aws-ecs-itaskdefinitionextension)
+
+### Initializer
+
+
+
+
+```ts
+new NginxProxyContainerExtension(options: NginxProxyContainerExtensionOptions)
+```
+
+* **options** (<code>[NginxProxyContainerExtensionOptions](#wheatstalk-cdk-ecs-website-nginxproxycontainerextensionoptions)</code>)  *No description*
+  * **defaultConf** (<code>string</code>)  Provides `default.conf` configuration for an nginx container that is added to the task as the default, traffic-serving container. You may use this feature to create a reverse proxy for your workload. 
+  * **containerName** (<code>string</code>)  Name of the proxy container. __*Default*__: 'proxy'
+  * **imageFrom** (<code>string</code>)  Provides an image name to build the nginx container from. __*Default*__: 'nginx:1'
+  * **trafficPort** (<code>number</code>)  Traffic port for the proxy. __*Default*__: 80
+
+
+
+### Properties
+
+
+Name | Type | Description 
+-----|------|-------------
+**options** | <code>[NginxProxyContainerExtensionOptions](#wheatstalk-cdk-ecs-website-nginxproxycontainerextensionoptions)</code> | <span></span>
+
+### Methods
+
+
+#### extend(taskDefinition) <a id="wheatstalk-cdk-ecs-website-nginxproxycontainerextension-extend"></a>
+
+Apply the extension to the given TaskDefinition.
+
+```ts
+extend(taskDefinition: TaskDefinition): void
+```
+
+* **taskDefinition** (<code>[TaskDefinition](#aws-cdk-aws-ecs-taskdefinition)</code>)  *No description*
+
+
+
 
 
 
@@ -235,8 +443,8 @@ Configuration for authentication through a Cognito user pool.
 
 Name | Type | Description 
 -----|------|-------------
-**domain** | <code>string</code> | <span></span>
-**userPool** | <code>[IUserPool](#aws-cdk-aws-cognito-iuserpool)</code> | <span></span>
+**domain** | <code>string</code> | Domain name of the Cognito user pool IdP.
+**userPool** | <code>[IUserPool](#aws-cdk-aws-cognito-iuserpool)</code> | The Cognito user pool to identify against.
 
 
 
@@ -387,6 +595,40 @@ addServingHost(hostHeader: string): void
 
 
 
+## struct ListenerRulesBuilderProps  <a id="wheatstalk-cdk-ecs-website-listenerrulesbuilderprops"></a>
+
+
+Props for `ListenerRulesBuilder`.
+
+
+
+Name | Type | Description 
+-----|------|-------------
+**albListener** | <code>[IApplicationListener](#aws-cdk-aws-elasticloadbalancingv2-iapplicationlistener)</code> | The ALB listener to add listener rules to.
+**albPriority** | <code>[ListenerRulePriorities](#wheatstalk-cdk-ecs-website-listenerrulepriorities)</code> | The strategy for allocating alb listener rule priorities.
+**primaryHostName** | <code>string</code> | The primary host name to redirect to.
+**service** | <code>[Ec2Service](#aws-cdk-aws-ecs-ec2service) &#124; [FargateService](#aws-cdk-aws-ecs-fargateservice)</code> | ECS service serving traffic.
+**trafficContainerName** | <code>string</code> | Container to direct traffic to.
+**trafficPort** | <code>number</code> | Port that the container listens on.
+
+
+
+## struct NginxProxyContainerExtensionOptions 🔹 <a id="wheatstalk-cdk-ecs-website-nginxproxycontainerextensionoptions"></a>
+
+
+Options for `NginxProxyContainerExtension`.
+
+
+
+Name | Type | Description 
+-----|------|-------------
+**defaultConf**🔹 | <code>string</code> | Provides `default.conf` configuration for an nginx container that is added to the task as the default, traffic-serving container. You may use this feature to create a reverse proxy for your workload.
+**containerName**?🔹 | <code>string</code> | Name of the proxy container.<br/>__*Default*__: 'proxy'
+**imageFrom**?🔹 | <code>string</code> | Provides an image name to build the nginx container from.<br/>__*Default*__: 'nginx:1'
+**trafficPort**?🔹 | <code>number</code> | Traffic port for the proxy.<br/>__*Default*__: 80
+
+
+
 ## struct WebsiteHostRedirect  <a id="wheatstalk-cdk-ecs-website-websitehostredirect"></a>
 
 
@@ -493,8 +735,8 @@ Name | Type | Description
 
 Name | Type | Description 
 -----|------|-------------
-**domain**⚠️ | <code>string</code> | <span></span>
-**userPool**⚠️ | <code>[IUserPool](#aws-cdk-aws-cognito-iuserpool)</code> | <span></span>
+**domain**⚠️ | <code>string</code> | Domain name of the Cognito user pool IdP.
+**userPool**⚠️ | <code>[IUserPool](#aws-cdk-aws-cognito-iuserpool)</code> | The Cognito user pool to identify against.
 
 
 

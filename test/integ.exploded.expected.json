@@ -1,0 +1,1192 @@
+{
+  "Resources": {
+    "Vpc8378EB38": {
+      "Type": "AWS::EC2::VPC",
+      "Properties": {
+        "CidrBlock": "10.0.0.0/16",
+        "EnableDnsHostnames": true,
+        "EnableDnsSupport": true,
+        "InstanceTenancy": "default",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "exploded-integ/Vpc"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "exploded-integ/Vpc/Resource"
+      }
+    },
+    "VpcpublicSubnet1Subnet2BB74ED7": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "CidrBlock": "10.0.0.0/24",
+        "VpcId": {
+          "Ref": "Vpc8378EB38"
+        },
+        "AvailabilityZone": {
+          "Fn::Select": [
+            0,
+            {
+              "Fn::GetAZs": ""
+            }
+          ]
+        },
+        "MapPublicIpOnLaunch": true,
+        "Tags": [
+          {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "public"
+          },
+          {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Public"
+          },
+          {
+            "Key": "Name",
+            "Value": "exploded-integ/Vpc/publicSubnet1"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "exploded-integ/Vpc/publicSubnet1/Subnet"
+      }
+    },
+    "VpcpublicSubnet1RouteTable15C15F8E": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "VpcId": {
+          "Ref": "Vpc8378EB38"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "exploded-integ/Vpc/publicSubnet1"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "exploded-integ/Vpc/publicSubnet1/RouteTable"
+      }
+    },
+    "VpcpublicSubnet1RouteTableAssociation4E83B6E4": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "VpcpublicSubnet1RouteTable15C15F8E"
+        },
+        "SubnetId": {
+          "Ref": "VpcpublicSubnet1Subnet2BB74ED7"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "exploded-integ/Vpc/publicSubnet1/RouteTableAssociation"
+      }
+    },
+    "VpcpublicSubnet1DefaultRouteB88F9E93": {
+      "Type": "AWS::EC2::Route",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "VpcpublicSubnet1RouteTable15C15F8E"
+        },
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "GatewayId": {
+          "Ref": "VpcIGWD7BA715C"
+        }
+      },
+      "DependsOn": [
+        "VpcVPCGWBF912B6E"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "exploded-integ/Vpc/publicSubnet1/DefaultRoute"
+      }
+    },
+    "VpcpublicSubnet1EIP411541E6": {
+      "Type": "AWS::EC2::EIP",
+      "Properties": {
+        "Domain": "vpc",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "exploded-integ/Vpc/publicSubnet1"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "exploded-integ/Vpc/publicSubnet1/EIP"
+      }
+    },
+    "VpcpublicSubnet1NATGatewayA036E8A6": {
+      "Type": "AWS::EC2::NatGateway",
+      "Properties": {
+        "SubnetId": {
+          "Ref": "VpcpublicSubnet1Subnet2BB74ED7"
+        },
+        "AllocationId": {
+          "Fn::GetAtt": [
+            "VpcpublicSubnet1EIP411541E6",
+            "AllocationId"
+          ]
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "exploded-integ/Vpc/publicSubnet1"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "exploded-integ/Vpc/publicSubnet1/NATGateway"
+      }
+    },
+    "VpcpublicSubnet2SubnetE34B022A": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "CidrBlock": "10.0.1.0/24",
+        "VpcId": {
+          "Ref": "Vpc8378EB38"
+        },
+        "AvailabilityZone": {
+          "Fn::Select": [
+            1,
+            {
+              "Fn::GetAZs": ""
+            }
+          ]
+        },
+        "MapPublicIpOnLaunch": true,
+        "Tags": [
+          {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "public"
+          },
+          {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Public"
+          },
+          {
+            "Key": "Name",
+            "Value": "exploded-integ/Vpc/publicSubnet2"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "exploded-integ/Vpc/publicSubnet2/Subnet"
+      }
+    },
+    "VpcpublicSubnet2RouteTableC5A6DF77": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "VpcId": {
+          "Ref": "Vpc8378EB38"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "exploded-integ/Vpc/publicSubnet2"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "exploded-integ/Vpc/publicSubnet2/RouteTable"
+      }
+    },
+    "VpcpublicSubnet2RouteTableAssociationCCE257FF": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "VpcpublicSubnet2RouteTableC5A6DF77"
+        },
+        "SubnetId": {
+          "Ref": "VpcpublicSubnet2SubnetE34B022A"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "exploded-integ/Vpc/publicSubnet2/RouteTableAssociation"
+      }
+    },
+    "VpcpublicSubnet2DefaultRoute732F0BEB": {
+      "Type": "AWS::EC2::Route",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "VpcpublicSubnet2RouteTableC5A6DF77"
+        },
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "GatewayId": {
+          "Ref": "VpcIGWD7BA715C"
+        }
+      },
+      "DependsOn": [
+        "VpcVPCGWBF912B6E"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "exploded-integ/Vpc/publicSubnet2/DefaultRoute"
+      }
+    },
+    "VpcpublicSubnet2EIP811E07A7": {
+      "Type": "AWS::EC2::EIP",
+      "Properties": {
+        "Domain": "vpc",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "exploded-integ/Vpc/publicSubnet2"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "exploded-integ/Vpc/publicSubnet2/EIP"
+      }
+    },
+    "VpcpublicSubnet2NATGateway4A29FD4F": {
+      "Type": "AWS::EC2::NatGateway",
+      "Properties": {
+        "SubnetId": {
+          "Ref": "VpcpublicSubnet2SubnetE34B022A"
+        },
+        "AllocationId": {
+          "Fn::GetAtt": [
+            "VpcpublicSubnet2EIP811E07A7",
+            "AllocationId"
+          ]
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "exploded-integ/Vpc/publicSubnet2"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "exploded-integ/Vpc/publicSubnet2/NATGateway"
+      }
+    },
+    "VpcprivateSubnet1SubnetCEAD3716": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "CidrBlock": "10.0.4.0/22",
+        "VpcId": {
+          "Ref": "Vpc8378EB38"
+        },
+        "AvailabilityZone": {
+          "Fn::Select": [
+            0,
+            {
+              "Fn::GetAZs": ""
+            }
+          ]
+        },
+        "MapPublicIpOnLaunch": false,
+        "Tags": [
+          {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "private"
+          },
+          {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Private"
+          },
+          {
+            "Key": "Name",
+            "Value": "exploded-integ/Vpc/privateSubnet1"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "exploded-integ/Vpc/privateSubnet1/Subnet"
+      }
+    },
+    "VpcprivateSubnet1RouteTable1979EACB": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "VpcId": {
+          "Ref": "Vpc8378EB38"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "exploded-integ/Vpc/privateSubnet1"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "exploded-integ/Vpc/privateSubnet1/RouteTable"
+      }
+    },
+    "VpcprivateSubnet1RouteTableAssociationEEBD93CE": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "VpcprivateSubnet1RouteTable1979EACB"
+        },
+        "SubnetId": {
+          "Ref": "VpcprivateSubnet1SubnetCEAD3716"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "exploded-integ/Vpc/privateSubnet1/RouteTableAssociation"
+      }
+    },
+    "VpcprivateSubnet1DefaultRouteB506891A": {
+      "Type": "AWS::EC2::Route",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "VpcprivateSubnet1RouteTable1979EACB"
+        },
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "NatGatewayId": {
+          "Ref": "VpcpublicSubnet1NATGatewayA036E8A6"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "exploded-integ/Vpc/privateSubnet1/DefaultRoute"
+      }
+    },
+    "VpcprivateSubnet2Subnet2DE7549C": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "CidrBlock": "10.0.8.0/22",
+        "VpcId": {
+          "Ref": "Vpc8378EB38"
+        },
+        "AvailabilityZone": {
+          "Fn::Select": [
+            1,
+            {
+              "Fn::GetAZs": ""
+            }
+          ]
+        },
+        "MapPublicIpOnLaunch": false,
+        "Tags": [
+          {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "private"
+          },
+          {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Private"
+          },
+          {
+            "Key": "Name",
+            "Value": "exploded-integ/Vpc/privateSubnet2"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "exploded-integ/Vpc/privateSubnet2/Subnet"
+      }
+    },
+    "VpcprivateSubnet2RouteTable4D0FFC8C": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "VpcId": {
+          "Ref": "Vpc8378EB38"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "exploded-integ/Vpc/privateSubnet2"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "exploded-integ/Vpc/privateSubnet2/RouteTable"
+      }
+    },
+    "VpcprivateSubnet2RouteTableAssociationB691E645": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "VpcprivateSubnet2RouteTable4D0FFC8C"
+        },
+        "SubnetId": {
+          "Ref": "VpcprivateSubnet2Subnet2DE7549C"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "exploded-integ/Vpc/privateSubnet2/RouteTableAssociation"
+      }
+    },
+    "VpcprivateSubnet2DefaultRouteBAC3C1C3": {
+      "Type": "AWS::EC2::Route",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "VpcprivateSubnet2RouteTable4D0FFC8C"
+        },
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "NatGatewayId": {
+          "Ref": "VpcpublicSubnet2NATGateway4A29FD4F"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "exploded-integ/Vpc/privateSubnet2/DefaultRoute"
+      }
+    },
+    "VpcIGWD7BA715C": {
+      "Type": "AWS::EC2::InternetGateway",
+      "Properties": {
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "exploded-integ/Vpc"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "exploded-integ/Vpc/IGW"
+      }
+    },
+    "VpcVPCGWBF912B6E": {
+      "Type": "AWS::EC2::VPCGatewayAttachment",
+      "Properties": {
+        "VpcId": {
+          "Ref": "Vpc8378EB38"
+        },
+        "InternetGatewayId": {
+          "Ref": "VpcIGWD7BA715C"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "exploded-integ/Vpc/VPCGW"
+      }
+    },
+    "Alb16C2F182": {
+      "Type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
+      "Properties": {
+        "LoadBalancerAttributes": [
+          {
+            "Key": "deletion_protection.enabled",
+            "Value": "false"
+          }
+        ],
+        "Scheme": "internet-facing",
+        "SecurityGroups": [
+          {
+            "Fn::GetAtt": [
+              "AlbSecurityGroup580F65A6",
+              "GroupId"
+            ]
+          }
+        ],
+        "Subnets": [
+          {
+            "Ref": "VpcpublicSubnet1Subnet2BB74ED7"
+          },
+          {
+            "Ref": "VpcpublicSubnet2SubnetE34B022A"
+          }
+        ],
+        "Type": "application"
+      },
+      "DependsOn": [
+        "VpcpublicSubnet1DefaultRouteB88F9E93",
+        "VpcpublicSubnet2DefaultRoute732F0BEB"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "exploded-integ/Alb/Resource"
+      }
+    },
+    "AlbSecurityGroup580F65A6": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "Automatically created Security Group for ELB explodedintegAlb0D49FD5E",
+        "SecurityGroupIngress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow from anyone on port 80",
+            "FromPort": 80,
+            "IpProtocol": "tcp",
+            "ToPort": 80
+          }
+        ],
+        "VpcId": {
+          "Ref": "Vpc8378EB38"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "exploded-integ/Alb/SecurityGroup/Resource"
+      }
+    },
+    "AlbSecurityGrouptoexplodedintegServiceSecurityGroup1B1B9B4C808A3CD054": {
+      "Type": "AWS::EC2::SecurityGroupEgress",
+      "Properties": {
+        "GroupId": {
+          "Fn::GetAtt": [
+            "AlbSecurityGroup580F65A6",
+            "GroupId"
+          ]
+        },
+        "IpProtocol": "tcp",
+        "Description": "Load balancer to target",
+        "DestinationSecurityGroupId": {
+          "Fn::GetAtt": [
+            "ServiceSecurityGroupC96ED6A7",
+            "GroupId"
+          ]
+        },
+        "FromPort": 80,
+        "ToPort": 80
+      },
+      "Metadata": {
+        "aws:cdk:path": "exploded-integ/Alb/SecurityGroup/to explodedintegServiceSecurityGroup1B1B9B4C:80"
+      }
+    },
+    "AlbhttpF4DDFFB4": {
+      "Type": "AWS::ElasticLoadBalancingV2::Listener",
+      "Properties": {
+        "DefaultActions": [
+          {
+            "FixedResponseConfig": {
+              "ContentType": "text/plain",
+              "MessageBody": "Nothing here",
+              "StatusCode": "404"
+            },
+            "Type": "fixed-response"
+          }
+        ],
+        "LoadBalancerArn": {
+          "Ref": "Alb16C2F182"
+        },
+        "Port": 80,
+        "Protocol": "HTTP"
+      },
+      "Metadata": {
+        "aws:cdk:path": "exploded-integ/Alb/http/Resource"
+      }
+    },
+    "ClusterEB0386A7": {
+      "Type": "AWS::ECS::Cluster",
+      "Metadata": {
+        "aws:cdk:path": "exploded-integ/Cluster/Resource"
+      }
+    },
+    "TaskDefinitionTaskRoleFD40A61D": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "ecs-tasks.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "exploded-integ/TaskDefinition/TaskRole/Resource"
+      }
+    },
+    "TaskDefinitionB36D86D9": {
+      "Type": "AWS::ECS::TaskDefinition",
+      "Properties": {
+        "ContainerDefinitions": [
+          {
+            "Environment": [
+              {
+                "Name": "PORT",
+                "Value": "3000"
+              }
+            ],
+            "Essential": true,
+            "Image": "nathanpeck/name",
+            "Name": "web",
+            "PortMappings": [
+              {
+                "ContainerPort": 3000,
+                "Protocol": "tcp"
+              }
+            ]
+          },
+          {
+            "Environment": [
+              {
+                "Name": "CONFIG",
+                "Value": "server {\n  listen 80;\n  server_name proxy;\n\n  location / {\n      proxy_pass http://127.0.0.1:3000;\n      error_page 403 404 405 = @example;\n      error_page 500 502 503 504 = @example;\n  }\n\n  location /example {\n      proxy_pass https://example.org:443;\n  }\n\n  location /2example {\n      proxy_pass https://example.org:443;\n  }\n\n  location @example {\n      proxy_pass https://example.org:443;\n  }\n}"
+              }
+            ],
+            "Essential": true,
+            "Image": {
+              "Fn::Join": [
+                "",
+                [
+                  {
+                    "Ref": "AWS::AccountId"
+                  },
+                  ".dkr.ecr.",
+                  {
+                    "Ref": "AWS::Region"
+                  },
+                  ".",
+                  {
+                    "Ref": "AWS::URLSuffix"
+                  },
+                  "/aws-cdk/assets:4d8a8a747f74315655e3c9446ba2589bc84aaeb91d7617a074458bed33dba7a0"
+                ]
+              ]
+            },
+            "LogConfiguration": {
+              "LogDriver": "awslogs",
+              "Options": {
+                "awslogs-group": {
+                  "Ref": "TaskDefinitionproxyLogGroup4AA2564B"
+                },
+                "awslogs-stream-prefix": "nginx-proxy",
+                "awslogs-region": {
+                  "Ref": "AWS::Region"
+                }
+              }
+            },
+            "Memory": 128,
+            "MemoryReservation": 32,
+            "Name": "proxy",
+            "PortMappings": [
+              {
+                "ContainerPort": 80,
+                "Protocol": "tcp"
+              }
+            ]
+          }
+        ],
+        "Cpu": "512",
+        "ExecutionRoleArn": {
+          "Fn::GetAtt": [
+            "TaskDefinitionExecutionRole8D61C2FB",
+            "Arn"
+          ]
+        },
+        "Family": "explodedintegTaskDefinition703EEA47",
+        "Memory": "1024",
+        "NetworkMode": "awsvpc",
+        "RequiresCompatibilities": [
+          "FARGATE"
+        ],
+        "TaskRoleArn": {
+          "Fn::GetAtt": [
+            "TaskDefinitionTaskRoleFD40A61D",
+            "Arn"
+          ]
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "exploded-integ/TaskDefinition/Resource"
+      }
+    },
+    "TaskDefinitionproxyLogGroup4AA2564B": {
+      "Type": "AWS::Logs::LogGroup",
+      "UpdateReplacePolicy": "Retain",
+      "DeletionPolicy": "Retain",
+      "Metadata": {
+        "aws:cdk:path": "exploded-integ/TaskDefinition/proxy/LogGroup/Resource"
+      }
+    },
+    "TaskDefinitionExecutionRole8D61C2FB": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "ecs-tasks.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "exploded-integ/TaskDefinition/ExecutionRole/Resource"
+      }
+    },
+    "TaskDefinitionExecutionRoleDefaultPolicy1F3406F5": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "ecr:BatchCheckLayerAvailability",
+                "ecr:GetDownloadUrlForLayer",
+                "ecr:BatchGetImage"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":ecr:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":repository/aws-cdk/assets"
+                  ]
+                ]
+              }
+            },
+            {
+              "Action": "ecr:GetAuthorizationToken",
+              "Effect": "Allow",
+              "Resource": "*"
+            },
+            {
+              "Action": [
+                "logs:CreateLogStream",
+                "logs:PutLogEvents"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "TaskDefinitionproxyLogGroup4AA2564B",
+                  "Arn"
+                ]
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "TaskDefinitionExecutionRoleDefaultPolicy1F3406F5",
+        "Roles": [
+          {
+            "Ref": "TaskDefinitionExecutionRole8D61C2FB"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "exploded-integ/TaskDefinition/ExecutionRole/DefaultPolicy/Resource"
+      }
+    },
+    "ServiceD69D759B": {
+      "Type": "AWS::ECS::Service",
+      "Properties": {
+        "Cluster": {
+          "Ref": "ClusterEB0386A7"
+        },
+        "DeploymentConfiguration": {
+          "MaximumPercent": 200,
+          "MinimumHealthyPercent": 50
+        },
+        "DesiredCount": 1,
+        "EnableECSManagedTags": false,
+        "HealthCheckGracePeriodSeconds": 60,
+        "LaunchType": "FARGATE",
+        "LoadBalancers": [
+          {
+            "ContainerName": "proxy",
+            "ContainerPort": 80,
+            "TargetGroupArn": {
+              "Ref": "ListenerRulesBuilderTargetGroup48615CC1"
+            }
+          }
+        ],
+        "NetworkConfiguration": {
+          "AwsvpcConfiguration": {
+            "AssignPublicIp": "DISABLED",
+            "SecurityGroups": [
+              {
+                "Fn::GetAtt": [
+                  "ServiceSecurityGroupC96ED6A7",
+                  "GroupId"
+                ]
+              }
+            ],
+            "Subnets": [
+              {
+                "Ref": "VpcprivateSubnet1SubnetCEAD3716"
+              },
+              {
+                "Ref": "VpcprivateSubnet2Subnet2DE7549C"
+              }
+            ]
+          }
+        },
+        "TaskDefinition": {
+          "Ref": "TaskDefinitionB36D86D9"
+        }
+      },
+      "DependsOn": [
+        "ListenerRulesBuilderlistenerrule5000460D26E6"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "exploded-integ/Service/Service"
+      }
+    },
+    "ServiceSecurityGroupC96ED6A7": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "exploded-integ/Service/SecurityGroup",
+        "SecurityGroupEgress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1"
+          }
+        ],
+        "VpcId": {
+          "Ref": "Vpc8378EB38"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "exploded-integ/Service/SecurityGroup/Resource"
+      }
+    },
+    "ServiceSecurityGroupfromexplodedintegAlbSecurityGroup5690FF798013126E86": {
+      "Type": "AWS::EC2::SecurityGroupIngress",
+      "Properties": {
+        "IpProtocol": "tcp",
+        "Description": "Load balancer to target",
+        "FromPort": 80,
+        "GroupId": {
+          "Fn::GetAtt": [
+            "ServiceSecurityGroupC96ED6A7",
+            "GroupId"
+          ]
+        },
+        "SourceSecurityGroupId": {
+          "Fn::GetAtt": [
+            "AlbSecurityGroup580F65A6",
+            "GroupId"
+          ]
+        },
+        "ToPort": 80
+      },
+      "Metadata": {
+        "aws:cdk:path": "exploded-integ/Service/SecurityGroup/from explodedintegAlbSecurityGroup5690FF79:80"
+      }
+    },
+    "ListenerRulesBuilderTargetGroup48615CC1": {
+      "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
+      "Properties": {
+        "HealthCheckEnabled": true,
+        "HealthCheckIntervalSeconds": 15,
+        "HealthCheckProtocol": "HTTP",
+        "HealthCheckTimeoutSeconds": 5,
+        "HealthyThresholdCount": 5,
+        "Port": 80,
+        "Protocol": "HTTP",
+        "TargetGroupAttributes": [
+          {
+            "Key": "deregistration_delay.timeout_seconds",
+            "Value": "15"
+          }
+        ],
+        "TargetType": "ip",
+        "UnhealthyThresholdCount": 2,
+        "VpcId": {
+          "Ref": "Vpc8378EB38"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "exploded-integ/ListenerRulesBuilder/TargetGroup/Resource"
+      }
+    },
+    "ListenerRulesBuilderlistenerrule5000460D26E6": {
+      "Type": "AWS::ElasticLoadBalancingV2::ListenerRule",
+      "Properties": {
+        "Actions": [
+          {
+            "TargetGroupArn": {
+              "Ref": "ListenerRulesBuilderTargetGroup48615CC1"
+            },
+            "Type": "forward"
+          }
+        ],
+        "Conditions": [
+          {
+            "Field": "host-header",
+            "HostHeaderConfig": {
+              "Values": [
+                {
+                  "Fn::GetAtt": [
+                    "Alb16C2F182",
+                    "DNSName"
+                  ]
+                }
+              ]
+            }
+          }
+        ],
+        "ListenerArn": {
+          "Ref": "AlbhttpF4DDFFB4"
+        },
+        "Priority": 5000
+      },
+      "Metadata": {
+        "aws:cdk:path": "exploded-integ/ListenerRulesBuilder/listener-rule-5000/Resource"
+      }
+    },
+    "ListenerRulesBuilderlistenerrule5010B520BCD5": {
+      "Type": "AWS::ElasticLoadBalancingV2::ListenerRule",
+      "Properties": {
+        "Actions": [
+          {
+            "RedirectConfig": {
+              "Host": {
+                "Fn::GetAtt": [
+                  "Alb16C2F182",
+                  "DNSName"
+                ]
+              },
+              "Path": "/#{path}",
+              "Port": "#{port}",
+              "Protocol": "#{protocol}",
+              "Query": "#{query}",
+              "StatusCode": "HTTP_302"
+            },
+            "Type": "redirect"
+          }
+        ],
+        "Conditions": [
+          {
+            "Field": "host-header",
+            "Values": [
+              "redirect.host"
+            ]
+          }
+        ],
+        "ListenerArn": {
+          "Ref": "AlbhttpF4DDFFB4"
+        },
+        "Priority": 5010
+      },
+      "Metadata": {
+        "aws:cdk:path": "exploded-integ/ListenerRulesBuilder/listener-rule-5010/Resource"
+      }
+    },
+    "CDKMetadata": {
+      "Type": "AWS::CDK::Metadata",
+      "Properties": {
+        "Analytics": "v2:deflate64:H4sIAAAAAAAAA31SUU/jMAz+LbxngZ5OJ/HGGByahI6qQ7x7mSlmXVIlztBU9b/jpOtWuNM9+fNn58tnJ4Uurq711cUNfISZ2WwvO+M86m7FYLaqwuCiN6jmISALV5Ot1eLVPkVuI6uFs4F9NJy4U7NgKWyIydleJeEOzQ/dvbQm1V7KhSrjuiGzimuL+ewZVS4yPsO6wTN/5sSHMwRJ+dScwP2yTOEP8AMwfsBBlZ72As/CS8voBY8Ng5NjNmeZ922HltUKTfTEhwfvYps9/Je4rz2G8Be9tJnvFTYQmEzjYLOGBqyRDe5lGfO2lQ3kSR6ldptr6JPQl3zaR4HRHntGPKk/g69lvtHmNP2HShWHFU9zsWuC7hZNFC7fM8LfIgbpEcL2Dl/J0vgE3xlnGUjkJtzx7Ar9nobvcYS9ItjprnKDkxxLJ0bz6wwoWfIzSP8v6DtntuiXO6gx/8hU0xW2LhA7f7iFgKpxtYzw6OrTIkbc972yboP6PVzui5+6+KWLi/dANPPRMu1QV0P8BAhzr6kVAwAA"
+      },
+      "Metadata": {
+        "aws:cdk:path": "exploded-integ/CDKMetadata/Default"
+      },
+      "Condition": "CDKMetadataAvailable"
+    }
+  },
+  "Outputs": {
+    "LoadBalancer": {
+      "Value": {
+        "Fn::Sub": [
+          "http://${LoadBalancerDnsName}/",
+          {
+            "LoadBalancerDnsName": {
+              "Fn::GetAtt": [
+                "Alb16C2F182",
+                "DNSName"
+              ]
+            }
+          }
+        ]
+      }
+    }
+  },
+  "Conditions": {
+    "CDKMetadataAvailable": {
+      "Fn::Or": [
+        {
+          "Fn::Or": [
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "af-south-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "ap-east-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "ap-northeast-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "ap-northeast-2"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "ap-south-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "ap-southeast-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "ap-southeast-2"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "ca-central-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "cn-north-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "cn-northwest-1"
+              ]
+            }
+          ]
+        },
+        {
+          "Fn::Or": [
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "eu-central-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "eu-north-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "eu-south-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "eu-west-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "eu-west-2"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "eu-west-3"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "me-south-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "sa-east-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "us-east-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "us-east-2"
+              ]
+            }
+          ]
+        },
+        {
+          "Fn::Or": [
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "us-west-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "us-west-2"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

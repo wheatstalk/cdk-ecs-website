@@ -1,19 +1,36 @@
-import * as path from 'path';
 import { IConnectable, Port } from '@aws-cdk/aws-ec2';
-import {
-  ContainerImage,
-  Ec2Service,
-  FargateService,
-  ICluster,
-  LogDriver,
-  Protocol,
-  TaskDefinition,
-} from '@aws-cdk/aws-ecs';
+import { Ec2Service, FargateService, ICluster, TaskDefinition } from '@aws-cdk/aws-ecs';
 import { IApplicationListener, RedirectOptions } from '@aws-cdk/aws-elasticloadbalancingv2';
 import { Construct } from '@aws-cdk/core';
 
 import { EcsWorkloadCapacityType, EcsWorkloadService, IEcsWorkload } from './ecs-workloads';
-import { CognitoAuthenticationConfig, IWebsiteService, ListenerRulesBuilder } from './listener-rules-builder';
+import { CognitoAuthenticationConfig, ListenerRulesBuilder } from './listener-rules-builder';
+import { ListenerRulePriorities } from './listener-rules-builder/listener-rule-priorities';
+import { NginxProxyContainerExtension } from './nginx-proxy-container-extension-options';
+
+/**
+ * A builder-pattern website service.
+ */
+export interface IWebsiteService {
+  /**
+   * Add a host name on which traffic will be served.
+   */
+  addServingHost(hostHeader: string): void;
+
+  /**
+   * Add a host name from which traffic will be redirected to another URL.
+   */
+  addRedirectResponse(hostHeader: string, redirectResponse: RedirectOptions): void;
+
+  /**
+   * Add a host name from which traffic will be directed to the primary
+   * host name of the `IWebsiteService`.
+   */
+  addRedirectToPrimaryHostName(hostHeader: string): void;
+
+  // addAuthenticatedServingHost(hostHeader: string, authConfig: AuthWithUserPoolProps): void;
+  // addAuthBypassServingHost(hostHeader: string, authBypassValue: string): void;
+}
 
 /**
  * Non-workload options for `WebsiteServiceBase`
@@ -154,32 +171,10 @@ export class WebsiteServiceBase extends Construct implements IWebsiteService {
     // When reverse proxy configuration present, we add a reverse proxy container as the default
     // container.
     if (props.nginxContainerConfig) {
-      const workloadContainer = taskDefinition.defaultContainer!;
-
-      const proxyContainer = taskDefinition.addContainer('proxy', {
-        image: ContainerImage.fromAsset(path.join(__dirname, '..', 'files', 'nginx-proxy'), {
-          buildArgs: {
-            FROM: props.nginxContainerImageFrom ?? 'nginx:1',
-          },
-        }),
-        memoryReservationMiB: 32,
-        memoryLimitMiB: 128,
-        logging: LogDriver.awsLogs({
-          streamPrefix: 'nginx-proxy',
-        }),
-        environment: {
-          CONFIG: props.nginxContainerConfig,
-        },
-      });
-
-      proxyContainer.addLink(workloadContainer);
-
-      proxyContainer.addPortMappings({
-        protocol: Protocol.TCP,
-        containerPort: 80,
-      });
-
-      taskDefinition.defaultContainer = proxyContainer;
+      taskDefinition.addExtension(new NginxProxyContainerExtension({
+        imageFrom: props.nginxContainerImageFrom,
+        defaultConf: props.nginxContainerConfig,
+      }));
     }
 
     const defaultContainerName = taskDefinition.defaultContainer!.containerName;
@@ -199,10 +194,9 @@ export class WebsiteServiceBase extends Construct implements IWebsiteService {
     }
 
     this.listenerRuleBuilder = new ListenerRulesBuilder(this, 'RulesBuilder', {
-      albBasePriority: props.albBasePriority,
+      albPriority: ListenerRulePriorities.incremental(props.albBasePriority),
       albListener: props.albListener,
-      cluster: props.cluster,
-      containerName: defaultContainerName,
+      trafficContainerName: defaultContainerName,
       trafficPort: defaultContainerPort,
       primaryHostName: props.primaryHostName,
       service: service,
@@ -255,3 +249,4 @@ export class WebsiteServiceBase extends Construct implements IWebsiteService {
     return this.listenerRuleBuilder.addServingHost(hostHeader);
   }
 }
+
