@@ -13,9 +13,10 @@
 .jsii
 .nyc_output
 .yarn-integrity
-/.changelog.tmp.md
 /coverage
 /dist
+/dist/changelog.md
+/dist/version.txt
 /lib
 /test-reports/
 build/Release
@@ -38,6 +39,7 @@ yarn-error.log*
 !/.github/pull_request_template.md
 !/.github/workflows/build.yml
 !/.github/workflows/release.yml
+!/.github/workflows/stale.yml
 !/.github/workflows/upgrade-dependencies.yml
 !/.github/workflows/upgrade-projen.yml
 !/.mergify.yml
