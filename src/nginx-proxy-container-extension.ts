@@ -35,10 +35,16 @@ export interface NginxProxyContainerExtensionOptions {
   readonly trafficPort?: number;
 
   /**
-   * Name of the proxy container
+   * Name of the proxy container.
    * @default 'proxy'
    */
   readonly containerName?: string;
+
+  /**
+   * Specifies the logging mechanism for the proxy container.
+   * @default - does not log
+   */
+  readonly logging?: LogDriver;
 }
 
 /**
@@ -49,12 +55,14 @@ export class NginxProxyContainerExtension implements ITaskDefinitionExtension {
   private readonly defaultConf: string;
   private readonly trafficPort: number;
   private readonly containerName: string;
+  private readonly logging?: LogDriver;
 
   constructor(readonly options: NginxProxyContainerExtensionOptions) {
     this.imageFrom = options.imageFrom ?? 'nginx:1';
     this.defaultConf = options.defaultConf;
     this.trafficPort = options.trafficPort ?? 80;
     this.containerName = options.containerName ?? 'proxy';
+    this.logging = options.logging;
   }
 
   extend(taskDefinition: TaskDefinition): void {
@@ -68,7 +76,7 @@ export class NginxProxyContainerExtension implements ITaskDefinitionExtension {
       }),
       memoryReservationMiB: 32,
       memoryLimitMiB: 128,
-      logging: LogDriver.awsLogs({ streamPrefix: 'nginx-proxy' }),
+      logging: this.logging,
       environment: {
         CONFIG: this.defaultConf,
       },

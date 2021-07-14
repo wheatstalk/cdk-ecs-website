@@ -362,18 +362,6 @@ Object {
                 ],
               ],
             },
-            "LogConfiguration": Object {
-              "LogDriver": "awslogs",
-              "Options": Object {
-                "awslogs-group": Object {
-                  "Ref": "TaskDefinitionproxyLogGroup4AA2564B",
-                },
-                "awslogs-region": Object {
-                  "Ref": "AWS::Region",
-                },
-                "awslogs-stream-prefix": "nginx-proxy",
-              },
-            },
             "Memory": 128,
             "MemoryReservation": 32,
             "Name": "proxy",
@@ -461,19 +449,6 @@ Object {
               "Effect": "Allow",
               "Resource": "*",
             },
-            Object {
-              "Action": Array [
-                "logs:CreateLogStream",
-                "logs:PutLogEvents",
-              ],
-              "Effect": "Allow",
-              "Resource": Object {
-                "Fn::GetAtt": Array [
-                  "TaskDefinitionproxyLogGroup4AA2564B",
-                  "Arn",
-                ],
-              },
-            },
           ],
           "Version": "2012-10-17",
         },
@@ -502,11 +477,6 @@ Object {
         },
       },
       "Type": "AWS::IAM::Role",
-    },
-    "TaskDefinitionproxyLogGroup4AA2564B": Object {
-      "DeletionPolicy": "Retain",
-      "Type": "AWS::Logs::LogGroup",
-      "UpdateReplacePolicy": "Retain",
     },
     "Vpc8378EB38": Object {
       "Properties": Object {
