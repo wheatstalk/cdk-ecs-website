@@ -6,7 +6,7 @@ import { Construct } from '@aws-cdk/core';
 import { EcsWorkloadCapacityType, EcsWorkloadService, IEcsWorkload } from './ecs-workloads';
 import { CognitoAuthenticationConfig, ListenerRulesBuilder } from './listener-rules-builder';
 import { ListenerRulePriorities } from './listener-rules-builder/listener-rule-priorities';
-import { NginxProxyContainerExtension } from './nginx-proxy-container-extension-options';
+import { NginxProxyContainerExtension } from './nginx-proxy-container-extension';
 
 /**
  * A builder-pattern website service.
