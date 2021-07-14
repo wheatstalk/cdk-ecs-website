@@ -222,6 +222,7 @@ new NginxProxyContainerExtension(options: NginxProxyContainerExtensionOptions)
   * **defaultConf** (<code>string</code>)  Provides `default.conf` configuration for an nginx container that is added to the task as the default, traffic-serving container. You may use this feature to create a reverse proxy for your workload. 
   * **containerName** (<code>string</code>)  Name of the proxy container. __*Default*__: 'proxy'
   * **imageFrom** (<code>string</code>)  Provides an image name to build the nginx container from. __*Default*__: 'nginx:1'
+  * **logging** (<code>[LogDriver](#aws-cdk-aws-ecs-logdriver)</code>)  Specifies the logging mechanism for the proxy container. __*Default*__: does not log
   * **trafficPort** (<code>number</code>)  Traffic port for the proxy. __*Default*__: 80
 
 
@@ -625,6 +626,7 @@ Name | Type | Description
 **defaultConf**🔹 | <code>string</code> | Provides `default.conf` configuration for an nginx container that is added to the task as the default, traffic-serving container. You may use this feature to create a reverse proxy for your workload.
 **containerName**?🔹 | <code>string</code> | Name of the proxy container.<br/>__*Default*__: 'proxy'
 **imageFrom**?🔹 | <code>string</code> | Provides an image name to build the nginx container from.<br/>__*Default*__: 'nginx:1'
+**logging**?🔹 | <code>[LogDriver](#aws-cdk-aws-ecs-logdriver)</code> | Specifies the logging mechanism for the proxy container.<br/>__*Default*__: does not log
 **trafficPort**?🔹 | <code>number</code> | Traffic port for the proxy.<br/>__*Default*__: 80
 
 
