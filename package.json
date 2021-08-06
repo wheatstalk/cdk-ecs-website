@@ -22,9 +22,10 @@
     "package": "npx projen package",
     "eslint": "npx projen eslint",
     "compat": "npx projen compat",
+    "publish:npm": "npx projen publish:npm",
     "docgen": "npx projen docgen",
-    "projen": "npx projen",
-    "start": "npx projen start"
+    "release": "npx projen release",
+    "projen": "npx projen"
   },
   "author": {
     "name": "Josh Kellendonk",
@@ -63,7 +64,7 @@
     "json-diff": "^0.5.4",
     "json-schema": "^0.3.0",
     "npm-check-updates": "^11",
-    "projen": "^0.24.11",
+    "projen": "^0.27.18",
     "standard-version": "^9",
     "ts-jest": "^26.5.6",
     "ts-node": "^9.0.0",
