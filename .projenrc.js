@@ -16,7 +16,8 @@ const project = new AwsCdkConstructLibrary({
   depsUpgrade: DependenciesUpgradeMechanism.githubWorkflow(),
   autoApproveUpgrades: true,
   autoApproveOptions: {
-    secret: 'YARN_UPGRADE_TOKEN',
+    secret: 'GITHUB_TOKEN',
+    allowedUsernames: ['github-actions', 'github-actions[bot]', 'misterjoshua'],
   },
 
   defaultReleaseBranch: 'master',
