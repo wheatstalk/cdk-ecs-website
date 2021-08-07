@@ -13,7 +13,6 @@ const project = new AwsCdkConstructLibrary({
   license: 'MIT',
 
   projenUpgradeSecret: 'YARN_UPGRADE_TOKEN',
-  depsUpgrade: DependenciesUpgradeMechanism.githubWorkflow(),
   autoApproveUpgrades: true,
   autoApproveOptions: {
     secret: 'GITHUB_TOKEN',
