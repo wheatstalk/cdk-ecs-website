@@ -48,6 +48,10 @@ Object {
             "Key": "deregistration_delay.timeout_seconds",
             "Value": "15",
           },
+          Object {
+            "Key": "stickiness.enabled",
+            "Value": "false",
+          },
         ],
         "TargetType": "instance",
         "UnhealthyThresholdCount": 2,
