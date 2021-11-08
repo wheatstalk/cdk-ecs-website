@@ -1548,6 +1548,7 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
       "Type": "AWS::SecretsManager::SecretTargetAttachment",
     },
     "ClusterdatabaseSecretB9C6A406": Object {
+      "DeletionPolicy": "Delete",
       "Properties": Object {
         "Description": Object {
           "Fn::Join": Array [
@@ -1568,6 +1569,7 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
         },
       },
       "Type": "AWS::SecretsManager::Secret",
+      "UpdateReplacePolicy": "Delete",
     },
     "ClusterdatabaseSecurityGroupC208FFA3": Object {
       "Properties": Object {
