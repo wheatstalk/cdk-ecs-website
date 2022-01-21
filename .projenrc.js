@@ -1,12 +1,8 @@
-const {
-  AwsCdkConstructLibrary,
-  DependenciesUpgradeMechanism, Semver,
-} = require('projen');
+const { awscdk } = require('projen');
 
-const project = new AwsCdkConstructLibrary({
+const project = new awscdk.AwsCdkConstructLibrary({
   name: '@wheatstalk/cdk-ecs-website',
   description: 'CDK ECS Website Constructs',
-  jsiiVersion: Semver.caret('1.7.0'),
   authorName: 'Josh Kellendonk',
   authorEmail: 'joshkellendonk@gmail.com',
   repository: 'git@github.com:wheatstalk/cdk-ecs-website.git',
@@ -15,8 +11,7 @@ const project = new AwsCdkConstructLibrary({
   projenUpgradeSecret: 'YARN_UPGRADE_TOKEN',
   autoApproveUpgrades: true,
   autoApproveOptions: {
-    secret: 'GITHUB_TOKEN',
-    allowedUsernames: ['github-actions', 'github-actions[bot]', 'misterjoshua'],
+    allowedUsernames: ['misterjoshua'],
   },
 
   defaultReleaseBranch: 'master',
