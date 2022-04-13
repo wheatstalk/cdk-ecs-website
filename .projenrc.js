@@ -52,7 +52,9 @@ const project = new awscdk.AwsCdkConstructLibrary({
   },
 
   defaultReleaseBranch: 'main',
-  releaseTrigger: release.ReleaseTrigger.manual(),
+
+  releaseToNpm: true,
+  releaseTrigger: release.ReleaseTrigger.continuous(),
 
   compat: true,
 
