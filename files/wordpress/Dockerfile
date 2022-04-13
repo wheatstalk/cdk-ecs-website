@@ -1,4 +1,4 @@
-ARG FROM=php:7.4-apache
+ARG FROM=php:8.0-apache
 
 FROM alpine as SOURCE
 
@@ -44,28 +44,44 @@ RUN set -ex; \
 	apt-get update; \
 	apt-get install -y --no-install-recommends \
 		libfreetype6-dev \
+		libicu-dev \
 		libjpeg-dev \
 		libmagickwand-dev \
 		libpng-dev \
+		libwebp-dev \
 		libzip-dev \
 	; \
 	\
-	docker-php-ext-configure gd --with-freetype --with-jpeg; \
+	docker-php-ext-configure gd \
+		--with-freetype \
+		--with-jpeg \
+		--with-webp \
+	; \
 	docker-php-ext-install -j "$(nproc)" \
 		bcmath \
 		exif \
 		gd \
+		intl \
 		mysqli \
-		opcache \
 		zip \
 	; \
-	pecl install imagick-3.4.4; \
+# https://pecl.php.net/package/imagick
+	pecl install imagick-3.6.0; \
 	docker-php-ext-enable imagick; \
+	rm -r /tmp/pear; \
 	\
+# some misbehaving extensions end up outputting to stdout 🙈 (https://github.com/docker-library/wordpress/issues/669#issuecomment-993945967)
+	out="$(php -r 'exit(0);')"; \
+	[ -z "$out" ]; \
+	err="$(php -r 'exit(0);' 3>&1 1>&2 2>&3)"; \
+	[ -z "$err" ]; \
+	\
+	extDir="$(php -r 'echo ini_get("extension_dir");')"; \
+	[ -d "$extDir" ]; \
 # reset apt-mark's "manual" list so that "purge --auto-remove" will remove all build dependencies
 	apt-mark auto '.*' > /dev/null; \
 	apt-mark manual $savedAptMark; \
-	ldd "$(php -r 'echo ini_get("extension_dir");')"/*.so \
+	ldd "$extDir"/*.so \
 		| awk '/=>/ { print $3 }' \
 		| sort -u \
 		| xargs -r dpkg-query -S \
@@ -74,15 +90,22 @@ RUN set -ex; \
 		| xargs -rt apt-mark manual; \
 	\
 	apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false; \
-	rm -rf /var/lib/apt/lists/*
+	rm -rf /var/lib/apt/lists/*; \
+	\
+	! { ldd "$extDir"/*.so | grep 'not found'; }; \
+# check for output like "PHP Warning:  PHP Startup: Unable to load dynamic library 'foo' (tried: ...)
+	err="$(php --version 3>&1 1>&2 2>&3)"; \
+	[ -z "$err" ]
 
 # set recommended PHP.ini settings
 # see https://secure.php.net/manual/en/opcache.installation.php
-RUN { \
+RUN set -eux; \
+	docker-php-ext-enable opcache; \
+	{ \
 		echo 'opcache.memory_consumption=128'; \
 		echo 'opcache.interned_strings_buffer=8'; \
 		echo 'opcache.max_accelerated_files=4000'; \
-		echo 'opcache.revalidate_freq=60'; \
+		echo 'opcache.revalidate_freq=2'; \
 		echo 'opcache.fast_shutdown=1'; \
 	} > /usr/local/etc/php/conf.d/opcache-recommended.ini
 
@@ -91,6 +114,7 @@ RUN { \
 		echo 'post_max_size=65M'; \
 	} > /usr/local/etc/php/conf.d/uploads.ini
 
+# https://wordpress.org/support/article/editing-wp-config-php/#configure-error-logging
 RUN { \
 # https://www.php.net/manual/en/errorfunc.constants.php
 # https://github.com/docker-library/wordpress/issues/420#issuecomment-517839670
