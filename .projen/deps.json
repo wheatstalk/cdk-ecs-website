@@ -62,6 +62,7 @@
     },
     {
       "name": "@types/jest",
+      "version": "^27",
       "type": "build"
     },
     {
