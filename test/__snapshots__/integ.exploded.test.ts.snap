@@ -519,18 +519,6 @@ Object {
       },
       "Type": "AWS::EC2::VPCGatewayAttachment",
     },
-    "VpcprivateSubnet1DefaultRouteB506891A": Object {
-      "Properties": Object {
-        "DestinationCidrBlock": "0.0.0.0/0",
-        "NatGatewayId": Object {
-          "Ref": "VpcpublicSubnet1NATGatewayA036E8A6",
-        },
-        "RouteTableId": Object {
-          "Ref": "VpcprivateSubnet1RouteTable1979EACB",
-        },
-      },
-      "Type": "AWS::EC2::Route",
-    },
     "VpcprivateSubnet1RouteTable1979EACB": Object {
       "Properties": Object {
         "Tags": Array [
@@ -587,18 +575,6 @@ Object {
         },
       },
       "Type": "AWS::EC2::Subnet",
-    },
-    "VpcprivateSubnet2DefaultRouteBAC3C1C3": Object {
-      "Properties": Object {
-        "DestinationCidrBlock": "0.0.0.0/0",
-        "NatGatewayId": Object {
-          "Ref": "VpcpublicSubnet2NATGateway4A29FD4F",
-        },
-        "RouteTableId": Object {
-          "Ref": "VpcprivateSubnet2RouteTable4D0FFC8C",
-        },
-      },
-      "Type": "AWS::EC2::Route",
     },
     "VpcprivateSubnet2RouteTable4D0FFC8C": Object {
       "Properties": Object {
@@ -672,38 +648,6 @@ Object {
       },
       "Type": "AWS::EC2::Route",
     },
-    "VpcpublicSubnet1EIP411541E6": Object {
-      "Properties": Object {
-        "Domain": "vpc",
-        "Tags": Array [
-          Object {
-            "Key": "Name",
-            "Value": "exploded-integ/Vpc/publicSubnet1",
-          },
-        ],
-      },
-      "Type": "AWS::EC2::EIP",
-    },
-    "VpcpublicSubnet1NATGatewayA036E8A6": Object {
-      "Properties": Object {
-        "AllocationId": Object {
-          "Fn::GetAtt": Array [
-            "VpcpublicSubnet1EIP411541E6",
-            "AllocationId",
-          ],
-        },
-        "SubnetId": Object {
-          "Ref": "VpcpublicSubnet1Subnet2BB74ED7",
-        },
-        "Tags": Array [
-          Object {
-            "Key": "Name",
-            "Value": "exploded-integ/Vpc/publicSubnet1",
-          },
-        ],
-      },
-      "Type": "AWS::EC2::NatGateway",
-    },
     "VpcpublicSubnet1RouteTable15C15F8E": Object {
       "Properties": Object {
         "Tags": Array [
@@ -775,38 +719,6 @@ Object {
         },
       },
       "Type": "AWS::EC2::Route",
-    },
-    "VpcpublicSubnet2EIP811E07A7": Object {
-      "Properties": Object {
-        "Domain": "vpc",
-        "Tags": Array [
-          Object {
-            "Key": "Name",
-            "Value": "exploded-integ/Vpc/publicSubnet2",
-          },
-        ],
-      },
-      "Type": "AWS::EC2::EIP",
-    },
-    "VpcpublicSubnet2NATGateway4A29FD4F": Object {
-      "Properties": Object {
-        "AllocationId": Object {
-          "Fn::GetAtt": Array [
-            "VpcpublicSubnet2EIP811E07A7",
-            "AllocationId",
-          ],
-        },
-        "SubnetId": Object {
-          "Ref": "VpcpublicSubnet2SubnetE34B022A",
-        },
-        "Tags": Array [
-          Object {
-            "Key": "Name",
-            "Value": "exploded-integ/Vpc/publicSubnet2",
-          },
-        ],
-      },
-      "Type": "AWS::EC2::NatGateway",
     },
     "VpcpublicSubnet2RouteTableAssociationCCE257FF": Object {
       "Properties": Object {
