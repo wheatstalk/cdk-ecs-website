@@ -4,8 +4,8 @@ import { IFileSystem } from '@aws-cdk/aws-efs';
 import { RetentionDays } from '@aws-cdk/aws-logs';
 import { ISecret } from '@aws-cdk/aws-secretsmanager';
 
-import { IEcsWorkload, EcsWorkloadTaskInfo } from '../ecs-workloads';
 import { createWordpressImage } from './create-wordpress-image';
+import { IEcsWorkload, EcsWorkloadTaskInfo } from '../ecs-workloads';
 
 /**
  * Configuration options for building the WordPress container image.
